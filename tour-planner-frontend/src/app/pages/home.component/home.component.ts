@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import * as L from 'leaflet';
 import { Navbar } from '@/components/navbar/navbar';
+import { Content} from '@/components/content/content';
 
 @Component({
   selector: 'app-home.component',
-  imports: [Navbar],
+  imports: [Navbar, Content],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
