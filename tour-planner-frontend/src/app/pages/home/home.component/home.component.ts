@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }).addTo(this.map);
 
     L.control.zoom({
-      position: 'bottomright'
+      position: 'topright'
     }).addTo(this.map);
   }
 

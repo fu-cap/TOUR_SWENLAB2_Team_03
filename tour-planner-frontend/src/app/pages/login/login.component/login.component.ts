@@ -3,10 +3,11 @@ import * as L from 'leaflet';
 import { Content } from '@/components/content/content';
 import { LoginFormComponent} from '@/pages/login/login.form.component/login.form.component';
 import { LoginRegisterComponent } from '@/pages/login/login.register.component/login.register.component';
+import { Footer } from '@/components/footer/footer';
 
 @Component({
   selector: 'app-login.component',
-  imports: [Content, LoginFormComponent, LoginRegisterComponent],
+  imports: [Content, LoginFormComponent, LoginRegisterComponent, Footer],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })

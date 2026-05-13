@@ -1,7 +1,7 @@
 import { Component, Output, EventEmitter, signal } from '@angular/core';
 import { Navbutton } from '@/components/navbutton/navbutton';
 
-export type AppState = 'overview' | 'details' | 'edit' | 'logs' | 'user' | 'create';
+export type AppState = 'overview' | 'details' | 'edit' | 'logs' | 'user' | 'create' | 'info';
 
 interface NavItem {
   icon: string;
@@ -32,6 +32,7 @@ export class Navbar {
   ];
 
   userItem: NavItem[] = [
+    {icon: 'info', label: 'Impressum', state: 'info'},
     {icon: 'account_circle', label: 'Account', state: 'user'},
   ];
 
