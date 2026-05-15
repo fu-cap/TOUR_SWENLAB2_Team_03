@@ -5,7 +5,6 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputDirective } from '@/shared/components/input';
 import { ZardFormImports } from '@/shared/components/form';
 import { ZardSelectImports } from '@/shared/components/select';
-import { ZardBadgeComponent} from '@/shared/components/badge';
 
 @Component({
   selector: 'app-register-form',

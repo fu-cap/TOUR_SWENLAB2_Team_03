@@ -1,0 +1,50 @@
+<form [formGroup]="form">
+  <z-form-field #fn="zardId" zardId="name">
+    <label z-form-label [for]="fn.id()" zRequired>Name</label>
+    <z-form-control>
+      <input
+        z-input
+        [id]="fn.id()"
+        type="text"
+        placeholder="Enter the name of the tour"
+        formControlName="name"
+      />
+    </z-form-control>
+    @if (form.get('name')?.invalid && form.get('name')?.touched) {
+      <z-form-message>Please enter a name for the tour.</z-form-message>
+    }
+  </z-form-field>
+
+  <z-form-field #fd="zardId" zardId="description">
+    <label z-form-label [for]="fd.id()" zRequired>Description</label>
+    <z-form-control>
+      <textarea
+        z-input
+        [id]="fd.id()"
+        type="text"
+        rows="3"
+        placeholder="Enter the name a description"
+        formControlName="description"
+      ></textarea>
+    </z-form-control>
+    @if (form.get('description')?.invalid && form.get('description')?.touched) {
+      <z-form-message>Please enter a description for the tour.</z-form-message>
+    }
+  </z-form-field>
+
+  <z-form-field #ft="zardId" zardId="transportType">
+    <label z-form-label [for]="ft.id()" zRequired>Transport type</label>
+    <z-form-control>
+      <z-select [id]="ft.id()" formControlName="transportType" zPlaceholder="Select transport type">
+        <z-select-item zValue="car">Car</z-select-item>
+        <z-select-item zValue="bike">Bike</z-select-item>
+        <z-select-item zValue="walking">Walking</z-select-item>
+      </z-select>
+    </z-form-control>
+    @if (form.get('transportType')?.invalid && form.get('transportType')?.touched) {
+      <z-form-message>Please select your transport type.</z-form-message>
+    }
+  </z-form-field>
+
+
+</form>
