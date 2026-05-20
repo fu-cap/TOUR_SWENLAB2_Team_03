@@ -24,7 +24,7 @@ z-form-field {
   @apply w-full flex justify-center;
 }
 .form-send-button {
-  @apply w-full h-11 border border-purple-300 text-purple-500 tracking-widest rounded-xl uppercase bg-white/20 transition-all duration-200 hover:bg-purple-500/10 active:scale-[0.99];
+  @apply w-full h-11 border border-purple-300 text-purple-500 tracking-widest rounded-xl uppercase bg-white/20 transition-all duration-200 hover:bg-purple-500/10 active:scale-[0.99] cursor-pointer;
 }
 
 .content-bottom {
