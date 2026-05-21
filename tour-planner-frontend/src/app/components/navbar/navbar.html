@@ -1,0 +1,37 @@
+<div class="flex flex-col justify-between w-15 h-full p-2 rounded-lg bg-sidebar border border-sidebar-border opacity-85">
+  <div id="nav_top">
+    @for (item of mainNavItems; track item.state) {
+      <app-nav-button
+        [icon]="item.icon"
+        [label]="item.label"
+        [state]="item.state"
+        [isActive]="activeState() === item.state"
+        (stateChange)="onStateChange($event)"
+      />
+    }
+
+    <div>
+      @for (item of actionNavItems; track item.state) {
+        <app-nav-button
+          [icon]="item.icon"
+          [label]="item.label"
+          [state]="item.state"
+          [isActive]="activeState() === item.state"
+          (stateChange)="onStateChange($event)"
+        />
+      }
+    </div>
+  </div>
+
+  <div id="nav_btm">
+    @for (item of userItem; track item.state) {
+      <app-nav-button
+        [icon]="item.icon"
+        [label]="item.label"
+        [state]="item.state"
+        [isActive]="activeState() === item.state"
+        (stateChange)="onStateChange($event)"
+      />
+    }
+  </div>
+</div>

@@ -1,0 +1,116 @@
+<form [formGroup]="form" class="form">
+  <h1 class="form-title">Register</h1>
+  <z-form-field #fg="zardId" zardId="gender">
+    <label z-form-label [for]="fg.id()" zRequired>Gender</label>
+    <z-form-control>
+      <z-select [id]="fg.id()" formControlName="gender" zPlaceholder="Select gender" class="form-select">
+        <z-select-item zValue="male">Male</z-select-item>
+        <z-select-item zValue="female">Female</z-select-item>
+        <z-select-item zValue="other">Other</z-select-item>
+      </z-select>
+    </z-form-control>
+    @if (form.get('gender')?.invalid && form.get('gender')?.touched) {
+      <z-form-message>Please select your gender.</z-form-message>
+    }
+  </z-form-field>
+
+  <z-form-field #ffn="zardId" zardId="firstname">
+    <label z-form-label [for]="ffn.id()" zRequired>Firstname</label>
+    <z-form-control>
+      <input
+        z-input
+        [id]="ffn.id()"
+        type="text"
+        placeholder="Enter your firstname"
+        formControlName="firstname"
+        class="form-input"
+      />
+    </z-form-control>
+    @if (form.get('firstname')?.invalid && form.get('firstname')?.touched) {
+      <z-form-message>Please enter your firstname.</z-form-message>
+    }
+  </z-form-field>
+
+  <z-form-field #fln="zardId" zardId="lastname">
+    <label z-form-label [for]="fln.id()" zRequired>Lastname</label>
+    <z-form-control>
+      <input
+        z-input
+        [id]="fln.id()"
+        type="text"
+        placeholder="Enter your lastname"
+        formControlName="lastname"
+        class="form-input"
+      />
+    </z-form-control>
+    @if (form.get('lastname')?.invalid && form.get('lastname')?.touched) {
+      <z-form-message>Please enter your lastname.</z-form-message>
+    }
+  </z-form-field>
+
+  <z-form-field #fem="zardId" zardId="email">
+    <label z-form-label [for]="fem.id()" zRequired>Email</label>
+    <z-form-control>
+      <input
+        z-input
+        [id]="fem.id()"
+        type="email"
+        placeholder="Enter your email"
+        formControlName="email"
+        class="form-input"
+      />
+    </z-form-control>
+    @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+      <z-form-message>Please enter your email.</z-form-message>
+    }
+    @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+      <z-form-message>Please enter a valid email.</z-form-message>
+    }
+  </z-form-field>
+
+  <z-form-field #fun="zardId" zardId="username">
+    <label z-form-label [for]="fun.id()" zRequired>Username</label>
+    <z-form-control>
+      <input
+        z-input
+        [id]="fun.id()"
+        type="text"
+        placeholder="Enter your username"
+        formControlName="username"
+        class="form-input"
+      />
+    </z-form-control>
+    @if (form.get('username')?.invalid && form.get('username')?.touched) {
+      <z-form-message>Please enter your username.</z-form-message>
+    }
+    @if (form.get('username')?.hasError('pattern') && form.get('username')?.touched) {
+      <z-form-message>Usernames must not contain any special characters.</z-form-message>
+    }
+  </z-form-field>
+
+  <z-form-field #fp="zardId" zardId="password">
+    <label z-form-label [for]="fp.id()" zRequired>Password</label>
+    <z-form-control>
+      <input
+        z-input
+        [id]="fp.id()"
+        type="password"
+        placeholder="Enter your password"
+        formControlName="password"
+        class="form-input"
+      />
+    </z-form-control>
+    @if (form.get('password')?.invalid && form.get('password')?.touched) {
+      <z-form-message>Please enter your password.</z-form-message>
+    }
+    @if (form.get('password')?.hasError('minlength') && form.get('password')?.touched) {
+      <z-form-message>The password must be at least 9 characters long.</z-form-message>
+    }
+  </z-form-field>
+  <div class="content-center">
+    <button z-button zType="default" type="submit" class="form-send-button">Register</button>
+  </div>
+  <div class="content-bottom">
+    <button z-button zType="default" type="button" (click)="changeStatus()" class="form-change-form">Login</button>
+  </div>
+</form>

@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+.form {
+  @apply w-full max-w-[400px] rounded-[2.5rem] px-9 py-3 flex flex-col items-center relative overflow-hidden;
+}
+
+.form-title {
+  @apply text-3xl text-gray-700 self-start mb-8 tracking-wide;
+}
+
+z-form-field {
+  @apply w-full mb-5 flex flex-col;
+}
+
+[z-form-label] {
+  @apply text-sm text-gray-600 pl-2 self-start;
+}
+
+.form-input {
+  @apply w-full h-9 px-4 rounded-xl border border-purple-300/60 bg-white/40 text-gray-700 placeholder:text-transparent focus:bg-white/70 focus:outline-none focus:border-purple-400 transition-all;
+}
+
+.content-center {
+  @apply w-full flex justify-center;
+}
+.form-send-button {
+  @apply w-full h-11 border border-purple-300 text-purple-500 tracking-widest rounded-xl uppercase bg-white/20 transition-all duration-200 hover:bg-purple-500/10 active:scale-[0.99] cursor-pointer;
+}
+
+.content-bottom {
+  @apply w-full mt-20 flex justify-center;
+}
+.form-change-form {
+  @apply w-full h-11 text-white tracking-widest rounded-xl uppercase transition-all duration-200 flex items-center justify-center cursor-pointer active:scale-[0.99];
+  background-color: #a78bfa;
+  border: none;
+}
+.form-change-form:hover {
+  background-color: #906ffa;
+}
+
+z-form-message {
+  @apply text-xs text-red-500 mt-1 pl-2;
+}

@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+app-content {
+  position: absolute;
+  z-index: 1000;
+}
