@@ -26,7 +26,7 @@ namespace TourPlanner.API.Controllers
         {
             try
             {
-                _logger.LogInformation("GetAllTours wurde aufgerufen.");
+                _logger.LogInformation("GetAllTours was called");
 
                 List<Tour> allTours = await _tourService.GetAllToursAsync();
 

@@ -27,7 +27,9 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         // Konvertiert Enums im JSON automatisch in Strings statt Zahlen
-        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.KebabCaseLower)
+        );
     });
 
     
