@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TourPlanner.API.Dtos;
 using TourPlanner.BusinessLayer.Services;
+using TourPlanner.DataAccessLayer.Entities;
 
 namespace TourPlanner.API.Controllers
 {
@@ -21,18 +22,18 @@ namespace TourPlanner.API.Controllers
 
         // GET http://localhost:<port>/api/tour
         [HttpGet]
-        public IActionResult GetAllTours()
+        public async Task<IActionResult> GetAllTours()
         {
             _logger.LogInformation("GetAllTours wurde aufgerufen.");
 
-            // Test Data
-            var testTours = new[]
-            {
-                new { Id = 1, Name = "Donauinsel Radtour", Description = "Schöne flache Strecke" },
-                new { Id = 2, Name = "Kahlenberg Wanderung", Description = "Steiler Aufstieg mit Aussicht" }
-            };
+            var allTours = await _tourService.GetAllToursAsync();
 
-            return Ok(testTours);
+            return new ContentResult
+            {
+                Content = allTours,
+                ContentType = "application/json",
+                StatusCode = 200
+            };
         }
 
         [HttpPost]

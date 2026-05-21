@@ -1,6 +1,7 @@
 using TourPlanner.DataAccessLayer.Repositories;
 using TourPlanner.DataAccessLayer.Entities;
 using TourPlanner.DataAccessLayer.Enums;
+using TourPlanner.BusinessLayer.Utils;
 
 namespace TourPlanner.BusinessLayer.Services
 {
@@ -34,6 +35,12 @@ namespace TourPlanner.BusinessLayer.Services
             };
 
             return await _tourRepository.AddAsync(newTour);
+        }
+
+        public async Task<string> GetAllToursAsync()
+        {
+            List<Tour> tourList = await _tourRepository.GetAllToursAsync();
+            return JsonSerializerHelper.SerializeList(tourList);
         }
     }
 }

@@ -5,5 +5,6 @@ namespace TourPlanner.DataAccessLayer.Repositories
     public interface ITourRepository
     {
         Task<Tour> AddAsync(Tour tour);
+        Task<List<Tour>> GetAllToursAsync();
     }
 }

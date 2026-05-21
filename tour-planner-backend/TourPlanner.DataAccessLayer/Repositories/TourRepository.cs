@@ -14,5 +14,10 @@ namespace TourPlanner.DataAccessLayer.Repositories
             _tours.Add(tour);
             return Task.FromResult(tour);
         }
+
+        public Task<List<Tour>> GetAllToursAsync()
+        {
+            return Task.FromResult(_tours);
+        }
     }
 }
