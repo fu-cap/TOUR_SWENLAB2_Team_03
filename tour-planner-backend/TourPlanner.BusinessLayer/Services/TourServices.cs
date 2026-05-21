@@ -37,10 +37,9 @@ namespace TourPlanner.BusinessLayer.Services
             return await _tourRepository.AddAsync(newTour);
         }
 
-        public async Task<string> GetAllToursAsync()
+        public async Task<List<Tour>> GetAllToursAsync()
         {
-            List<Tour> tourList = await _tourRepository.GetAllToursAsync();
-            return JsonSerializerHelper.SerializeList(tourList);
+            return await _tourRepository.GetAllToursAsync();
         }
     }
 }

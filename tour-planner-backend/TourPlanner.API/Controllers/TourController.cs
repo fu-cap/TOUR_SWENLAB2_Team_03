@@ -26,14 +26,9 @@ namespace TourPlanner.API.Controllers
         {
             _logger.LogInformation("GetAllTours wurde aufgerufen.");
 
-            var allTours = await _tourService.GetAllToursAsync();
+            List<Tour> allTours = await _tourService.GetAllToursAsync();
 
-            return new ContentResult
-            {
-                Content = allTours,
-                ContentType = "application/json",
-                StatusCode = 200
-            };
+            return Ok(allTours);
         }
 
         [HttpPost]

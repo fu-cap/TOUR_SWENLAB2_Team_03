@@ -6,6 +6,6 @@ namespace TourPlanner.BusinessLayer.Services
     public interface ITourService
     {
         Task<Tour> CreateTourAsync(int userID, string name, string description, string from, string to, TransportType transportType);
-        Task<string> GetAllToursAsync();
+        Task<List<Tour>> GetAllToursAsync();
     }
 }
