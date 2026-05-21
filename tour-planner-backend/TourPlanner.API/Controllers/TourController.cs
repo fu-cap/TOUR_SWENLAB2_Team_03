@@ -24,21 +24,52 @@ namespace TourPlanner.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllTours()
         {
-            _logger.LogInformation("GetAllTours wurde aufgerufen.");
+            try
+            {
+                _logger.LogInformation("GetAllTours wurde aufgerufen.");
 
-            List<Tour> allTours = await _tourService.GetAllToursAsync();
+                List<Tour> allTours = await _tourService.GetAllToursAsync();
 
-            return Ok(allTours);
+                return Ok(allTours);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while exporting tours.");
+                return StatusCode(500, new {message = "Export failed"});
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTour([FromBody] CreateTourDto dto)
         {
-            if(!ModelState.IsValid) return BadRequest(ModelState);
+            if (!ModelState.IsValid) 
+            {
+                _logger.LogWarning("Got invalid DTO for creating a tour.");
+                return BadRequest(ModelState);
+            }
 
-            var createdTour = await _tourService.CreateTourAsync(dto.userId, dto.name, dto.description, dto.from, dto.to, dto.TransportType);
+            try{
+                _logger.LogInformation("Starting creating tour: {TourName}", dto.name);
 
-            return CreatedAtAction(nameof(CreateTour), new { id = createdTour.Id }, createdTour);
+                var createdTour = await _tourService.CreateTourAsync(dto.userId, dto.name, dto.description, dto.from, dto.to, dto.TransportType);
+
+                return CreatedAtAction(nameof(CreateTour), new { id = createdTour.Id }, createdTour);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Error in Business Logic: {TourName}", dto.name);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Error while communicating with external API.");
+                return StatusCode(503, new { message = "The route service is unavailable" });
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while creating the tour");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
         }
 
     }
