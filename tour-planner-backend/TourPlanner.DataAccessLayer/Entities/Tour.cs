@@ -8,8 +8,7 @@ namespace TourPlanner.DataAccessLayer.Entities
         public Guid userID { get; set; }
         public required string Name { get; set; }
         public string Description { get; set; } = "";
-        public required double[] From { get; set; }
-        public required double[] To { get; set; }
+        public List<Waypoint> Waypoints { get; set; } = new();
         public TransportType TransportType { get; set; }
         public double Distance_km { get; set; }
         public TimeSpan EstimatedTime { get; set; }

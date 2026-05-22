@@ -51,7 +51,7 @@ namespace TourPlanner.API.Controllers
             try{
                 _logger.LogInformation("Starting creating tour: {TourName}", dto.name);
 
-                var createdTour = await _tourService.CreateTourAsync(dto.userId, dto.name, dto.description, dto.from, dto.to, dto.TransportType);
+                var createdTour = await _tourService.CreateTourAsync(dto);
 
                 return CreatedAtAction(nameof(CreateTour), new { id = createdTour.Id }, createdTour);
             }

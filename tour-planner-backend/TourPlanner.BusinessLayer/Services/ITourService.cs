@@ -1,11 +1,12 @@
 using TourPlanner.DataAccessLayer.Entities;
 using TourPlanner.DataAccessLayer.Enums;
+using TourPlanner.API.Dtos;
 
 namespace TourPlanner.BusinessLayer.Services
 {
     public interface ITourService
     {
-        Task<Tour> CreateTourAsync(Guid userID, string name, string description, double[] from, double[] to, TransportType transportType);
+        Task<Tour> CreateTourAsync(CreateTourDto createTourDto);
         Task<List<Tour>> GetAllToursAsync();
     }
 }

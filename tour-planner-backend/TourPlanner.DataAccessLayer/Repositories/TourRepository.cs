@@ -10,6 +10,11 @@ namespace TourPlanner.DataAccessLayer.Repositories
         public Task<Tour> AddAsync(Tour tour)
         {
             tour.Id = Guid.NewGuid();
+            foreach (var wp in tour.Waypoints)
+            {
+                wp.Id = Guid.NewGuid();
+                wp.TourId = tour.Id;
+            }
             _tours.Add(tour);
             return Task.FromResult(tour);
         }
