@@ -35,7 +35,27 @@ namespace TourPlanner.DataAccessLayer.Repositories
 
         public async Task UpdateAsync(Tour tour)
         {
-            _context.Tours.Update(tour);
+            var existingTour = await _context.Tours
+                .Include(t => t.Waypoints)
+                .FirstOrDefaultAsync(t => t.Id == tour.Id);
+
+            if (existingTour == null) return;
+
+            // Update primitive properties
+            _context.Entry(existingTour).CurrentValues.SetValues(tour);
+
+            // Replace waypoints: 
+            // 1. Remove old ones
+            _context.Waypoints.RemoveRange(existingTour.Waypoints);
+            
+            // 2. Add new ones (ensure they have new IDs and correct TourId)
+            foreach (var wp in tour.Waypoints)
+            {
+                wp.Id = Guid.NewGuid();
+                wp.TourId = tour.Id;
+            }
+            existingTour.Waypoints = tour.Waypoints;
+
             await _context.SaveChangesAsync();
         }
 
