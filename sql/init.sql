@@ -18,9 +18,12 @@ DROP TYPE  IF EXISTS transport_type CASCADE;
 --  ENUM: Transport types
 -- =============================================================
 CREATE TYPE transport_type AS ENUM (
-    'CAR',
-    'BIKE',
-    'WALKING'
+    'driving-car',
+    'driving-hgv',
+    'cycling-regular',
+    'cycling-road',
+    'foot-walking',
+    'foot-hiking'
 );
 
 -- =============================================================

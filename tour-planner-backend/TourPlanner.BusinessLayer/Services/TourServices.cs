@@ -22,7 +22,7 @@ namespace TourPlanner.BusinessLayer.Services
 
         private static HttpClient openrouteClient = new();
 
-        public async Task<Tour> CreateTourAsync(int userID, string name, string description, double[] from, double[] to, TransportType transportType)
+        public async Task<Tour> CreateTourAsync(Guid userID, string name, string description, double[] from, double[] to, TransportType transportType)
         {
             string? apiKey = Environment.GetEnvironmentVariable("OpenRoute_ApiKey");
 

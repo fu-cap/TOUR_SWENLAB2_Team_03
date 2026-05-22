@@ -6,11 +6,10 @@ namespace TourPlanner.DataAccessLayer.Repositories
     {
         // In-Memory Implementation bis Datenbank erstellt ist
         private static readonly List<Tour> _tours = new();
-        private static int _counter = 1;
 
         public Task<Tour> AddAsync(Tour tour)
         {
-            tour.Id = _counter++;
+            tour.Id = Guid.NewGuid();
             _tours.Add(tour);
             return Task.FromResult(tour);
         }

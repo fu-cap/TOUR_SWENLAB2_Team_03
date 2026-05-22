@@ -4,8 +4,8 @@ namespace TourPlanner.DataAccessLayer.Entities
 {
     public class Tour
     {
-        public int Id { get; set; }
-        public int userID { get; set; }
+        public Guid Id { get; set; }
+        public Guid userID { get; set; }
         public required string Name { get; set; }
         public string Description { get; set; } = "";
         public required double[] From { get; set; }
