@@ -1,8 +1,21 @@
 using System.Text.Json.Serialization;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataAccessLayer.Repositories;
+using TourPlanner.DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
+using TourPlanner.DataAccessLayer.Enums;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Register DbContext
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+dataSourceBuilder.MapEnum<TransportType>();
+var dataSource = dataSourceBuilder.Build();
+
+builder.Services.AddDbContext<TourPlannerDbContext>(options =>
+    options.UseNpgsql(dataSource));
 
 //Services registrieren
 builder.Services.AddControllers();

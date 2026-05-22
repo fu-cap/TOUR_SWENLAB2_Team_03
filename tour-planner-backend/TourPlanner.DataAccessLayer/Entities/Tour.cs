@@ -13,6 +13,8 @@ namespace TourPlanner.DataAccessLayer.Entities
         public double Distance_km { get; set; }
         public TimeSpan EstimatedTime { get; set; }
         public string RouteInformation { get; set; } = string.Empty;
+        public double Popularity { get; set; }
+        public double ChildFriendliness { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
     }

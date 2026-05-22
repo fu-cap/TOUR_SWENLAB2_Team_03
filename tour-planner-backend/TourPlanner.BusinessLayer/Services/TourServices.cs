@@ -3,7 +3,7 @@ using TourPlanner.DataAccessLayer.Entities;
 using TourPlanner.DataAccessLayer.Enums;
 using TourPlanner.BusinessLayer.Utils;
 using TourPlanner.BusinessLayer.Clients;
-using TourPlanner.API.Dtos;
+using TourPlanner.BusinessLayer.Dtos;
 using System.Net.Http.Json;
 using System.Net.Http.Headers;
 
@@ -25,15 +25,86 @@ namespace TourPlanner.BusinessLayer.Services
 
         public async Task<Tour> CreateTourAsync(CreateTourDto dto)
         {
-            string? apiKey = Environment.GetEnvironmentVariable("OpenRoute_ApiKey");
+            var (distance_km, estimatedTime, geometryString) = await GetRouteInfoAsync(dto.waypoints, dto.TransportType);
 
+            var newTour = new Tour
+            {
+                userID = dto.userId,
+                Name = dto.name,
+                Description = dto.description,
+                TransportType = dto.TransportType,
+                Distance_km = distance_km,
+                EstimatedTime = estimatedTime,
+                RouteInformation = geometryString,
+                CreationDate = DateTime.UtcNow,
+                LastModifiedDate = DateTime.UtcNow,
+                Waypoints = dto.waypoints.Select((w, index) => new Waypoint
+                {
+                    OrderIndex = index,
+                    Address = w.address,
+                    Latitude = w.latitude,
+                    Longitude = w.longitude
+                }).ToList()
+            };
+
+            return await _tourRepository.AddAsync(newTour);
+        }
+
+        public async Task<List<Tour>> GetAllToursAsync()
+        {
+            return await _tourRepository.GetAllToursAsync();
+        }
+
+        public async Task<Tour?> GetTourByIdAsync(Guid id)
+        {
+            return await _tourRepository.GetByIdAsync(id);
+        }
+
+        public async Task UpdateTourAsync(Guid id, CreateTourDto dto)
+        {
+            var existingTour = await _tourRepository.GetByIdAsync(id);
+            if (existingTour == null)
+            {
+                throw new KeyNotFoundException($"Tour with ID {id} not found.");
+            }
+
+            var (distance_km, estimatedTime, geometryString) = await GetRouteInfoAsync(dto.waypoints, dto.TransportType);
+
+            existingTour.Name = dto.name;
+            existingTour.Description = dto.description;
+            existingTour.TransportType = dto.TransportType;
+            existingTour.Distance_km = distance_km;
+            existingTour.EstimatedTime = estimatedTime;
+            existingTour.RouteInformation = geometryString;
+            existingTour.LastModifiedDate = DateTime.UtcNow;
+            
+            existingTour.Waypoints = dto.waypoints.Select((w, index) => new Waypoint
+            {
+                TourId = id,
+                OrderIndex = index,
+                Address = w.address,
+                Latitude = w.latitude,
+                Longitude = w.longitude
+            }).ToList();
+
+            await _tourRepository.UpdateAsync(existingTour);
+        }
+
+        public async Task DeleteTourAsync(Guid id)
+        {
+            await _tourRepository.DeleteAsync(id);
+        }
+
+        private async Task<(double distance_km, TimeSpan estimatedTime, string geometryString)> GetRouteInfoAsync(List<WaypointDto> waypoints, TransportType transportType)
+        {
+            string? apiKey = Environment.GetEnvironmentVariable("OpenRoute_ApiKey");
 
             if (string.IsNullOrEmpty(apiKey))
             {
                 throw new Exception("API-Key not found");
             }
 
-            if (dto.waypoints.Count < 2)
+            if (waypoints.Count < 2)
             {
                 throw new ArgumentException("A tour must have at least a start and an end point.");
             }
@@ -43,10 +114,10 @@ namespace TourPlanner.BusinessLayer.Services
             
             var requestBody = new OrsRequest
             {
-                Coordinates = dto.waypoints.Select(w => new double[] { w.longitude, w.latitude }).ToList()
+                Coordinates = waypoints.Select(w => new double[] { w.longitude, w.latitude }).ToList()
             };
 
-            var response = await openrouteClient.PostAsJsonAsync($"{OpenRouteAPI}/v2/directions/{dto.TransportType.ToApiString()}", requestBody);  
+            var response = await openrouteClient.PostAsJsonAsync($"{OpenRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
 
             if (response.IsSuccessStatusCode)
             {
@@ -66,39 +137,13 @@ namespace TourPlanner.BusinessLayer.Services
                     geometryString = route.Geometry; 
                 }
 
-                var newTour = new Tour
-                {
-                    userID = dto.userId,
-                    Name = dto.name,
-                    Description = dto.description,
-                    TransportType = dto.TransportType,
-                    Distance_km = distance_km,
-                    EstimatedTime = estimatedTime,
-                    RouteInformation = geometryString,
-                    CreationDate = DateTime.UtcNow,
-                    LastModifiedDate = DateTime.UtcNow,
-                    Waypoints = dto.waypoints.Select((w, index) => new Waypoint
-                    {
-                        OrderIndex = index,
-                        Address = w.address,
-                        Latitude = w.latitude,
-                        Longitude = w.longitude
-                    }).ToList()
-                };
-
-                return await _tourRepository.AddAsync(newTour);
+                return (distance_km, estimatedTime, geometryString);
             }
             else
             {
                 string errorJson = await response.Content.ReadAsStringAsync();
                 throw new HttpRequestException($"Error while getting route information: {errorJson}");
             }
-
-        }
-
-        public async Task<List<Tour>> GetAllToursAsync()
-        {
-            return await _tourRepository.GetAllToursAsync();
         }
     }
 }

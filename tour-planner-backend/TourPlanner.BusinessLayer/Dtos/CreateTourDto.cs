@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using TourPlanner.DataAccessLayer.Enums;
 
-namespace TourPlanner.API.Dtos
+namespace TourPlanner.BusinessLayer.Dtos
 {
     public class WaypointDto
     {

@@ -59,6 +59,7 @@ CREATE TABLE tour (
                       transport_type      transport_type NOT NULL,
                       distance_km         NUMERIC(10,2),               -- populated via OpenRouteService API
                       estimated_time_min  INTEGER,                     -- populated via OpenRouteService API
+                      route_information   TEXT,                        -- encoded geometry polyline
                       map_image_path      VARCHAR(500),                -- path on filesystem (not a BLOB)
                       popularity          NUMERIC(5,2)   NOT NULL DEFAULT 0.0,   -- derived from number of logs
                       child_friendliness  NUMERIC(5,2)   NOT NULL DEFAULT 0.0,   -- derived from log statistics
@@ -87,8 +88,8 @@ CREATE INDEX idx_tour_user_id ON tour(user_id);
 CREATE TABLE tour_waypoint (
                                id             UUID           NOT NULL DEFAULT gen_random_uuid(),
                                tour_id        UUID           NOT NULL,
-                               order_index    INTEGER        NOT NULL, -- 0 for Start, 1..N-1 for Waypoints, N for End
-                               address        VARCHAR(300),            -- Human readable name
+                               order_index    INTEGER        NOT NULL,
+                               label        VARCHAR(300),
                                latitude       NUMERIC(10, 8) NOT NULL,
                                longitude      NUMERIC(11, 8) NOT NULL,
 

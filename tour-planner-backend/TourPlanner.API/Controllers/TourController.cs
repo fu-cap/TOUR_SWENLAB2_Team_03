@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TourPlanner.API.Dtos;
+using TourPlanner.BusinessLayer.Dtos;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataAccessLayer.Entities;
 
@@ -53,7 +53,7 @@ namespace TourPlanner.API.Controllers
 
                 var createdTour = await _tourService.CreateTourAsync(dto);
 
-                return CreatedAtAction(nameof(CreateTour), new { id = createdTour.Id }, createdTour);
+                return CreatedAtAction(nameof(GetTourById), new { id = createdTour.Id }, createdTour);
             }
             catch (ArgumentException ex)
             {
@@ -72,5 +72,58 @@ namespace TourPlanner.API.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTourById(Guid id)
+        {
+            var tour = await _tourService.GetTourByIdAsync(id);
+            if (tour == null)
+            {
+                return NotFound(new { message = $"Tour with ID {id} not found." });
+            }
+            return Ok(tour);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTour(Guid id, [FromBody] CreateTourDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _tourService.UpdateTourAsync(id, dto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while updating tour {Id}", id);
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTour(Guid id)
+        {
+            try
+            {
+                await _tourService.DeleteTourAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while deleting tour {Id}", id);
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
     }
 }
