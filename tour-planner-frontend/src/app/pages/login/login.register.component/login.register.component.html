@@ -1,8 +1,9 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="form">
+  <h1 class="form-title">Register</h1>
   <z-form-field #fg="zardId" zardId="gender">
     <label z-form-label [for]="fg.id()" zRequired>Gender</label>
     <z-form-control>
-      <z-select [id]="fg.id()" formControlName="gender" zPlaceholder="Select gender">
+      <z-select [id]="fg.id()" formControlName="gender" zPlaceholder="Select gender" class="form-select">
         <z-select-item zValue="male">Male</z-select-item>
         <z-select-item zValue="female">Female</z-select-item>
         <z-select-item zValue="other">Other</z-select-item>
@@ -22,6 +23,7 @@
         type="text"
         placeholder="Enter your firstname"
         formControlName="firstname"
+        class="form-input"
       />
     </z-form-control>
     @if (form.get('firstname')?.invalid && form.get('firstname')?.touched) {
@@ -38,6 +40,7 @@
         type="text"
         placeholder="Enter your lastname"
         formControlName="lastname"
+        class="form-input"
       />
     </z-form-control>
     @if (form.get('lastname')?.invalid && form.get('lastname')?.touched) {
@@ -54,6 +57,7 @@
         type="email"
         placeholder="Enter your email"
         formControlName="email"
+        class="form-input"
       />
     </z-form-control>
     @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
@@ -73,6 +77,7 @@
         type="text"
         placeholder="Enter your username"
         formControlName="username"
+        class="form-input"
       />
     </z-form-control>
     @if (form.get('username')?.invalid && form.get('username')?.touched) {
@@ -92,6 +97,7 @@
         type="password"
         placeholder="Enter your password"
         formControlName="password"
+        class="form-input"
       />
     </z-form-control>
     @if (form.get('password')?.invalid && form.get('password')?.touched) {
@@ -101,7 +107,10 @@
       <z-form-message>The password must be at least 9 characters long.</z-form-message>
     }
   </z-form-field>
-
-  <button z-button zType="default" type="submit">Register</button>
-  <button z-button zType="default" type="button" (click)="changeStatus()">Login</button>
+  <div class="content-center">
+    <button z-button zType="default" type="submit" class="form-send-button">Register</button>
+  </div>
+  <div class="content-bottom">
+    <button z-button zType="default" type="button" (click)="changeStatus()" class="form-change-form">Login</button>
+  </div>
 </form>

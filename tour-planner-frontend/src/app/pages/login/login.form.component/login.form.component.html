@@ -1,4 +1,5 @@
-<form [formGroup]="form">
+<form class="form" [formGroup]="form">
+  <h1 class="form-title">Login</h1>
   <z-form-field #fu="zardId" zardId="username">
     <label z-form-label [for]="fu.id()" zRequired>Username</label>
     <z-form-control>
@@ -8,6 +9,7 @@
         type="text"
         placeholder="Enter your username"
         formControlName="username"
+        class="form-input"
       />
     </z-form-control>
     @if (form.get('username')?.invalid && form.get('username')?.touched) {
@@ -24,13 +26,17 @@
         type="password"
         placeholder="Enter your password"
         formControlName="password"
+        class="form-input"
       />
     </z-form-control>
     @if (form.get('password')?.invalid && form.get('password')?.touched) {
       <z-form-message>Please enter your password.</z-form-message>
     }
   </z-form-field>
-
-  <button z-button zType="default" type="submit">Login</button>
-  <button z-button zType="default" type="button" (click)="changeStatus()">Register</button>
+  <div class="content-center">
+    <button z-button zType="default" type="submit" class="form-send-button">Login</button>
+  </div>
+  <div class="content-bottom">
+    <button z-button zType="default" type="button" (click)="changeStatus()" class="form-change-form">Register</button>
+  </div>
 </form>

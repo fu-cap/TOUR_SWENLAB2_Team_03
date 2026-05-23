@@ -9,18 +9,22 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- =============================================================
 --  Drop existing tables (for a clean reset)
 -- =============================================================
-DROP TABLE IF EXISTS tour_log CASCADE;
-DROP TABLE IF EXISTS tour     CASCADE;
-DROP TABLE IF EXISTS app_user CASCADE;
+DROP TABLE IF EXISTS tour_waypoint CASCADE;
+DROP TABLE IF EXISTS tour_log      CASCADE;
+DROP TABLE IF EXISTS tour          CASCADE;
+DROP TABLE IF EXISTS app_user      CASCADE;
 DROP TYPE  IF EXISTS transport_type CASCADE;
 
 -- =============================================================
 --  ENUM: Transport types
 -- =============================================================
 CREATE TYPE transport_type AS ENUM (
-    'CAR',
-    'BIKE',
-    'WALKING'
+    'driving-car',
+    'driving-hgv',
+    'cycling-regular',
+    'cycling-road',
+    'foot-walking',
+    'foot-hiking'
 );
 
 -- =============================================================
@@ -52,11 +56,10 @@ CREATE TABLE tour (
                       user_id             UUID           NOT NULL,
                       name                VARCHAR(200)   NOT NULL,
                       description         TEXT,
-                      from_location       VARCHAR(300)   NOT NULL,
-                      to_location         VARCHAR(300)   NOT NULL,
                       transport_type      transport_type NOT NULL,
                       distance_km         NUMERIC(10,2),               -- populated via OpenRouteService API
                       estimated_time_min  INTEGER,                     -- populated via OpenRouteService API
+                      route_information   TEXT,                        -- encoded geometry polyline
                       map_image_path      VARCHAR(500),                -- path on filesystem (not a BLOB)
                       popularity          NUMERIC(5,2)   NOT NULL DEFAULT 0.0,   -- derived from number of logs
                       child_friendliness  NUMERIC(5,2)   NOT NULL DEFAULT 0.0,   -- derived from log statistics
@@ -79,9 +82,30 @@ COMMENT ON COLUMN tour.child_friendliness IS 'Auto-computed from difficulty, tim
 -- Index for fast lookup of all tours belonging to a user
 CREATE INDEX idx_tour_user_id ON tour(user_id);
 
--- Full-text search index over name, description and locations
+-- =============================================================
+--  TABLE: tour_waypoint
+-- =============================================================
+CREATE TABLE tour_waypoint (
+                               id             UUID           NOT NULL DEFAULT gen_random_uuid(),
+                               tour_id        UUID           NOT NULL,
+                               order_index    INTEGER        NOT NULL,
+                               label        VARCHAR(300),
+                               latitude       NUMERIC(10, 8) NOT NULL,
+                               longitude      NUMERIC(11, 8) NOT NULL,
+
+                               CONSTRAINT pk_tour_waypoint PRIMARY KEY (id),
+                               CONSTRAINT fk_waypoint_tour FOREIGN KEY (tour_id) REFERENCES tour(id) ON DELETE CASCADE,
+                               CONSTRAINT uq_tour_order    UNIQUE (tour_id, order_index)
+);
+
+COMMENT ON TABLE tour_waypoint IS 'Waypoints/Stops of a tour in sequential order';
+
+-- Index for fast retrieval in order
+CREATE INDEX idx_waypoint_tour_order ON tour_waypoint(tour_id, order_index);
+
+-- Full-text search index over name and description
 CREATE INDEX idx_tour_fulltext ON tour
-    USING GIN (to_tsvector('english', coalesce(name,'') || ' ' || coalesce(description,'') || ' ' || from_location || ' ' || to_location));
+    USING GIN (to_tsvector('english', coalesce(name,'') || ' ' || coalesce(description,'')));
 
 -- =============================================================
 --  TABLE: tour_log
@@ -117,7 +141,7 @@ CREATE INDEX idx_tour_log_fulltext ON tour_log
 
 -- =============================================================
 --  TRIGGER: automatically update updated_at on tour
--- =============================================================
+-- =============================================
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -131,7 +155,7 @@ CREATE TRIGGER trg_tour_updated_at
     FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- =============================================================
---  VIEW: Full-text search (combines tour + logs)
+--  VIEW: Full-text search (combines tour + logs + waypoints)
 -- =============================================================
 CREATE OR REPLACE VIEW v_tour_search AS
 SELECT
@@ -139,52 +163,23 @@ SELECT
     t.user_id,
     t.name,
     t.description,
-    t.from_location,
-    t.to_location,
     t.transport_type,
     t.distance_km,
     t.estimated_time_min,
     t.popularity,
     t.child_friendliness,
-    COUNT(l.id)                                       AS log_count,
+    COUNT(DISTINCT l.id)                              AS log_count,
     AVG(l.rating)                                     AS avg_rating,
     AVG(l.difficulty)                                 AS avg_difficulty,
     to_tsvector('english',
                 coalesce(t.name,'')        || ' ' ||
                 coalesce(t.description,'') || ' ' ||
-                t.from_location            || ' ' ||
-                t.to_location              || ' ' ||
-                coalesce(string_agg(l.comment, ' '),'')
+                coalesce(string_agg(DISTINCT w.address, ' '),'') || ' ' ||
+                coalesce(string_agg(DISTINCT l.comment, ' '),'')
     )                                                 AS search_vector
 FROM tour t
          LEFT JOIN tour_log l ON l.tour_id = t.id
+         LEFT JOIN tour_waypoint w ON w.tour_id = t.id
 GROUP BY t.id;
 
-COMMENT ON VIEW v_tour_search IS 'Combined full-text search index across tours and all related logs';
-
--- =============================================================
---  EXAMPLE FULL-TEXT QUERY (for testing in DataGrip):
---
---  SELECT tour_id, name, from_location, to_location
---  FROM   v_tour_search
---  WHERE  user_id = '<your-user-uuid>'
---    AND  search_vector @@ plainto_tsquery('english', 'Vienna bike');
--- =============================================================
-
--- =============================================================
---  SAMPLE DATA (optional – keep commented out for production)
--- =============================================================
-/*
-INSERT INTO app_user (username, email, password_hash)
-VALUES ('testuser', 'test@example.com', '$2a$12$PLACEHOLDER_BCRYPT_HASH');
-
-INSERT INTO tour (user_id, name, description, from_location, to_location, transport_type, distance_km, estimated_time_min)
-SELECT id, 'Danube Cycle Path', 'Scenic bike tour along the Danube river', 'Vienna', 'Krems', 'BIKE', 73.5, 240
-FROM app_user WHERE username = 'testuser';
-
-INSERT INTO tour_log (tour_id, date_time, comment, difficulty, total_distance_km, total_time_min, rating)
-SELECT t.id, NOW(), 'Great ride, light headwind', 2, 73.5, 255, 5
-FROM tour t
-JOIN app_user u ON t.user_id = u.id
-WHERE u.username = 'testuser';
-*/
+COMMENT ON VIEW v_tour_search IS 'Combined full-text search index across tours, logs and waypoints';
