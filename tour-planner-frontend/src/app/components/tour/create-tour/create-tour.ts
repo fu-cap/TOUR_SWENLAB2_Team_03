@@ -50,6 +50,7 @@ export class CreateTour implements OnInit, OnDestroy {
 
   searchResults = signal<GeocodingResult[]>([]);
   isSearching = signal(false);
+  activeWaypointIndex = signal<number | null>(null);
 
   get waypoints() {
     return this.form.controls.waypoints;
@@ -105,12 +106,20 @@ export class CreateTour implements OnInit, OnDestroy {
           this.searchResults.set([]);
           return of([]);
         }
+        
+        // Find current index of this group in the array
+        const currentIndex = this.waypoints.controls.indexOf(waypointGroup);
+        this.activeWaypointIndex.set(currentIndex);
+        
         this.isSearching.set(true);
         return this.geocodingService.search(value);
       })
     ).subscribe(results => {
-      this.searchResults.set(results);
-      this.isSearching.set(false);
+      const currentIndex = this.waypoints.controls.indexOf(waypointGroup);
+      if (this.activeWaypointIndex() === currentIndex) {
+        this.searchResults.set(results);
+        this.isSearching.set(false);
+      }
     });
 
     if (index !== undefined) {
@@ -128,6 +137,7 @@ export class CreateTour implements OnInit, OnDestroy {
       lng: result.lng
     }, { emitEvent: true }); // Trigger valueChanges to sync map
     this.searchResults.set([]);
+    this.activeWaypointIndex.set(null);
   }
 
   removeWaypoint(index: number) {
