@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TourPlanner.DataAccessLayer.Entities;
 using TourPlanner.DataAccessLayer.Enums;
 using Npgsql;
+using TourPlanner.DataAccessLayer.Utils;
 
 namespace TourPlanner.DataAccessLayer
 {
@@ -26,7 +27,10 @@ namespace TourPlanner.DataAccessLayer
                 entity.Property(e => e.userID).HasColumnName("user_id");
                 entity.Property(e => e.Name).HasColumnName("name").IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Description).HasColumnName("description");
-                entity.Property(e => e.TransportType).HasColumnName("transport_type");
+                entity.Property(e => e.TransportType).HasConversion(
+                    v => v.ToPgName(),
+                    v => EnumExtensions.FromPgName<TransportType>(v)
+                ).HasColumnName("transport_type");
                 entity.Property(e => e.Distance_km).HasColumnName("distance_km");
                 entity.Property(e => e.EstimatedTime).HasColumnName("estimated_time_min")
                     .HasConversion(
