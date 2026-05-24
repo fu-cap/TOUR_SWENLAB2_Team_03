@@ -14,6 +14,7 @@ import { lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch } from
 import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocoding.service';
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
+import { RouteService } from '@/shared/core/services/route.service';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 
 @Component({
@@ -40,6 +41,7 @@ export class CreateTour implements OnInit, OnDestroy {
   private geocodingService = inject(GeocodingService);
   private tourService = inject(TourService);
   private mapService = inject(MapService);
+  private routeService = inject(RouteService);
   
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -61,9 +63,10 @@ export class CreateTour implements OnInit, OnDestroy {
     this.addWaypoint(); // Start
     this.addWaypoint(); // Destination
 
-    // Listen to form changes to update map markers
+    // Listen to form changes to update map markers and route
     this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
       this.syncMapMarkers();
+      this.syncRoute();
     });
   }
 
@@ -88,6 +91,20 @@ export class CreateTour implements OnInit, OnDestroy {
       .filter(m => m !== null) as MapMarker[];
     
     this.mapService.updateMarkers(markers);
+  }
+
+  syncRoute() {
+    const coords = this.waypoints.controls
+      .map(c => [c.value.lng, c.value.lat])
+      .filter(c => c[0] && c[1]);
+
+    if (coords.length >= 2) {
+      const transportType = this.form.get('transportType')?.value as TransportType;
+      this.routeService.getRoute(coords, transportType).subscribe({
+        next: (geoJson) => this.mapService.updateRoute(geoJson),
+        error: (err) => console.error('Error fetching route:', err)
+      });
+    }
   }
 
   addWaypoint(index?: number) {
