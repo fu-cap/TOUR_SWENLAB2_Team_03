@@ -11,12 +11,20 @@ export interface Waypoint {
   adresse?: string;
 }
 
+export type TransportType = 
+  | 'driving-car' 
+  | 'driving-hgv' 
+  | 'cycling-regular' 
+  | 'cycling-road' 
+  | 'foot-walking' 
+  | 'foot-hiking';
+
 export interface Tour {
   id?: number;
   name: string;
   description: string;
   waypoints: Waypoint[]; // From und To mit Zwischenschritten
-  transportType: 'car' | 'bike' | 'walking';
+  transportType: TransportType;
 
   // Felder von API befüllt
   distance?: number;
