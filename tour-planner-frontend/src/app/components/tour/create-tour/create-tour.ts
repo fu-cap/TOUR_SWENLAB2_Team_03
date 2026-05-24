@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Tour, Waypoint, TransportType } from '@/models/tour.model';
 import { ZardIdDirective } from '@/shared/core';
@@ -8,9 +8,10 @@ import { ZardFormImports } from '@/shared/components/form';
 import { ZardSelectImports } from '@/shared/components/select';
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { ZardPopoverImports } from '@/shared/components/popover';
+import { ZardBadgeComponent } from '@/shared/components/badge';
 import { CommonModule } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch } from '@ng-icons/lucide';
+import { lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch, lucideRoute, lucideTimer } from '@ng-icons/lucide';
 import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocoding.service';
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
@@ -29,10 +30,11 @@ import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
     ...ZardSelectImports,
     ...ZardPopoverImports,
     ZardInputGroupComponent,
+    ZardBadgeComponent,
     NgIcon
   ],
   providers: [
-    provideIcons({ lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch })
+    provideIcons({ lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch, lucideRoute, lucideTimer })
   ],
   templateUrl: './create-tour.html',
   styleUrl: './create-tour.css',
@@ -53,6 +55,23 @@ export class CreateTour implements OnInit, OnDestroy {
   searchResults = signal<GeocodingResult[]>([]);
   isSearching = signal(false);
   activeWaypointIndex = signal<number | null>(null);
+
+  routeDistance = signal<number | null>(null); // meters
+  routeDuration = signal<number | null>(null); // seconds
+
+  formattedDistance = computed(() => {
+    const d = this.routeDistance();
+    if (d === null) return '0.00 km';
+    return (d / 1000).toFixed(2) + ' km';
+  });
+
+  formattedDuration = computed(() => {
+    const s = this.routeDuration();
+    if (s === null) return '0m';
+    const hours = Math.floor(s / 3600);
+    const minutes = Math.floor((s % 3600) / 60);
+    return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+  });
 
   get waypoints() {
     return this.form.controls.waypoints;
@@ -101,9 +120,19 @@ export class CreateTour implements OnInit, OnDestroy {
     if (coords.length >= 2) {
       const transportType = this.form.get('transportType')?.value as TransportType;
       this.routeService.getRoute(coords, transportType).subscribe({
-        next: (geoJson) => this.mapService.updateRoute(geoJson),
+        next: (geoJson) => {
+          this.mapService.updateRoute(geoJson);
+          if (geoJson.features && geoJson.features.length > 0) {
+            const summary = geoJson.features[0].properties.summary;
+            this.routeDistance.set(summary.distance);
+            this.routeDuration.set(summary.duration);
+          }
+        },
         error: (err) => console.error('Error fetching route:', err)
       });
+    } else {
+      this.routeDistance.set(null);
+      this.routeDuration.set(null);
     }
   }
 
