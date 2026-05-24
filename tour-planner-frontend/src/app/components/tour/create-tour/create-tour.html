@@ -1,50 +1,159 @@
-<form [formGroup]="form">
-  <z-form-field #fn="zardId" zardId="name">
-    <label z-form-label [for]="fn.id()" zRequired>Name</label>
-    <z-form-control>
-      <input
-        z-input
-        [id]="fn.id()"
-        type="text"
-        placeholder="Enter the name of the tour"
-        formControlName="name"
-      />
-    </z-form-control>
-    @if (form.get('name')?.invalid && form.get('name')?.touched) {
-      <z-form-message>Please enter a name for the tour.</z-form-message>
-    }
-  </z-form-field>
+<div class="flex flex-col gap-6 p-4">
+  <div>
+    <h2 class="text-2xl font-bold">Create New Tour</h2>
+    <p class="text-muted-foreground">Plan your next adventure by filling out the details below.</p>
+  </div>
 
-  <z-form-field #fd="zardId" zardId="description">
-    <label z-form-label [for]="fd.id()" zRequired>Description</label>
-    <z-form-control>
-      <textarea
-        z-input
-        [id]="fd.id()"
-        type="text"
-        rows="3"
-        placeholder="Enter the name a description"
-        formControlName="description"
-      ></textarea>
-    </z-form-control>
-    @if (form.get('description')?.invalid && form.get('description')?.touched) {
-      <z-form-message>Please enter a description for the tour.</z-form-message>
-    }
-  </z-form-field>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+  <!-- Tour General Info -->
+  <div class="space-y-4">
+    <z-form-field #fn="zardId" zardId="name">
+      <label z-form-label [for]="fn.id()" zRequired>Tour Name</label>
+      <z-form-control>
+        <input
+          z-input
+          [id]="fn.id()"
+          type="text"
+          placeholder="e.g. Mountain Bike Tour Vienna"
+          formControlName="name"
+        />
+      </z-form-control>
+      @if (form.get('name')?.invalid && form.get('name')?.touched) {
+        <z-form-message>Please enter a name for the tour.</z-form-message>
+      }
+    </z-form-field>
 
-  <z-form-field #ft="zardId" zardId="transportType">
-    <label z-form-label [for]="ft.id()" zRequired>Transport type</label>
-    <z-form-control>
-      <z-select [id]="ft.id()" formControlName="transportType" zPlaceholder="Select transport type">
-        <z-select-item zValue="car">Car</z-select-item>
-        <z-select-item zValue="bike">Bike</z-select-item>
-        <z-select-item zValue="walking">Walking</z-select-item>
-      </z-select>
-    </z-form-control>
-    @if (form.get('transportType')?.invalid && form.get('transportType')?.touched) {
-      <z-form-message>Please select your transport type.</z-form-message>
-    }
-  </z-form-field>
+    <z-form-field #fd="zardId" zardId="description">
+      <label z-form-label [for]="fd.id()" zRequired>Description</label>
+      <z-form-control>
+        <textarea
+          z-input
+          [id]="fd.id()"
+          type="text"
+          rows="3"
+          placeholder="Describe your tour..."
+          formControlName="description"
+        ></textarea>
+      </z-form-control>
+      @if (form.get('description')?.invalid && form.get('description')?.touched) {
+        <z-form-message>Please enter a description for the tour.</z-form-message>
+      }
+    </z-form-field>
 
+    <z-form-field #ft="zardId" zardId="transportType">
+      <label z-form-label [for]="ft.id()" zRequired>Transport Type</label>
+      <z-form-control>
+        <z-select [id]="ft.id()" formControlName="transportType" zPlaceholder="Select transport type">
+          <z-select-item zValue="driving-car">Car</z-select-item>
+          <z-select-item zValue="driving-hgv">HGV (Truck)</z-select-item>
+          <z-select-item zValue="cycling-regular">Cycling (Regular)</z-select-item>
+          <z-select-item zValue="cycling-road">Cycling (Road)</z-select-item>
+          <z-select-item zValue="foot-walking">Walking</z-select-item>
+          <z-select-item zValue="foot-hiking">Hiking</z-select-item>
+        </z-select>
+      </z-form-control>
+    </z-form-field>
+  </div>
 
+  <hr class="border-sidebar-border" />
+
+  <!-- Waypoints Section -->
+  <div class="space-y-4">
+    <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">Route Waypoints</h3>
+
+    <div formArrayName="waypoints" class="space-y-3">
+      @for (waypoint of waypoints.controls; track $index; let first = $first; let last = $last) {
+        <div [formGroupName]="$index" class="flex flex-col">
+          <z-form-field #fw="zardId" [zardId]="'waypoint-' + $index">
+            <label z-form-label [for]="fw.id()" zRequired>
+              @if (first) { Start }
+              @else if (last) { Destination }
+              @else { Stop {{ $index }} }
+            </label>
+            <z-form-control>
+              <z-input-group 
+                [zAddonBefore]="pinIcon" 
+                [zAddonAfter]="!first && !last ? removeBtn : ''"
+                zPopover
+                [zContent]="resultsPopover"
+                [zVisible]="!!(searchResults().length > 0 && waypoints.at($index).get('adresse')?.dirty)"
+                [zTrigger]="null"
+              >
+                <input
+                  z-input
+                  [id]="fw.id()"
+                  type="text"
+                  [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')"
+                  formControlName="adresse"
+                />
+              </z-input-group>
+
+              <ng-template #resultsPopover>
+                <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-sidebar-border rounded-md shadow-lg p-1">
+                  @if (isSearching()) {
+                    <div class="p-2 text-xs text-muted-foreground flex items-center gap-2">
+                      <ng-icon name="lucideSearch" class="animate-pulse" />
+                      Searching...
+                    </div>
+                  }
+                  @for (result of searchResults(); track result.address) {
+                    <button
+                      type="button"
+                      class="w-full text-left p-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm transition-colors"
+                      (click)="selectResult($index, result)"
+                    >
+                      {{ result.address }}
+                    </button>
+                  }
+                </div>
+              </ng-template>
+
+              <ng-template #pinIcon>
+                <ng-icon name="lucideMapPin" [class]="waypoints.at($index).get('lat')?.value ? 'text-primary' : 'text-muted-foreground'" />
+              </ng-template>
+
+              <ng-template #removeBtn>
+                <button
+                  z-button
+                  zType="ghost"
+                  zSize="sm"
+                  type="button"
+                  (click)="removeWaypoint($index)"
+                  class="text-destructive hover:text-destructive/80 -mr-2"
+                >
+                  <ng-icon name="lucideTrash2" />
+                </button>
+              </ng-template>
+            </z-form-control>
+          </z-form-field>
+
+          <!-- Button to add waypoint AFTER this one (if not the last one) -->
+          @if (!last) {
+            <div class="flex justify-center -my-2 relative z-10">
+              <button
+                z-button
+                zType="outline"
+                zSize="sm"
+                zShape="circle"
+                type="button"
+                (click)="addWaypoint($index + 1)"
+                class="bg-background h-6 w-6 min-w-0 p-0 shadow-sm"
+                title="Add intermediate stop"
+              >
+                <ng-icon name="lucidePlus" size="14" />
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="pt-4">
+    <button z-button zType="default" zFull type="submit" [disabled]="form.invalid">
+      <ng-icon name="lucideSend" class="mr-2" />
+      Create Tour
+    </button>
+  </div>
 </form>
+</div>
