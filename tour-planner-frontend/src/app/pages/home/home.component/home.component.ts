@@ -46,6 +46,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(markers => this.updateMarkers(markers));
 
+    this.mapService.routeUpdates$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(geoJson => this.updateRoute(geoJson));
+
     this.mapService.clearMap$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
@@ -54,14 +58,35 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
+  private updateRoute(geoJson: any) {
+    if (!this.map) return;
+
+    this.routeLayer.clearLayers();
+    const route = L.geoJSON(geoJson, {
+      style: {
+        color: '#3b82f6', // primary blue
+        weight: 5,
+        opacity: 0.7
+      }
+    });
+    route.addTo(this.routeLayer);
+  }
+
   private updateMarkers(markers: MapMarker[]) {
     if (!this.map) return;
 
     this.markersLayer.clearLayers();
     const leafMarkers: L.Marker[] = [];
 
+    const customIcon = L.divIcon({
+      className: 'custom-div-icon',
+      html: "<div style='background-color:#3b82f6; width:12px; height:12px; border:2px solid white; border-radius:50%; box-shadow:0 0 4px rgba(0,0,0,0.5);'></div>",
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+
     markers.forEach(m => {
-      const marker = L.marker([m.lat, m.lng])
+      const marker = L.marker([m.lat, m.lng], { icon: customIcon })
         .bindPopup(m.label || `Stop ${m.id}`);
       marker.addTo(this.markersLayer);
       leafMarkers.push(marker);
