@@ -12,26 +12,41 @@ namespace TourPlanner.DataAccessLayer.Repositories
             _context = context;
         }
 
-        public async Task<Tour> AddAsync(Tour tour)
+        public async Task<User> AddAsync(User user)
         {
-            return tour;
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
         }
-        public async Task<List<Tour>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync()
         {
-            List<Tour> tour = [];
-            return tour;
+            return await _context.Users
+                .ToListAsync();
         }
-        public async Task<Tour?> GetByIdAsync(Guid id)
+        public async Task<User?> GetByIdAsync(Guid id)
         {
-            return null;
+            return await _context.Users
+                .FirstOrDefaultAsync(t => t.Id == id);
         }
-        public async Task UpdateAsync(Tour tour)
+        public async Task UpdateAsync(User user)
         {
-            
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(t => t.Id == user.Id);
+
+            if (existingUser == null) return;
+
+            _context.Entry(existingUser).CurrentValues.SetValues(user);
+
+            await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(Guid id)
         {
-            
+            var user = await _context.Users.FindAsync(id);
+            if (user != null)
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

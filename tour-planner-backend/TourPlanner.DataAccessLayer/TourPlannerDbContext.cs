@@ -14,10 +14,25 @@ namespace TourPlanner.DataAccessLayer
 
         public DbSet<Tour> Tours { get; set; }
         public DbSet<Waypoint> Waypoints { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresEnum<TransportType>();
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("app_users");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.username).HasColumnName("username").IsRequired().HasMaxLength(50);
+                entity.Property(e => e.email).HasColumnName("email").IsRequired().HasMaxLength(255);
+                entity.Property(e => e.password_hash).HasColumnName("password_hash").IsRequired().HasMaxLength(255);
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("NOW()");
+
+                entity.HasIndex(e => e.username).IsUnique();
+                entity.HasIndex(e => e.email).IsUnique();
+            });
 
             modelBuilder.Entity<Tour>(entity =>
             {

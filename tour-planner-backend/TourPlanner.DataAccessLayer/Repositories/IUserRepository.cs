@@ -4,10 +4,10 @@ namespace TourPlanner.DataAccessLayer.Repositories
 {
     public interface IUserRepository
     {
-        Task<Tour> AddAsync(Tour tour);
-        Task<List<Tour>> GetAllUsersAsync();
-        Task<Tour?> GetByIdAsync(Guid id);
-        Task UpdateAsync(Tour tour);
+        Task<User> AddAsync(User user);
+        Task<List<User>> GetAllUsersAsync();
+        Task<User?> GetByIdAsync(Guid id);
+        Task UpdateAsync(User user);
         Task DeleteAsync(Guid id);
     }
 }
