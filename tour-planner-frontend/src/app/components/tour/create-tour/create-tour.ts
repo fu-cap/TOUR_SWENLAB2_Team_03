@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Tour, Waypoint, TransportType } from '@/models/tour.model';
 import { ZardIdDirective } from '@/shared/core';
@@ -13,6 +13,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch } from '@ng-icons/lucide';
 import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocoding.service';
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
+import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 
 @Component({
@@ -35,9 +36,10 @@ import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
   templateUrl: './create-tour.html',
   styleUrl: './create-tour.css',
 })
-export class CreateTour implements OnInit {
+export class CreateTour implements OnInit, OnDestroy {
   private geocodingService = inject(GeocodingService);
   private tourService = inject(TourService);
+  private mapService = inject(MapService);
   
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
@@ -57,6 +59,34 @@ export class CreateTour implements OnInit {
     // A tour needs at least a start and a destination
     this.addWaypoint(); // Start
     this.addWaypoint(); // Destination
+
+    // Listen to form changes to update map markers
+    this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+      this.syncMapMarkers();
+    });
+  }
+
+  ngOnDestroy() {
+    this.mapService.clearMap();
+  }
+
+  syncMapMarkers() {
+    const markers: MapMarker[] = this.waypoints.controls
+      .map((control, index) => {
+        const val = control.value;
+        if (val.lat && val.lng) {
+          return {
+            id: index,
+            lat: val.lat,
+            lng: val.lng,
+            label: val.adresse
+          };
+        }
+        return null;
+      })
+      .filter(m => m !== null) as MapMarker[];
+    
+    this.mapService.updateMarkers(markers);
   }
 
   addWaypoint(index?: number) {
@@ -96,7 +126,7 @@ export class CreateTour implements OnInit {
       adresse: result.address,
       lat: result.lat,
       lng: result.lng
-    }, { emitEvent: false }); // Avoid triggering valueChanges again
+    }, { emitEvent: true }); // Trigger valueChanges to sync map
     this.searchResults.set([]);
   }
 
