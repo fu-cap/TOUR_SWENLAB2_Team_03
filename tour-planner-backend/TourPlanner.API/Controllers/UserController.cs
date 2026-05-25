@@ -52,8 +52,12 @@ namespace TourPlanner.API.Controllers
                 _logger.LogInformation("Starting creating user: {Username}", dto.username);
 
                 var createdUser = await _userService.CreateUserAsync(dto);
-
-                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+                
+                if(createdUser is not null)
+                {
+                    return Created();
+                }
+                throw new Exception("Returned user is null");
             }
             catch (ArgumentException ex)
             {
