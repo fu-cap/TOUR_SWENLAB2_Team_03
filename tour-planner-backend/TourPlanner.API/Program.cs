@@ -24,6 +24,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ITourRepository, TourRepository>();
 builder.Services.AddScoped<ITourService, TourService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 //Cors für Angular-Frontend erlauben
 builder.Services.AddCors(options =>

@@ -22,7 +22,7 @@ namespace TourPlanner.DataAccessLayer
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.ToTable("app_users");
+                entity.ToTable("app_user");
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.username).HasColumnName("username").IsRequired().HasMaxLength(50);
