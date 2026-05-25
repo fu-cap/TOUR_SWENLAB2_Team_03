@@ -4,6 +4,10 @@
     <ProjectReference Include="..\TourPlanner.DataAccessLayer\TourPlanner.DataAccessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Argon2" Version="0.1.2-preview" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
