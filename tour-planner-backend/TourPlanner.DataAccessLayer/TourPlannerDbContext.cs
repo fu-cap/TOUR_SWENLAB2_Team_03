@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TourPlanner.DataAccessLayer.Entities;
 using TourPlanner.DataAccessLayer.Enums;
 using Npgsql;
+using TourPlanner.DataAccessLayer.Utils;
 
 namespace TourPlanner.DataAccessLayer
 {
@@ -13,10 +14,25 @@ namespace TourPlanner.DataAccessLayer
 
         public DbSet<Tour> Tours { get; set; }
         public DbSet<Waypoint> Waypoints { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresEnum<TransportType>();
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("app_users");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.username).HasColumnName("username").IsRequired().HasMaxLength(50);
+                entity.Property(e => e.email).HasColumnName("email").IsRequired().HasMaxLength(255);
+                entity.Property(e => e.password_hash).HasColumnName("password_hash").IsRequired().HasMaxLength(255);
+                entity.Property(e => e.created_at).HasColumnName("created_at").HasDefaultValueSql("NOW()");
+
+                entity.HasIndex(e => e.username).IsUnique();
+                entity.HasIndex(e => e.email).IsUnique();
+            });
 
             modelBuilder.Entity<Tour>(entity =>
             {
@@ -26,7 +42,10 @@ namespace TourPlanner.DataAccessLayer
                 entity.Property(e => e.userID).HasColumnName("user_id");
                 entity.Property(e => e.Name).HasColumnName("name").IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Description).HasColumnName("description");
-                entity.Property(e => e.TransportType).HasColumnName("transport_type");
+                entity.Property(e => e.TransportType).HasConversion(
+                    v => v.ToPgName(),
+                    v => EnumExtensions.FromPgName<TransportType>(v)
+                ).HasColumnName("transport_type");
                 entity.Property(e => e.Distance_km).HasColumnName("distance_km");
                 entity.Property(e => e.EstimatedTime).HasColumnName("estimated_time_min")
                     .HasConversion(
