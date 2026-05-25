@@ -8,7 +8,7 @@ export interface CreateTourRequest {
   name: string;
   description: string;
   waypoints: {
-    address: string;
+    label: string;
     latitude: number;
     longitude: number;
   }[];

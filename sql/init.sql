@@ -89,7 +89,7 @@ CREATE TABLE tour_waypoint (
                                id             UUID           NOT NULL DEFAULT gen_random_uuid(),
                                tour_id        UUID           NOT NULL,
                                order_index    INTEGER        NOT NULL,
-                               label        VARCHAR(300),
+                               label          VARCHAR(300),
                                latitude       NUMERIC(10, 8) NOT NULL,
                                longitude      NUMERIC(11, 8) NOT NULL,
 
@@ -97,6 +97,13 @@ CREATE TABLE tour_waypoint (
                                CONSTRAINT fk_waypoint_tour FOREIGN KEY (tour_id) REFERENCES tour(id) ON DELETE CASCADE,
                                CONSTRAINT uq_tour_order    UNIQUE (tour_id, order_index)
 );
+
+-- =============================================================
+--  DEFAULT DATA: Add a system user for development
+-- =============================================================
+INSERT INTO app_user (id, username, email, password_hash)
+VALUES ('00000000-0000-0000-0000-000000000000', 'system_user', 'system@example.com', 'no_hash_yet')
+ON CONFLICT DO NOTHING;
 
 COMMENT ON TABLE tour_waypoint IS 'Waypoints/Stops of a tour in sequential order';
 
@@ -174,7 +181,7 @@ SELECT
     to_tsvector('english',
                 coalesce(t.name,'')        || ' ' ||
                 coalesce(t.description,'') || ' ' ||
-                coalesce(string_agg(DISTINCT w.address, ' '),'') || ' ' ||
+                coalesce(string_agg(DISTINCT w.label, ' '),'') || ' ' ||
                 coalesce(string_agg(DISTINCT l.comment, ' '),'')
     )                                                 AS search_vector
 FROM tour t

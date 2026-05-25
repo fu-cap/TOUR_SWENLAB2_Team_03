@@ -13,22 +13,24 @@ namespace TourPlanner.BusinessLayer.Services
     public class TourService: ITourService
     {
         private readonly ITourRepository _tourRepository;
+        private readonly HttpClient _httpClient;
 
         private readonly string OpenRouteAPI = "https://api.openrouteservice.org";
 
-        public TourService(ITourRepository tourRepository)
+        public TourService(ITourRepository tourRepository, HttpClient httpClient)
         {
             _tourRepository = tourRepository;
+            _httpClient = httpClient;
         }
-
-        private static HttpClient openrouteClient = new();
 
         public async Task<Tour> CreateTourAsync(CreateTourDto dto)
         {
             var (distance_km, estimatedTime, geometryString) = await GetRouteInfoAsync(dto.waypoints, dto.TransportType);
 
+            var tourId = Guid.NewGuid();
             var newTour = new Tour
             {
+                Id = tourId,
                 userID = dto.userId,
                 Name = dto.name,
                 Description = dto.description,
@@ -40,8 +42,10 @@ namespace TourPlanner.BusinessLayer.Services
                 LastModifiedDate = DateTime.UtcNow,
                 Waypoints = dto.waypoints.Select((w, index) => new Waypoint
                 {
+                    Id = Guid.NewGuid(),
+                    TourId = tourId,
                     OrderIndex = index,
-                    Address = w.address,
+                    Label = w.label,
                     Latitude = w.latitude,
                     Longitude = w.longitude
                 }).ToList()
@@ -82,7 +86,7 @@ namespace TourPlanner.BusinessLayer.Services
             {
                 TourId = id,
                 OrderIndex = index,
-                Address = w.address,
+                Label = w.label,
                 Latitude = w.latitude,
                 Longitude = w.longitude
             }).ToList();
@@ -109,15 +113,15 @@ namespace TourPlanner.BusinessLayer.Services
                 throw new ArgumentException("A tour must have at least a start and an end point.");
             }
 
-            openrouteClient.DefaultRequestHeaders.Clear();
-            openrouteClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey);
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey);
             
             var requestBody = new OrsRequest
             {
                 Coordinates = waypoints.Select(w => new double[] { w.longitude, w.latitude }).ToList()
             };
 
-            var response = await openrouteClient.PostAsJsonAsync($"{OpenRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
+            var response = await _httpClient.PostAsJsonAsync($"{OpenRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
 
             if (response.IsSuccessStatusCode)
             {

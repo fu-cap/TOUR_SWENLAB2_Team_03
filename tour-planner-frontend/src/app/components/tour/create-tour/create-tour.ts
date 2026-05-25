@@ -17,6 +17,7 @@ import { TourService, CreateTourRequest } from '@/shared/core/services/tour.serv
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { RouteService } from '@/shared/core/services/route.service';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-create-tour',
@@ -30,7 +31,6 @@ import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
     ...ZardSelectImports,
     ...ZardPopoverImports,
     ZardInputGroupComponent,
-    ZardBadgeComponent,
     NgIcon
   ],
   providers: [
@@ -102,7 +102,7 @@ export class CreateTour implements OnInit, OnDestroy {
             id: index,
             lat: val.lat,
             lng: val.lng,
-            label: val.adresse
+            label: val.label
           };
         }
         return null;
@@ -138,13 +138,13 @@ export class CreateTour implements OnInit, OnDestroy {
 
   addWaypoint(index?: number) {
     const waypointGroup = new FormGroup({
-      adresse: new FormControl('', [Validators.required]),
+      label: new FormControl('', [Validators.required]),
       lat: new FormControl<number | null>(null, [Validators.required]),
       lng: new FormControl<number | null>(null, [Validators.required]),
     });
 
     // Setup autocomplete for this waypoint
-    waypointGroup.controls.adresse.valueChanges.pipe(
+    waypointGroup.controls.label.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
       switchMap(value => {
@@ -178,7 +178,7 @@ export class CreateTour implements OnInit, OnDestroy {
   selectResult(index: number, result: GeocodingResult) {
     const group = this.waypoints.at(index) as FormGroup;
     group.patchValue({
-      adresse: result.address,
+      label: result.address,
       lat: result.lat,
       lng: result.lng
     }, { emitEvent: true }); // Trigger valueChanges to sync map
@@ -202,21 +202,44 @@ export class CreateTour implements OnInit, OnDestroy {
         description: formValue.description ?? '',
         transportType: formValue.transportType as TransportType,
         waypoints: (formValue.waypoints ?? []).map((wp: any) => ({
-          address: wp.adresse,
+          label: wp.label,
           latitude: wp.lat,
           longitude: wp.lng
         }))
       };
 
+      const loadingToast = toast.loading('Creating tour...', {
+        description: `Saving "${request.name}" to the database.`
+      });
+
       this.tourService.createTour(request).subscribe({
         next: (response) => {
-          console.log('Tour created successfully:', response);
-          // TODO: Redirect or show success message
+          toast.success('Tour created!', {
+            id: loadingToast,
+            description: `Successfully created "${response.name}".`
+          });
+          this.resetForm();
         },
         error: (err) => {
           console.error('Error creating tour:', err);
+          toast.error('Failed to create tour', {
+            id: loadingToast,
+            description: 'There was an issue saving your tour. Please try again.'
+          });
         }
       });
     }
+  }
+
+  private resetForm() {
+    this.form.reset({
+      transportType: 'foot-walking'
+    });
+    this.waypoints.clear();
+    this.addWaypoint(); // New Start
+    this.addWaypoint(); // New Destination
+    this.mapService.clearMap();
+    this.routeDistance.set(null);
+    this.routeDuration.set(null);
   }
 }
