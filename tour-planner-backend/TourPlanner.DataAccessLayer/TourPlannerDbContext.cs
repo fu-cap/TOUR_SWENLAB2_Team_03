@@ -90,7 +90,7 @@ namespace TourPlanner.DataAccessLayer
                 entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.TourId).HasColumnName("tour_id");
                 entity.Property(e => e.OrderIndex).HasColumnName("order_index");
-                entity.Property(e => e.Address).HasColumnName("label");
+                entity.Property(e => e.Label).HasColumnName("label");
                 entity.Property(e => e.Latitude).HasColumnName("latitude");
                 entity.Property(e => e.Longitude).HasColumnName("longitude");
             });

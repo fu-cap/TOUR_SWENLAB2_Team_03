@@ -65,14 +65,34 @@ CREATE TABLE tour_waypoint (
     label       VARCHAR(300),
     latitude    NUMERIC(10, 8) NOT NULL,
     longitude   NUMERIC(11, 8) NOT NULL,
+                               id             UUID           NOT NULL DEFAULT gen_random_uuid(),
+                               tour_id        UUID           NOT NULL,
+                               order_index    INTEGER        NOT NULL,
+                               label          VARCHAR(300),
+                               latitude       NUMERIC(10, 8) NOT NULL,
+                               longitude      NUMERIC(11, 8) NOT NULL,
 
     CONSTRAINT pk_tour_waypoint PRIMARY KEY (id),
     CONSTRAINT fk_waypoint_tour FOREIGN KEY (tour_id) REFERENCES tour(id) ON DELETE CASCADE,
     CONSTRAINT uq_tour_order    UNIQUE (tour_id, order_index)
 );
 
+-- =============================================================
+--  DEFAULT DATA: Add a system user for development
+-- =============================================================
+INSERT INTO app_user (id, username, email, password_hash)
+VALUES ('00000000-0000-0000-0000-000000000000', 'system_user', 'system@example.com', 'no_hash_yet')
+ON CONFLICT DO NOTHING;
+
 CREATE INDEX idx_waypoint_tour_order ON tour_waypoint(tour_id, order_index);
 
+-- Full-text search index over name and description
+CREATE INDEX idx_tour_fulltext ON tour
+    USING GIN (to_tsvector('english', coalesce(name,'') || ' ' || coalesce(description,'')));
+
+-- =============================================================
+--  TABLE: tour_log
+-- =============================================================
 CREATE TABLE tour_log (
     id                 UUID          NOT NULL DEFAULT gen_random_uuid(),
     tour_id            UUID          NOT NULL,
@@ -124,11 +144,11 @@ SELECT
     AVG(l.rating) AS avg_rating,
     AVG(l.difficulty) AS avg_difficulty,
     to_tsvector('english',
-        coalesce(t.name,'')        || ' ' ||
-        coalesce(t.description,'') || ' ' ||
-        coalesce(string_agg(DISTINCT w.label, ' '),'') || ' ' || -- HIER: label statt address
-        coalesce(string_agg(DISTINCT l.comment, ' '),'')
-    ) AS search_vector
+                coalesce(t.name,'')        || ' ' ||
+                coalesce(t.description,'') || ' ' ||
+                coalesce(string_agg(DISTINCT w.label, ' '),'') || ' ' ||
+                coalesce(string_agg(DISTINCT l.comment, ' '),'')
+    )                                                 AS search_vector
 FROM tour t
 LEFT JOIN tour_log l ON l.tour_id = t.id
 LEFT JOIN tour_waypoint w ON w.tour_id = t.id

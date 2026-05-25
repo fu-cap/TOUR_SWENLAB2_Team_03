@@ -99,7 +99,7 @@
                 [zAddonAfter]="!first && !last ? removeBtn : ''"
                 zPopover
                 [zContent]="resultsPopover"
-                [zVisible]="!!(activeWaypointIndex() === i && searchResults().length > 0 && waypoints.at(i).get('adresse')?.dirty)"
+                [zVisible]="!!(activeWaypointIndex() === i && searchResults().length > 0 && waypoints.at(i).get('label')?.dirty)"
                 [zTrigger]="null"
               >
                 <input
@@ -107,7 +107,7 @@
                   [id]="fw.id()"
                   type="text"
                   [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')"
-                  formControlName="adresse"
+                  formControlName="label"
                 />
               </z-input-group>
 

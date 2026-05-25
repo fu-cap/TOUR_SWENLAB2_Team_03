@@ -5,7 +5,7 @@ namespace TourPlanner.BusinessLayer.Dtos
 {
     public class WaypointDto
     {
-        public string address { get; set; } = string.Empty;
+        public string label { get; set; } = string.Empty;
         [Required] public double latitude { get; set; }
         [Required] public double longitude { get; set; }
     }

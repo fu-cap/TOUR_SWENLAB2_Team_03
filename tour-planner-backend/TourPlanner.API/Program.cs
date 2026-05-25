@@ -23,7 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ITourRepository, TourRepository>();
-builder.Services.AddScoped<ITourService, TourService>();
+builder.Services.AddHttpClient<ITourService, TourService>();
 
 builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<ILogService, LogService>();

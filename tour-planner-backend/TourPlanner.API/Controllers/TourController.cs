@@ -67,8 +67,11 @@ namespace TourPlanner.API.Controllers
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while creating the tour");
-                return StatusCode(500, new { message = "Internal Server Error" });
+                var fullMessage = ex.InnerException != null 
+                    ? $"{ex.Message} -> {ex.InnerException.Message}" 
+                    : ex.Message;
+                _logger.LogError(ex, "An unexpected error occurred while creating the tour: {Message}", fullMessage);
+                return StatusCode(500, new { message = "Internal Server Error", detail = fullMessage });
             }
         }
 
@@ -106,8 +109,11 @@ namespace TourPlanner.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while updating tour {Id}", id);
-                return StatusCode(500, new { message = "Internal Server Error" });
+                var fullMessage = ex.InnerException != null 
+                    ? $"{ex.Message} -> {ex.InnerException.Message}" 
+                    : ex.Message;
+                _logger.LogError(ex, "Error while updating tour {Id}: {Message}", id, fullMessage);
+                return StatusCode(500, new { message = "Internal Server Error", detail = fullMessage });
             }
         }
 
