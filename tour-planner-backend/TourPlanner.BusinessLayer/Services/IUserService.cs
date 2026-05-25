@@ -7,7 +7,7 @@ namespace TourPlanner.BusinessLayer.Services
     {
         Task<User> CreateUserAsync(CreateUserDto createUserDto);
         Task<List<User>> GetAllUsersAsync();
-        Task<User?> GetTourByIdAsync(Guid id);
+        Task<User?> GetUserByIdAsync(Guid id);
         Task UpdateUserAsync(Guid id, CreateUserDto updateUserDto);
         Task DeleteUserAsync(Guid id);
     }

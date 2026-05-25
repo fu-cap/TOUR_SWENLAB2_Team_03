@@ -7,24 +7,31 @@ namespace TourPlanner.BusinessLayer.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
 
         public UserService(IUserRepository userRepository)
         {
-            this.userRepository = userRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<User> CreateUserAsync(CreateUserDto createUserDto)
         {    
-            throw new NotImplementedException("CreateUserAsync not implemented");
+            var newUser = new User
+            {
+                username = createUserDto.username,
+                password_hash = HashUtil.HashPassword(createUserDto.password),
+                email = createUserDto.email,
+            };
+
+            return await _userRepository.AddAsync(newUser);
         }
         
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await userRepository.GetAllUsersAsync();
+            return await _userRepository.GetAllUsersAsync();
         }
 
-        public async Task<User?> GetTourByIdAsync(Guid id)
+        public async Task<User?> GetUserByIdAsync(Guid id)
         {
             return null;
         }
