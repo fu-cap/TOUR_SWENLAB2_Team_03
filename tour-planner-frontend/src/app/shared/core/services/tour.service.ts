@@ -30,7 +30,11 @@ export class TourService {
     return this.http.get<Tour[]>(this.API_URL);
   }
 
-  getTourById(id: number): Observable<Tour> {
+  getTourById(id: string): Observable<Tour> {
     return this.http.get<Tour>(`${this.API_URL}/${id}`);
+  }
+
+  deleteTour(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }

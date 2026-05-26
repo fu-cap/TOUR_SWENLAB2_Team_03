@@ -23,6 +23,7 @@ namespace TourPlanner.DataAccessLayer.Repositories
         {
             return await _context.Tours
                 .Include(t => t.Waypoints)
+                .OrderByDescending(t => t.CreationDate)
                 .ToListAsync();
         }
 
