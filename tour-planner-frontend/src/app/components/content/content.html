@@ -2,7 +2,7 @@
   @switch (activeState) {
     @case ('overview') { <app-listview-tours (stateChange)="activeStateChange.emit($event)" /> }
     @case ('details')  { <app-detailsview-tour /> }
-    @case ('edit')     { <p>Edit</p> }
+    @case ('edit')     { <app-edit-tour (stateChange)="activeStateChange.emit($event)" /> }
     @case ('logs')     { <p>Logs</p> }
     @case ('user')     { <p>Account</p> }
     @case ('create')   { <app-create-tour /> }
