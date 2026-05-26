@@ -1,23 +1,25 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TourService } from '@/shared/core/services/tour.service';
 import { Tour, TransportType } from '@/models/tour.model';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardBadgeComponent } from '@/shared/components/badge';
 import { ZardDialogService } from '@/shared/components/dialog';
 import { toast } from 'ngx-sonner';
+import { AppState } from '@/components/navbar/navbar';
 
 @Component({
   selector: 'app-listview-tours',
   standalone: true,
-  imports: [CommonModule, ZardButtonComponent, ZardBadgeComponent],
+  imports: [CommonModule, ZardButtonComponent],
   templateUrl: './listview-tours.html',
   styleUrl: './listview-tours.css',
 })
 export class ListviewTours implements OnInit {
   private tourService = inject(TourService);
   private dialogService = inject(ZardDialogService);
-  
+
+  stateChange = output<AppState>();
+
   tours = signal<Tour[]>([]);
   isLoading = signal(true);
 
@@ -64,6 +66,11 @@ export class ListviewTours implements OnInit {
     });
   }
 
+  selectTour(tour: Tour) {
+    this.tourService.selectedTour.set(tour);
+    this.stateChange.emit('details');
+  }
+
   formatDuration(timeSpan?: string): string {
     if (!timeSpan) return '0m';
     
@@ -94,7 +101,7 @@ export class ListviewTours implements OnInit {
       case 'driving-car': return 'directions_car';
       case 'driving-hgv': return 'local_shipping';
       case 'cycling-regular': return 'directions_bike';
-      case 'cycling-road': return 'directions_run'; // Or bike again, but maybe different
+      case 'cycling-road': return 'directions_run';
       case 'foot-walking': return 'directions_walk';
       case 'foot-hiking': return 'hiking';
       default: return 'help_outline';

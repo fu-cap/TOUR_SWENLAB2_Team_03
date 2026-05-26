@@ -1,14 +1,10 @@
-export interface RouteMetadata {
-  distance: number;       // Gesamtlänge in Metern
-  duration: number;       // Gesamtzeit in Sekunden
-  geometry: number[][];   // Alle Punkte des Pfads für die Linie
-  waypointCoords: number[][]; // Nur die Koordinaten deiner tatsächlichen Stopps für die Marker[cite: 1]
-}
-
 export interface Waypoint {
-  lat : number;
-  lng: number;
-  adresse?: string;
+  id?: string;
+  tourId?: string;
+  orderIndex?: number;
+  label: string;
+  latitude: number;
+  longitude: number;
 }
 
 export type TransportType = 

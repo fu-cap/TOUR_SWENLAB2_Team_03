@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Tour, TransportType } from '@/models/tour.model';
@@ -21,6 +21,9 @@ export interface CreateTourRequest {
 export class TourService {
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:8080/api/Tour'; // Adjust based on backend
+
+  // Global state for sharing between list and details/edit
+  selectedTour = signal<Tour | null>(null);
 
   createTour(tourData: CreateTourRequest): Observable<Tour> {
     return this.http.post<Tour>(this.API_URL, tourData);

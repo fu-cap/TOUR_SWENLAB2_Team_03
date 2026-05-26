@@ -1,0 +1,90 @@
+@if (tour()) {
+  <div class="flex flex-col gap-6 p-4">
+    <!-- Header -->
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center gap-3">
+        <div class="p-3 bg-primary/10 rounded-xl text-primary flex-shrink-0">
+          <span class="material-icons text-2xl">{{ getTransportIcon(tour()?.transportType) }}</span>
+        </div>
+        <div class="min-w-0">
+          <h2 class="text-3xl font-bold truncate">{{ tour()?.name }}</h2>
+          <div class="flex gap-2">
+            <z-badge zType="secondary" class="capitalize">{{ tour()?.transportType?.replace('-', ' ') }}</z-badge>
+            <z-badge zType="outline">{{ tour()?.waypoints?.length }} Stops</z-badge>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-sidebar-border" />
+
+    <!-- Description Section -->
+    <div class="space-y-2">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Description</h3>
+      <div class="bg-muted/30 rounded-xl p-4 border border-sidebar-border">
+        <p class="text-sm leading-relaxed whitespace-pre-wrap">
+          {{ tour()?.description || 'No description available for this tour.' }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Quick Stats Grid -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="flex flex-col gap-1 p-3 bg-sidebar border border-sidebar-border rounded-xl">
+        <div class="flex items-center gap-2 text-primary">
+          <span class="material-icons text-lg">route</span>
+          <span class="text-[10px] uppercase font-bold text-muted-foreground">Total Distance</span>
+        </div>
+        <span class="text-xl font-bold">{{ tour()?.distance_km }} km</span>
+      </div>
+
+      <div class="flex flex-col gap-1 p-3 bg-sidebar border border-sidebar-border rounded-xl">
+        <div class="flex items-center gap-2 text-primary">
+          <span class="material-icons text-lg">timer</span>
+          <span class="text-[10px] uppercase font-bold text-muted-foreground">Estimated Time</span>
+        </div>
+        <span class="text-xl font-bold">{{ formattedDuration() }}</span>
+      </div>
+    </div>
+
+    <!-- Waypoints List -->
+    <div class="space-y-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Route Waypoints</h3>
+      <div class="space-y-2">
+        @for (wp of tour()?.waypoints; track wp.id; let i = $index; let first = $first; let last = $last) {
+          <div class="flex items-center gap-3 group">
+            <div class="flex flex-col items-center gap-1 w-6">
+              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold" 
+                   [class]="first || last ? 'bg-primary text-primary-foreground' : 'bg-muted border border-sidebar-border'">
+                {{ i + 1 }}
+              </div>
+              @if (!last) {
+                <div class="w-0.5 h-6 bg-sidebar-border group-hover:bg-primary/30 transition-colors"></div>
+              }
+            </div>
+            <div class="flex-1 p-2 px-3 bg-sidebar border border-sidebar-border rounded-lg group-hover:border-primary/50 transition-colors">
+              <p class="text-sm font-medium truncate">{{ wp.label }}</p>
+              <p class="text-[10px] text-muted-foreground">{{ wp.latitude.toFixed(5) }}, {{ wp.longitude.toFixed(5) }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Future: Tour Logs Placeholder -->
+    <div class="pt-4 mt-auto">
+      <div class="p-6 border-2 border-dashed border-sidebar-border rounded-2xl bg-muted/20 flex flex-col items-center gap-3 opacity-60">
+        <span class="material-icons text-3xl">history</span>
+        <div class="text-center">
+          <p class="text-sm font-bold">Tour Logs</p>
+          <p class="text-[10px] text-muted-foreground">Detailed logs and ratings will be visible here soon.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="flex flex-col items-center justify-center h-full py-20 opacity-50">
+    <span class="material-icons text-6xl">error_outline</span>
+    <p class="mt-4 text-lg">No tour selected.</p>
+  </div>
+}
