@@ -20,20 +20,20 @@ export type TransportType =
   | 'foot-hiking';
 
 export interface Tour {
-  id?: number;
+  id?: string; // Guid is string in JSON
   name: string;
   description: string;
-  waypoints: Waypoint[]; // From und To mit Zwischenschritten
+  waypoints: Waypoint[]; 
   transportType: TransportType;
 
   // Felder von API befüllt
-  distance?: number;
-  estimatedTime?: number;
+  distance_km?: number;
+  estimatedTime?: string; // TimeSpan string from Backend "HH:mm:ss"
 
   // Hier speicherst du die kompletten GeoJSON-Daten für Leaflet
-  routeInformation: RouteMetadata;
+  routeInformation: string; // Backend sends polyline string
 
-  // Statistiken (werden später vom Backend berechnet)
+  // Statistiken
   popularity?: number;
   childFriendliness?: number;
 }
