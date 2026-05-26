@@ -1,15 +1,17 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { AppState } from '@/components/navbar/navbar';
 import { Impressum} from '@/components/impressum/impressum';
 import { CreateTour } from '@/components/tour/create-tour/create-tour';
 import { ListviewTours } from '@/components/tour/listview-tours/listview-tours';
+import { DetailsviewTour } from '@/components/tour/detailsview-tour/detailsview-tour';
 
 @Component({
   selector: 'app-content',
-  imports: [Impressum, CreateTour, ListviewTours],
+  imports: [Impressum, CreateTour, ListviewTours, DetailsviewTour],
   templateUrl: './content.html',
   styleUrl: './content.css',
 })
 export class Content {
   @Input() activeState?: AppState;
+  @Output() activeStateChange = new EventEmitter<AppState>();
 }

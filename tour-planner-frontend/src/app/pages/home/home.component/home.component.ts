@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, inject, DestroyRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject, DestroyRef, effect } from '@angular/core';
 import * as L from 'leaflet';
 import { Content} from '@/components/content/content';
 import { Navbar, AppState } from '@/components/navbar/navbar';
@@ -20,13 +20,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   currentState = signal<AppState>('overview');
 
+  private readonly EUROPE_CENTER: L.LatLngExpression = [50, 10];
+  private readonly EUROPE_ZOOM = 4;
+
+  constructor() {
+    // Automatically reset map when switching back to overview
+    effect(() => {
+      if (this.currentState() === 'overview' && this.map) {
+        this.resetToDefaultView();
+      }
+    });
+  }
+
   ngOnInit() {
     this.initMap();
     this.setupSubscriptions();
   }
 
   private initMap() {
-    this.map = L.map('map', { zoomControl: false }).setView([48.2082, 16.3738], 13); // Default to Vienna
+    this.map = L.map('map', { zoomControl: false }).setView(this.EUROPE_CENTER, this.EUROPE_ZOOM);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
@@ -39,6 +51,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.markersLayer.addTo(this.map);
     this.routeLayer.addTo(this.map);
+  }
+
+  private resetToDefaultView() {
+    if (!this.map) return;
+    this.markersLayer.clearLayers();
+    this.routeLayer.clearLayers();
+    this.map.setView(this.EUROPE_CENTER, this.EUROPE_ZOOM);
   }
 
   private setupSubscriptions() {
