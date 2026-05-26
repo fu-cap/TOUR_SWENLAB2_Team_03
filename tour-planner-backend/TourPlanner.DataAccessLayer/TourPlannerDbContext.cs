@@ -15,10 +15,28 @@ namespace TourPlanner.DataAccessLayer
         public DbSet<Tour> Tours { get; set; }
         public DbSet<Waypoint> Waypoints { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Log> Log { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasPostgresEnum<TransportType>();
+
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.ToTable("tour_log");
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.tour_id).HasColumnName("tour_id").IsRequired();
+                entity.Property(e => e.date_time).HasColumnName("date_time").HasDefaultValueSql("NOW()");
+                entity.Property(e => e.comment).HasColumnName("comment").IsRequired();
+                entity.Property(e => e.difficulty).HasColumnName("difficulty").IsRequired();
+                entity.Property(e => e.total_distance_km).HasColumnName("total_distance_km").IsRequired();
+                entity.Property(e => e.total_time_min).HasColumnName("total_time_min").IsRequired().HasConversion(
+                        v => (int)v.TotalMinutes,
+                        v => TimeSpan.FromMinutes(v)
+                    );
+                entity.Property(e => e.rating).HasColumnName("rating").IsRequired();
+            });
 
             modelBuilder.Entity<User>(entity =>
             {
