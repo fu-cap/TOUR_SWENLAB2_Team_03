@@ -8,6 +8,7 @@ import { ZardFormImports } from '@/shared/components/form';
 import { ZardSelectImports } from '@/shared/components/select';
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { ZardPopoverImports } from '@/shared/components/popover';
+import { ZardDialogService } from '@/shared/components/dialog';
 import { CommonModule } from '@angular/common';
 import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocoding.service';
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
@@ -39,6 +40,7 @@ export class EditTour implements OnInit, OnDestroy {
   private tourService = inject(TourService);
   private mapService = inject(MapService);
   private routeService = inject(RouteService);
+  private dialogService = inject(ZardDialogService);
   
   stateChange = output<AppState>();
 
@@ -201,6 +203,32 @@ export class EditTour implements OnInit, OnDestroy {
     if (this.waypoints.length > 2) {
       this.waypoints.removeAt(index);
     }
+  }
+
+  confirmDelete() {
+    const tour = this.tour();
+    if (!tour?.id) return;
+
+    this.dialogService.create({
+      zTitle: 'Delete Tour',
+      zDescription: `Are you sure you want to delete "${tour.name}"? This action cannot be undone.`,
+      zOkText: 'Delete',
+      zOkDestructive: true,
+      zOnOk: () => {
+        this.tourService.deleteTour(tour.id!).subscribe({
+          next: () => {
+            toast.success('Tour deleted', {
+              description: `Successfully deleted "${tour.name}".`
+            });
+            this.stateChange.emit('overview');
+          },
+          error: (err) => {
+            console.error('Error deleting tour:', err);
+            toast.error('Failed to delete tour');
+          }
+        });
+      }
+    });
   }
 
   onSubmit() {
