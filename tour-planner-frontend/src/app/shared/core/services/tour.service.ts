@@ -40,4 +40,8 @@ export class TourService {
   deleteTour(id: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
+
+  updateTour(id: string, tourData: CreateTourRequest): Observable<void> {
+    return this.http.put<void>(`${this.API_URL}/${id}`, tourData);
+  }
 }

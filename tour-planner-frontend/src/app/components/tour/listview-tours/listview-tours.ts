@@ -71,6 +71,11 @@ export class ListviewTours implements OnInit {
     this.stateChange.emit('details');
   }
 
+  editTour(tour: Tour) {
+    this.tourService.selectedTour.set(tour);
+    this.stateChange.emit('edit');
+  }
+
   formatDuration(timeSpan?: string): string {
     if (!timeSpan) return '0m';
     

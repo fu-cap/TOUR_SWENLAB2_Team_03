@@ -45,17 +45,18 @@ namespace TourPlanner.DataAccessLayer.Repositories
             // Update primitive properties
             _context.Entry(existingTour).CurrentValues.SetValues(tour);
 
-            // Replace waypoints: 
-            // 1. Remove old ones
-            _context.Waypoints.RemoveRange(existingTour.Waypoints);
+            // Materialize the new waypoints list first to avoid enumeration issues
+            var newWaypoints = tour.Waypoints.ToList();
+
+            // Replace waypoints correctly for EF Core
+            existingTour.Waypoints.Clear();
             
-            // 2. Add new ones (ensure they have new IDs and correct TourId)
-            foreach (var wp in tour.Waypoints)
+            foreach (var wp in newWaypoints)
             {
                 wp.Id = Guid.NewGuid();
                 wp.TourId = tour.Id;
+                existingTour.Waypoints.Add(wp);
             }
-            existingTour.Waypoints = tour.Waypoints;
 
             await _context.SaveChangesAsync();
         }

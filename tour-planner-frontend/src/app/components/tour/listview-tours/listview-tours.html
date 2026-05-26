@@ -24,48 +24,54 @@
   } @else {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       @for (tour of tours(); track tour.id) {
-        <div (click)="selectTour(tour)" class="group relative cursor-pointer flex flex-col bg-sidebar border border-sidebar-border rounded-xl overflow-hidden hover:shadow-md transition-all">
+        <div (click)="selectTour(tour)" class="group relative cursor-pointer flex bg-sidebar border border-sidebar-border rounded-xl overflow-hidden hover:shadow-md transition-all h-[120px]">
           
-          <!-- Card Content -->
-          <div class="p-4 flex flex-col gap-4">
-            <div class="flex items-start justify-between gap-4">
-              <div class="flex gap-3 items-center min-w-0">
-                <div class="p-2 bg-primary/10 rounded-lg text-primary flex-shrink-0">
-                  <span class="material-icons text-xl">{{ getTransportIcon(tour.transportType) }}</span>
-                </div>
-                <div class="min-w-0">
-                  <h3 class="font-bold text-lg truncate" [title]="tour.name">{{ tour.name }}</h3>
-                  <p class="text-sm text-muted-foreground line-clamp-1">{{ tour.description || 'No description provided.' }}</p>
-                </div>
+          <!-- Main Content Area -->
+          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
+            <div class="flex gap-3 items-center min-w-0">
+              <div class="p-2 bg-primary/10 rounded-lg text-primary flex-shrink-0">
+                <span class="material-icons text-xl">{{ getTransportIcon(tour.transportType) }}</span>
+              </div>
+              <div class="min-w-0">
+                <h3 class="font-bold text-lg truncate leading-tight" [title]="tour.name">{{ tour.name }}</h3>
+                <p class="text-xs text-muted-foreground line-clamp-1">{{ tour.description || 'No description provided.' }}</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-4 text-xs font-medium text-muted-foreground px-1">
+            <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 px-1">
               <div class="flex items-center gap-1">
-                <span class="material-icons text-sm">route</span>
+                <span class="material-icons text-xs">route</span>
                 {{ tour.distance_km }} km
               </div>
-              <div class="flex items-center gap-1">
-                <span class="material-icons text-sm">timer</span>
+              <div class="flex items-center gap-1 border-l border-sidebar-border pl-4">
+                <span class="material-icons text-xs">timer</span>
                 {{ formatDuration(tour.estimatedTime) }}
               </div>
-              <div class="flex items-center gap-1">
-                <span class="material-icons text-sm">place</span>
+              <div class="flex items-center gap-1 border-l border-sidebar-border pl-4">
+                <span class="material-icons text-xs">place</span>
                 {{ tour.waypoints.length }} Stops
               </div>
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="p-2 px-3 bg-muted/20 border-t border-sidebar-border flex justify-end gap-1">
-            <button z-button zType="ghost" zSize="sm" title="View details" (click)="$event.stopPropagation(); selectTour(tour)">
-              <span class="material-icons text-sm">visibility</span>
+          <!-- Segmented Action Bar -->
+          <div class="w-12 flex flex-col border-l border-sidebar-border bg-muted/20 divide-y divide-sidebar-border">
+            <button 
+              z-button zType="ghost" zSize="sm" 
+              class="flex-1 rounded-none text-destructive hover:bg-destructive/10" 
+              (click)="$event.stopPropagation(); confirmDelete(tour)"
+              title="Delete tour"
+            >
+              <span class="material-icons text-base">delete</span>
             </button>
-            <button z-button zType="ghost" zSize="sm" title="Edit tour" (click)="$event.stopPropagation()">
-              <span class="material-icons text-sm">edit</span>
-            </button>
-            <button z-button zType="ghost" zSize="sm" class="text-destructive hover:text-destructive" title="Delete" (click)="$event.stopPropagation(); confirmDelete(tour)">
-              <span class="material-icons text-sm">delete</span>
+
+            <button 
+              z-button zType="ghost" zSize="sm" 
+              class="flex-1 rounded-none text-muted-foreground hover:text-foreground hover:bg-primary/5" 
+              (click)="$event.stopPropagation(); editTour(tour)"
+              title="Edit tour"
+            >
+              <span class="material-icons text-base">edit</span>
             </button>
           </div>
         </div>

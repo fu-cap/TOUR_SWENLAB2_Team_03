@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   currentState = signal<AppState>('overview');
 
   private readonly EUROPE_CENTER: L.LatLngExpression = [50, 10];
-  private readonly EUROPE_ZOOM = 4;
+  private readonly EUROPE_ZOOM = 5;
 
   constructor() {
     // Automatically reset map when switching back to overview
