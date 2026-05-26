@@ -60,18 +60,18 @@
   <!-- Route Summary -->
   <div class="flex gap-4 p-3 bg-muted/50 rounded-lg">
     <div class="flex items-center gap-2">
-      <div class="p-2 bg-primary/10 rounded-full text-primary">
-        <ng-icon name="lucideRoute" />
+      <div class="flex p-2 bg-primary/10 rounded-full text-primary">
+        <span class="material-icons text-base">route</span>
       </div>
       <div class="flex flex-col">
         <span class="text-[10px] uppercase font-bold text-muted-foreground leading-none">Distance</span>
         <span class="text-sm font-semibold">{{ formattedDistance() }}</span>
       </div>
     </div>
-    
+
     <div class="flex items-center gap-2 border-l border-sidebar-border pl-4">
-      <div class="p-2 bg-primary/10 rounded-full text-primary">
-        <ng-icon name="lucideTimer" />
+      <div class="flex p-2 bg-primary/10 rounded-full text-primary">
+        <span class="material-icons text-base">timer</span>
       </div>
       <div class="flex flex-col">
         <span class="text-[10px] uppercase font-bold text-muted-foreground leading-none">Est. Time</span>
@@ -94,8 +94,8 @@
               @else { Stop {{ i }} }
             </label>
             <z-form-control>
-              <z-input-group 
-                [zAddonBefore]="pinIcon" 
+              <z-input-group
+                [zAddonBefore]="pinIcon"
                 [zAddonAfter]="!first && !last ? removeBtn : ''"
                 zPopover
                 [zContent]="resultsPopover"
@@ -115,7 +115,7 @@
                 <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-sidebar-border rounded-md shadow-lg p-1">
                   @if (isSearching()) {
                     <div class="p-2 text-xs text-muted-foreground flex items-center gap-2">
-                      <ng-icon name="lucideSearch" class="animate-pulse" />
+                      <span class="material-icons animate-spin text-sm">search</span>
                       Searching...
                     </div>
                   }
@@ -132,7 +132,7 @@
               </ng-template>
 
               <ng-template #pinIcon>
-                <ng-icon name="lucideMapPin" [class]="waypoints.at(i).get('lat')?.value ? 'text-primary' : 'text-muted-foreground'" />
+                <span class="material-icons" [class]="waypoints.at(i).get('lat')?.value ? 'text-primary' : 'text-muted-foreground'">location_on</span>
               </ng-template>
 
               <ng-template #removeBtn>
@@ -144,7 +144,7 @@
                   (click)="removeWaypoint(i)"
                   class="text-destructive hover:text-destructive/80 -mr-2"
                 >
-                  <ng-icon name="lucideTrash2" />
+                  <span class="material-icons">delete</span>
                 </button>
               </ng-template>
             </z-form-control>
@@ -163,7 +163,7 @@
                 class="bg-background h-6 w-6 min-w-0 p-0 shadow-sm"
                 title="Add intermediate stop"
               >
-                <ng-icon name="lucidePlus" size="14" />
+                <span class="material-icons" style="font-size: 14px;">add</span>
               </button>
             </div>
           }
@@ -174,7 +174,6 @@
 
   <div class="pt-4">
     <button z-button zType="default" zFull type="submit" [disabled]="form.invalid">
-      <ng-icon name="lucideSend" class="mr-2" />
       Create Tour
     </button>
   </div>

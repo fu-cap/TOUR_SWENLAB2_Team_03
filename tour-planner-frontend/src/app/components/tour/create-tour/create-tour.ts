@@ -10,8 +10,6 @@ import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { ZardPopoverImports } from '@/shared/components/popover';
 import { ZardBadgeComponent } from '@/shared/components/badge';
 import { CommonModule } from '@angular/common';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch, lucideRoute, lucideTimer } from '@ng-icons/lucide';
 import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocoding.service';
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
@@ -31,10 +29,6 @@ import { toast } from 'ngx-sonner';
     ...ZardSelectImports,
     ...ZardPopoverImports,
     ZardInputGroupComponent,
-    NgIcon
-  ],
-  providers: [
-    provideIcons({ lucidePlus, lucideTrash2, lucideMapPin, lucideSend, lucideSearch, lucideRoute, lucideTimer })
   ],
   templateUrl: './create-tour.html',
   styleUrl: './create-tour.css',
