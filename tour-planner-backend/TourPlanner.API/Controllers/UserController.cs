@@ -72,7 +72,7 @@ namespace TourPlanner.API.Controllers
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex, "Username or email already exists: {Username}", dto.username);
-                return StatusCode(503, new { message = "Username or email already exists" });
+                return StatusCode(400, new { message = "Username or email already exists" });
             }
             catch(Exception ex)
             {
