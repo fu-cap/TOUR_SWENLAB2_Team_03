@@ -1,5 +1,5 @@
 @if (tour()) {
-  <div class="flex flex-col gap-6 p-4">
+  <div class="flex flex-col gap-6 p-4 w-150">
     <!-- Header -->
     <div class="flex flex-col gap-2">
       <div class="flex items-center gap-3">
@@ -7,7 +7,7 @@
           <span class="material-icons text-2xl">{{ getTransportIcon(tour()?.transportType) }}</span>
         </div>
         <div class="min-w-0">
-          <h2 class="text-3xl font-bold truncate">{{ tour()?.name }}</h2>
+          <h2 class="text-3xl font-bold">{{ tour()?.name }}</h2>
           <div class="flex gap-2">
             <z-badge zType="secondary" class="capitalize">{{ tour()?.transportType?.replace('-', ' ') }}</z-badge>
             <z-badge zType="outline">{{ tour()?.waypoints?.length }} Stops</z-badge>
@@ -21,8 +21,8 @@
     <!-- Description Section -->
     <div class="space-y-2">
       <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Description</h3>
-      <div class="bg-muted/30 rounded-xl p-4 border border-sidebar-border">
-        <p class="text-sm leading-relaxed whitespace-pre-wrap">
+      <div class="bg-muted/30 rounded-xl p-4 border border-sidebar-border overflow-scroll">
+        <p class="text-sm leading-relaxed whitespace-pre-wrap overflow-scroll">
           {{ tour()?.description || 'No description available for this tour.' }}
         </p>
       </div>
