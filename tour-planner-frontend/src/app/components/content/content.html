@@ -1,4 +1,4 @@
-<div class="flex flex-col h-full p-2 rounded-lg bg-sidebar border border-sidebar-border opacity-85 overflow-scroll">
+<div class="scroll-container flex flex-col h-full p-2 rounded-3xl bg-sidebar border border-sidebar-border shadow-sm overflow-y-auto">
   @switch (activeState) {
     @case ('overview') { <app-listview-tours (stateChange)="activeStateChange.emit($event)" /> }
     @case ('details')  { <app-detailsview-tour /> }

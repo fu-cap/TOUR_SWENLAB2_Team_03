@@ -19,3 +19,7 @@
   flex-direction: row;
   gap: 0.5rem;
 }
+
+app-content {
+  height: 100%;
+}

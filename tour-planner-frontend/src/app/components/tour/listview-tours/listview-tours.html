@@ -4,7 +4,7 @@
       <h2 class="text-2xl font-bold">Your Tours</h2>
       <p class="text-muted-foreground">Manage and explore your planned adventures.</p>
     </div>
-    <button z-button zType="outline" zSize="sm" (click)="loadTours()" [zLoading]="isLoading()">
+    <button z-button zType="outline" zSize="sm" (click)="loadTours()" [zLoading]="isLoading()" class="text-primary border-sidebar-border">
       <span class="material-icons text-sm mr-2">refresh</span>
       Refresh
     </button>
@@ -22,7 +22,7 @@
       <p class="text-muted-foreground mb-6">Start by creating your first adventure.</p>
     </div>
   } @else {
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="flex flex-col gap-4">
       @for (tour of tours(); track tour.id) {
         <div (click)="selectTour(tour)" class="group relative cursor-pointer flex bg-sidebar border border-sidebar-border rounded-xl overflow-hidden hover:shadow-md transition-all h-[120px]">
           
@@ -67,7 +67,7 @@
 
             <button 
               z-button zType="ghost" zSize="sm" 
-              class="flex-1 rounded-none text-muted-foreground hover:text-foreground hover:bg-primary/5" 
+              class="flex-1 rounded-none text-primary hover:bg-primary/5" 
               (click)="$event.stopPropagation(); editTour(tour)"
               title="Edit tour"
             >
