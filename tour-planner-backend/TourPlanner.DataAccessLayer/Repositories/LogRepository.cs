@@ -27,11 +27,12 @@ namespace TourPlanner.DataAccessLayer.Repositories
         }
         public async Task<Log?> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Log.Where(log => log.Id == id).FirstOrDefaultAsync();
         }
         public async Task UpdateAsync(Log Log)
         {
-            throw new NotImplementedException();
+            _context.Log.Update(Log);
+            await _context.SaveChangesAsync();
         }
         public async Task DeleteAsync(Guid id)
         {
