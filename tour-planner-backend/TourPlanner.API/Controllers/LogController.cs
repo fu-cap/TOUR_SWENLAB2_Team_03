@@ -40,8 +40,8 @@ namespace TourPlanner.API.Controllers
             }
         }
 
-        [HttpGet("{tourId}")]
-        public async Task<IActionResult> GetLogsByTourId(Guid tourId)
+        [HttpGet("{tourId:guid}")]
+        public async Task<IActionResult> GetLogsByTourId([FromRoute] Guid tourId)
         {
             _logger.LogInformation("Get Logs by Tour Id called for tour: {Tour}", tourId);
             try
