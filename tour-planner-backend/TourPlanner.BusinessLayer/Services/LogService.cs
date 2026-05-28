@@ -53,6 +53,16 @@ namespace TourPlanner.BusinessLayer.Services
         {
             return await _logRepository.GetAllLogsAsync();
         }
+
+        public async Task<List<Log>?> GetLogsByTourIdAsync(Guid tourId)
+        {
+            var tour = await _tourRepository.GetByIdAsync(tourId);
+            if (tour is null)
+            {
+                return null;
+            }
+            return await _logRepository.GetLogsByTourIdAsync(tourId);
+        }
         public async Task<Log?> GetLogByIdAsync(Guid id)
         {
             throw new NotImplementedException();

@@ -40,6 +40,31 @@ namespace TourPlanner.API.Controllers
             }
         }
 
+        [HttpGet("{tourId}")]
+        public async Task<IActionResult> GetLogsByTourId(Guid tourId)
+        {
+            _logger.LogInformation("Get Logs by Tour Id called for tour: {Tour}", tourId);
+            try
+            {
+                var logs = await _logService.GetLogsByTourIdAsync(tourId);
+                if(logs is null)
+                {
+                    return NotFound(new { message = "Tour not found" });
+                }
+                return Ok(logs);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogError(ex, "Tour was not found when getting logs by tour id");
+                return StatusCode(404, new { message = "Tour not found" });  
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting logs by tour id");
+                return StatusCode(500, new { message = "Internal Server Error" });  
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateLog([FromBody] CreateLogDto dto)
         {
