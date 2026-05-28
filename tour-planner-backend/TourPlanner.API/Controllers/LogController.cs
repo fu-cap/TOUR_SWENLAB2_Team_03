@@ -150,8 +150,8 @@ namespace TourPlanner.API.Controllers
             }
             catch (KeyNotFoundException ex)
             {
-                _logger.LogError(ex, "Tour was not found when updating log");
-                return StatusCode(404, new { message = "Tour not found" });  
+                _logger.LogError(ex, "Tour or log was not found when updating log");
+                return StatusCode(404, new { message = "Tour or log not found" });  
             }
             catch (IndexOutOfRangeException ex)
             {
@@ -161,6 +161,34 @@ namespace TourPlanner.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error while updating log");
+                return StatusCode(500, new { message = "Internal Server Error" });  
+            }
+        }
+
+
+        [HttpDelete("{logId:guid}")]
+        public async Task<IActionResult> deleteLogAsync([FromRoute] Guid logId)
+        {
+            try
+            {
+                _logger.LogInformation("Deleting log: {Log}", logId);
+
+                await _logService.DeleteLogAsync(logId);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogError(ex, "Log was not found when deleting log");
+                return StatusCode(404, new { message = "Log not found" });  
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                _logger.LogError(ex, "Error when deleting log");
+                return StatusCode(400, new { message = ex });  
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while deleting log");
                 return StatusCode(500, new { message = "Internal Server Error" });  
             }
         }

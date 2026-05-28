@@ -36,7 +36,7 @@ namespace TourPlanner.DataAccessLayer.Repositories
         }
         public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await _context.Log.Where(log => log.Id == id).ExecuteDeleteAsync();
         }
 
     }
