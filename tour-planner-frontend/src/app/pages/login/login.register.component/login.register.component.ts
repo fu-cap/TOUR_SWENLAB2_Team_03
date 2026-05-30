@@ -2,13 +2,13 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ZardIdDirective } from '@/shared/core';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardInputDirective } from '@/shared/components/input';
+import { ZardInputImports } from '@/shared/components/input';
 import { ZardFormImports } from '@/shared/components/form';
 import { ZardSelectImports } from '@/shared/components/select';
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports,
+  imports: [ReactiveFormsModule, ZardButtonComponent, ...ZardInputImports, ...ZardFormImports,
     ZardIdDirective, ZardSelectImports],
   templateUrl: './login.register.component.html',
   styleUrl: './login.register.component.css',

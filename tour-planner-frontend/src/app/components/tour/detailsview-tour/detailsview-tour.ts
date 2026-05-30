@@ -1,25 +1,32 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TourService } from '@/shared/core/services/tour.service';
+import { LogService } from '@/shared/core/services/log.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { RouteService } from '@/shared/core/services/route.service';
-import { TransportType } from '@/models/tour.model';
+import { TourLog, TransportType } from '@/models/tour.model';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardBadgeComponent } from '@/shared/components/badge';
+
+import { CreateLog } from '../create-log/create-log';
 
 @Component({
   selector: 'app-detailsview-tour',
   standalone: true,
-  imports: [CommonModule, ZardBadgeComponent],
+  imports: [CommonModule, ZardBadgeComponent, ZardButtonComponent, CreateLog],
   templateUrl: './detailsview-tour.html',
   styleUrl: './detailsview-tour.css',
 })
 export class DetailsviewTour implements OnInit, OnDestroy {
   private tourService = inject(TourService);
+  private logService = inject(LogService);
   private mapService = inject(MapService);
   private routeService = inject(RouteService);
 
   tour = this.tourService.selectedTour;
+  logs = signal<TourLog[]>([]);
+  isLoadingLogs = signal(false);
+  isAddingLog = signal(false);
 
   formattedDuration = computed(() => {
     const timeSpan = this.tour()?.estimatedTime;
@@ -47,7 +54,25 @@ export class DetailsviewTour implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.tour()) {
       this.syncMap();
+      this.loadLogs();
     }
+  }
+
+  loadLogs() {
+    const t = this.tour();
+    if (!t?.id) return;
+
+    this.isLoadingLogs.set(true);
+    this.logService.getLogsByTourId(t.id).subscribe({
+      next: (data) => {
+        this.logs.set(data);
+        this.isLoadingLogs.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading logs:', err);
+        this.isLoadingLogs.set(false);
+      }
+    });
   }
 
   ngOnDestroy() {

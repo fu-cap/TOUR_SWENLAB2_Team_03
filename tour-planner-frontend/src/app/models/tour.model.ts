@@ -15,6 +15,17 @@ export type TransportType =
   | 'foot-walking' 
   | 'foot-hiking';
 
+export interface TourLog {
+  id?: string;
+  tour_id: string;
+  date_time: string;
+  comment: string;
+  difficulty: number;
+  total_distance_km: number;
+  total_time_min: string; // TimeSpan string
+  rating: number;
+}
+
 export interface Tour {
   id?: string; // Guid is string in JSON
   name: string;

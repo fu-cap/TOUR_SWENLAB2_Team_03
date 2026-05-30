@@ -3,7 +3,7 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray } fr
 import { Tour, Waypoint, TransportType } from '@/models/tour.model';
 import { ZardIdDirective } from '@/shared/core';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardInputDirective } from '@/shared/components/input';
+import { ZardInputImports } from '@/shared/components/input';
 import { ZardFormImports } from '@/shared/components/form';
 import { ZardSelectImports } from '@/shared/components/select';
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
@@ -24,7 +24,7 @@ import { toast } from 'ngx-sonner';
     ReactiveFormsModule,
     ZardIdDirective,
     ZardButtonComponent,
-    ZardInputDirective,
+    ...ZardInputImports,
     ...ZardFormImports,
     ...ZardSelectImports,
     ...ZardPopoverImports,
