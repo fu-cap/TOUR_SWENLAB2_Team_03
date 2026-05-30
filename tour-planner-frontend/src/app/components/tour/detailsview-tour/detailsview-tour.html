@@ -1,16 +1,16 @@
 @if (tour()) {
-  <div class="flex flex-col gap-6 p-4 w-150">
+  <div class="flex flex-col gap-6 p-4 w-full max-w-full overflow-x-hidden">
     <!-- Header -->
-    <div class="flex flex-col gap-2">
-      <div class="flex items-center gap-3">
+    <div class="flex flex-col gap-2 min-w-0">
+      <div class="flex items-center gap-3 min-w-0">
         <div class="p-3 bg-primary/10 rounded-xl text-primary flex-shrink-0">
           <span class="material-icons text-2xl">{{ getTransportIcon(tour()?.transportType) }}</span>
         </div>
-        <div class="min-w-0">
-          <h2 class="text-3xl font-bold">{{ tour()?.name }}</h2>
-          <div class="flex gap-2">
-            <z-badge zType="secondary" class="capitalize">{{ tour()?.transportType?.replace('-', ' ') }}</z-badge>
-            <z-badge zType="outline">{{ tour()?.waypoints?.length }} Stops</z-badge>
+        <div class="min-w-0 flex-1">
+          <h2 class="text-3xl font-bold truncate" [title]="tour()?.name">{{ tour()?.name }}</h2>
+          <div class="flex flex-wrap gap-2">
+            <z-badge zType="secondary" class="capitalize whitespace-nowrap">{{ tour()?.transportType?.replace('-', ' ') }}</z-badge>
+            <z-badge zType="outline" class="whitespace-nowrap">{{ tour()?.waypoints?.length }} Stops</z-badge>
           </div>
         </div>
       </div>
@@ -21,8 +21,8 @@
     <!-- Description Section -->
     <div class="space-y-2">
       <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Description</h3>
-      <div class="bg-muted/30 rounded-xl p-4 border border-sidebar-border overflow-scroll">
-        <p class="text-sm leading-relaxed whitespace-pre-wrap overflow-scroll">
+      <div class="bg-muted/30 rounded-xl p-4 border border-sidebar-border">
+        <p class="text-sm leading-relaxed whitespace-pre-wrap">
           {{ tour()?.description || 'No description available for this tour.' }}
         </p>
       </div>
@@ -53,18 +53,13 @@
       <div class="space-y-2">
         @for (wp of tour()?.waypoints; track wp.id; let i = $index; let first = $first; let last = $last) {
           <div class="flex items-center gap-3 group">
-            <div class="flex flex-col items-center gap-1 w-6">
-              <div class="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold" 
-                   [class]="first || last ? 'bg-primary text-primary-foreground' : 'bg-muted border border-sidebar-border'">
-                {{ i + 1 }}
-              </div>
-              @if (!last) {
-                <div class="w-0.5 h-6 bg-sidebar-border group-hover:bg-primary/30 transition-colors"></div>
-              }
+            <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-[10px] font-bold" 
+                 [class]="first || last ? 'bg-primary text-primary-foreground' : 'bg-muted border border-sidebar-border'">
+              {{ i + 1 }}
             </div>
-            <div class="flex-1 p-2 px-3 bg-sidebar border border-sidebar-border rounded-lg group-hover:border-primary/50 transition-colors">
-              <p class="text-sm font-medium truncate">{{ wp.label }}</p>
-              <p class="text-[10px] text-muted-foreground">{{ wp.latitude.toFixed(5) }}, {{ wp.longitude.toFixed(5) }}</p>
+            <div class="flex-1 min-w-0 p-2 px-3 bg-sidebar border border-sidebar-border rounded-lg group-hover:border-primary/50 transition-colors">
+              <p class="text-sm font-medium truncate" [title]="wp.label">{{ wp.label }}</p>
+              <p class="text-[10px] text-muted-foreground truncate">{{ wp.latitude.toFixed(5) }}, {{ wp.longitude.toFixed(5) }}</p>
             </div>
           </div>
         }

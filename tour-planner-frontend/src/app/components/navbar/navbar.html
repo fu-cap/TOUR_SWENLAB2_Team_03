@@ -1,16 +1,20 @@
 <div class="flex flex-col justify-between w-15 h-full p-2 rounded-2xl bg-sidebar border border-sidebar-border shadow-sm">
-  <div id="nav_top">
-    @for (item of mainNavItems; track item.state) {
-      <app-nav-button
-        [icon]="item.icon"
-        [label]="item.label"
-        [state]="item.state"
-        [isActive]="activeState() === item.state"
-        (stateChange)="onStateChange($event)"
-      />
-    }
+  <div id="nav_top" class="flex flex-col gap-3">
+    <div class="flex flex-col gap-3">
+      @for (item of mainNavItems; track item.state) {
+        <app-nav-button
+          [icon]="item.icon"
+          [label]="item.label"
+          [state]="item.state"
+          [isActive]="activeState() === item.state"
+          (stateChange)="onStateChange($event)"
+        />
+      }
+    </div>
 
-    <div>
+    <hr class="border-sidebar-border mx-1" />
+
+    <div class="flex flex-col gap-3">
       @for (item of actionNavItems; track item.state) {
         <app-nav-button
           [icon]="item.icon"
@@ -23,7 +27,7 @@
     </div>
   </div>
 
-  <div id="nav_btm">
+  <div id="nav_btm" class="flex flex-col gap-3">
     @for (item of userItem; track item.state) {
       <app-nav-button
         [icon]="item.icon"
