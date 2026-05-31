@@ -101,34 +101,7 @@
         } @else {
           <div class="space-y-3">
             @for (log of logs(); track log.id) {
-              <div class="bg-sidebar border border-sidebar-border rounded-xl p-3 space-y-2">
-                <div class="flex justify-between items-start">
-                  <div class="flex flex-col">
-                    <span class="text-[10px] font-bold text-foreground">{{ log.date_time | date:'mediumDate' }}</span>
-                    <div class="flex items-center gap-1">
-                      @for (star of [1,2,3,4,5]; track star) {
-                        <span class="material-icons text-[10px]" [class.text-primary]="star <= log.rating" [class.text-muted-foreground]="star > log.rating">
-                          {{ star <= log.rating ? 'star' : 'star_border' }}
-                        </span>
-                      }
-                    </div>
-                  </div>
-                  <div class="flex gap-2">
-                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-muted font-bold">Diff: {{ log.difficulty }}</span>
-                  </div>
-                </div>
-                <p class="text-[11px] text-muted-foreground leading-relaxed">{{ log.comment }}</p>
-                <div class="flex gap-3 pt-1 border-t border-sidebar-border/50 text-[9px] font-bold text-muted-foreground">
-                  <div class="flex items-center gap-1">
-                    <span class="material-icons text-[10px]">route</span>
-                    {{ log.total_distance_km }} km
-                  </div>
-                  <div class="flex items-center gap-1">
-                    <span class="material-icons text-[10px]">timer</span>
-                    {{ log.total_time_min }}
-                  </div>
-                </div>
-              </div>
+              <app-log-item [log]="log" (logDeleted)="loadLogs()" />
             }
           </div>
         }

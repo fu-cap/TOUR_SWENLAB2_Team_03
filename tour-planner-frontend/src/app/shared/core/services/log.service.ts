@@ -18,6 +18,10 @@ export class LogService {
     return this.http.post<void>(this.API_URL, log);
   }
 
+  deleteLog(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
   getAllLogs(): Observable<TourLog[]> {
     return this.http.get<TourLog[]>(this.API_URL);
   }

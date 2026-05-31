@@ -8,11 +8,12 @@ import { TourLog, TransportType } from '@/models/tour.model';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardBadgeComponent } from '@/shared/components/badge';
 import { CreateLog } from '@/components/log/create-log/create-log';
+import { LogItemComponent } from '@/components/log/log-item/log-item';
 
 @Component({
   selector: 'app-detailsview-tour',
   standalone: true,
-  imports: [CommonModule, ZardBadgeComponent, ZardButtonComponent, CreateLog],
+  imports: [CommonModule, ZardBadgeComponent, ZardButtonComponent, CreateLog, LogItemComponent],
   templateUrl: './detailsview-tour.html',
   styleUrl: './detailsview-tour.css',
 })

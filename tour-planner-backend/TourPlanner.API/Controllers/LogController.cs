@@ -104,5 +104,26 @@ namespace TourPlanner.API.Controllers
             }
         }
 
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteLog(Guid id)
+        {
+            _logger.LogInformation("Delete Log called for id: {Id}", id);
+            try
+            {
+                await _logService.DeleteLogAsync(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogError(ex, "Log was not found when deleting");
+                return StatusCode(404, new { message = "Log not found" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while deleting log");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
     }
 }

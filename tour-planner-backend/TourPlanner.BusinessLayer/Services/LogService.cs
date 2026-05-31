@@ -73,7 +73,7 @@ namespace TourPlanner.BusinessLayer.Services
         }
         public async Task DeleteLogAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await _logRepository.DeleteAsync(id);
         }
     }
 }
