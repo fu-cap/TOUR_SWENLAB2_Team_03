@@ -8,7 +8,7 @@ import { TransportType } from '@/models/tour.model';
 })
 export class RouteService {
   private http = inject(HttpClient);
-  private readonly PROXY_URL = 'http://localhost:8080/api/Map/directions';
+  private readonly PROXY_URL = 'http://localhost:8080/api/map/directions';
 
   getRoute(coordinates: number[][], transportType: TransportType): Observable<any> {
     // coordinates should be [[lng, lat], [lng, lat], ...]

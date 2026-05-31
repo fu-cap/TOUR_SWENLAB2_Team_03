@@ -7,8 +7,7 @@ import { RouteService } from '@/shared/core/services/route.service';
 import { TourLog, TransportType } from '@/models/tour.model';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardBadgeComponent } from '@/shared/components/badge';
-
-import { CreateLog } from '../create-log/create-log';
+import { CreateLog } from '@/components/log/create-log/create-log';
 
 @Component({
   selector: 'app-detailsview-tour',
@@ -31,12 +30,12 @@ export class DetailsviewTour implements OnInit, OnDestroy {
   formattedDuration = computed(() => {
     const timeSpan = this.tour()?.estimatedTime;
     if (!timeSpan) return '0m';
-    
+
     const parts = timeSpan.split(':');
     if (parts.length >= 2) {
       const hoursPart = parts[0];
       const minutes = parts[1];
-      
+
       if (hoursPart.includes('.')) {
         const dayParts = hoursPart.split('.');
         const days = parseInt(dayParts[0]);
@@ -44,7 +43,7 @@ export class DetailsviewTour implements OnInit, OnDestroy {
         const totalHours = (days * 24) + hours;
         return `${totalHours}h ${minutes}m`;
       }
-      
+
       const hours = parseInt(hoursPart);
       return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
     }

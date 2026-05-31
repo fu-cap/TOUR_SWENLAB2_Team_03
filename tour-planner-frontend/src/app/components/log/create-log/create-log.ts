@@ -13,10 +13,10 @@ import { toast } from 'ngx-sonner';
   selector: 'app-create-log',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
+    CommonModule,
+    ReactiveFormsModule,
     ZardIdDirective,
-    ZardButtonComponent, 
+    ZardButtonComponent,
     ...ZardInputImports,
     ...ZardFormImports
   ],

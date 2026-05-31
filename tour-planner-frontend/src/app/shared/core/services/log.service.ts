@@ -8,7 +8,7 @@ import { TourLog } from '@/models/tour.model';
 })
 export class LogService {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:8080/api/Log';
+  private readonly API_URL = 'http://localhost:8080/api/log';
 
   getLogsByTourId(tourId: string): Observable<TourLog[]> {
     return this.http.get<TourLog[]>(`${this.API_URL}/${tourId}`);
