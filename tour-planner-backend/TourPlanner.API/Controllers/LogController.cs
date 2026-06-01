@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using TourPlanner.BusinessLayer.Dtos;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataAccessLayer.Entities;
@@ -40,7 +41,33 @@ namespace TourPlanner.API.Controllers
             }
         }
 
-        [HttpGet("{tourId:guid}")]
+        [HttpGet("{logId:guid}")]
+        public async Task<IActionResult> GetLogById([FromRoute] Guid logId)
+        {
+            _logger.LogInformation("Get Log by Log ID called for log: {Log}", logId);
+
+            try
+            {
+                var log = await _logService.GetLogByIdAsync(logId);
+                if(log is null)
+                {
+                    return NotFound(new { message = "Log not found" });
+                }
+                return Ok(log);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogError(ex, "Tour was not found when getting logs by tour id");
+                return StatusCode(404, new { message = "Log not found" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting logs by tour id");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
+        [HttpGet("tour/{tourId:guid}")]
         public async Task<IActionResult> GetLogsByTourId([FromRoute] Guid tourId)
         {
             _logger.LogInformation("Get Logs by Tour Id called for tour: {Tour}", tourId);
@@ -84,7 +111,7 @@ namespace TourPlanner.API.Controllers
                 {
                     return Created();
                 }
-                throw new Exception("Returned user is null");
+                throw new Exception("Returned log is null");
 
             }
             catch (KeyNotFoundException ex)
@@ -101,6 +128,68 @@ namespace TourPlanner.API.Controllers
             {
                 _logger.LogError(ex, "Error while creating new log");
                 return StatusCode(500, new { message = "Internal Server Error" });  
+            }
+        }
+
+        [HttpPut("{logId:guid}")]
+        public async Task<IActionResult> updateLogAsync([FromRoute] Guid logId, [FromBody] CreateLogDto dto)
+        {
+             if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Got invalid DTO for creating a user.");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _logger.LogInformation("Starting updating log for tour: {Tour}", dto.tour_id);
+
+                await _logService.UpdateLogAsync(logId, dto);
+                return NoContent();
+
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogError(ex, "Tour or log was not found when updating log");
+                return StatusCode(404, new { message = "Tour or log not found" });
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                _logger.LogError(ex, "Error when updating log");
+                return StatusCode(400, new { message = ex });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while updating log");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
+
+        [HttpDelete("{logId:guid}")]
+        public async Task<IActionResult> deleteLogAsync([FromRoute] Guid logId)
+        {
+            try
+            {
+                _logger.LogInformation("Deleting log: {Log}", logId);
+
+                await _logService.DeleteLogAsync(logId);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogError(ex, "Log was not found when deleting log");
+                return StatusCode(404, new { message = "Log not found" });
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                _logger.LogError(ex, "Error when deleting log");
+                return StatusCode(400, new { message = ex });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while deleting log");
+                return StatusCode(500, new { message = "Internal Server Error" });
             }
         }
 

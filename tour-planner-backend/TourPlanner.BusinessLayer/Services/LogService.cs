@@ -65,11 +65,43 @@ namespace TourPlanner.BusinessLayer.Services
         }
         public async Task<Log?> GetLogByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _logRepository.GetByIdAsync(id);
         }
         public async Task UpdateLogAsync(Guid id, CreateLogDto updateLogDto)
         {
-            throw new NotImplementedException();
+            var tour = await _tourRepository.GetByIdAsync(updateLogDto.tour_id);
+            var log = await _logRepository.GetByIdAsync(id);
+
+            if (tour is null)
+            {
+                throw new KeyNotFoundException("Tour does not exist");    
+            }
+
+            if (log is null)
+            {
+                throw new KeyNotFoundException("Log does not exist");    
+            }
+
+            if (updateLogDto.total_distance_km == 0.0)
+            {
+                updateLogDto.total_distance_km = tour.Distance_km;
+            }
+
+            if (updateLogDto.total_time_min == TimeSpan.Zero)
+            {
+                updateLogDto.total_time_min = tour.EstimatedTime;
+            }
+
+            log.tour_id = updateLogDto.tour_id;
+            log.date_time = updateLogDto.date_time.ToUniversalTime();
+            log.comment = updateLogDto.comment;
+            log.rating = updateLogDto.rating;
+            log.total_distance_km = updateLogDto.total_distance_km;
+            log.total_time_min = updateLogDto.total_time_min;
+            log.difficulty = updateLogDto.difficulty;
+
+            await _logRepository.UpdateAsync(log);
+
         }
         public async Task DeleteLogAsync(Guid id)
         {
