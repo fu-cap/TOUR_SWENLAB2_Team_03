@@ -16,7 +16,7 @@ namespace TourPlanner.BusinessLayer.Services
 
         public async Task<Log> CreateLogAsync(CreateLogDto createLogDto)
         {
-            var tour = await _tourRepository.GetByIdAsync(createLogDto.tour_id);
+            var tour = await _tourRepository.GetByIdAsync(createLogDto.TourId);
 
 
             if (tour is null)
@@ -24,25 +24,25 @@ namespace TourPlanner.BusinessLayer.Services
                 throw new KeyNotFoundException("Tour does not exist");    
             }
 
-            if (createLogDto.total_distance_km == 0.0)
+            if (createLogDto.TotalDistanceKm == 0.0)
             {
-                createLogDto.total_distance_km = tour.Distance_km;
+                createLogDto.TotalDistanceKm = tour.Distance_km;
             }
 
-            if (createLogDto.total_time_min == TimeSpan.Zero)
+            if (createLogDto.TotalTimeMin == TimeSpan.Zero)
             {
-                createLogDto.total_time_min = tour.EstimatedTime;
+                createLogDto.TotalTimeMin = tour.EstimatedTime;
             }
 
             var newLog = new Log
             {
-                tour_id = createLogDto.tour_id,
-                date_time = createLogDto.date_time.ToUniversalTime(),
-                comment = createLogDto.comment,
-                rating = createLogDto.rating,
-                total_distance_km = createLogDto.total_distance_km,
-                total_time_min = createLogDto.total_time_min,
-                difficulty = createLogDto.difficulty
+                TourId = createLogDto.TourId,
+                DateTime = createLogDto.DateTime.ToUniversalTime(),
+                Comment = createLogDto.Comment,
+                Rating = createLogDto.Rating,
+                TotalDistanceKm = createLogDto.TotalDistanceKm,
+                TotalTimeMin = createLogDto.TotalTimeMin,
+                Difficulty = createLogDto.Difficulty
             };
 
             var createdLog = await _logRepository.AddAsync(newLog);
@@ -69,7 +69,7 @@ namespace TourPlanner.BusinessLayer.Services
         }
         public async Task UpdateLogAsync(Guid id, CreateLogDto updateLogDto)
         {
-            var tour = await _tourRepository.GetByIdAsync(updateLogDto.tour_id);
+            var tour = await _tourRepository.GetByIdAsync(updateLogDto.TourId);
             var log = await _logRepository.GetByIdAsync(id);
 
             if (tour is null)
@@ -82,23 +82,23 @@ namespace TourPlanner.BusinessLayer.Services
                 throw new KeyNotFoundException("Log does not exist");    
             }
 
-            if (updateLogDto.total_distance_km == 0.0)
+            if (updateLogDto.TotalDistanceKm == 0.0)
             {
-                updateLogDto.total_distance_km = tour.Distance_km;
+                updateLogDto.TotalDistanceKm = tour.Distance_km;
             }
 
-            if (updateLogDto.total_time_min == TimeSpan.Zero)
+            if (updateLogDto.TotalTimeMin == TimeSpan.Zero)
             {
-                updateLogDto.total_time_min = tour.EstimatedTime;
+                updateLogDto.TotalTimeMin = tour.EstimatedTime;
             }
 
-            log.tour_id = updateLogDto.tour_id;
-            log.date_time = updateLogDto.date_time.ToUniversalTime();
-            log.comment = updateLogDto.comment;
-            log.rating = updateLogDto.rating;
-            log.total_distance_km = updateLogDto.total_distance_km;
-            log.total_time_min = updateLogDto.total_time_min;
-            log.difficulty = updateLogDto.difficulty;
+            log.TourId = updateLogDto.TourId;
+            log.DateTime = updateLogDto.DateTime.ToUniversalTime();
+            log.Comment = updateLogDto.Comment;
+            log.Rating = updateLogDto.Rating;
+            log.TotalDistanceKm = updateLogDto.TotalDistanceKm;
+            log.TotalTimeMin = updateLogDto.TotalTimeMin;
+            log.Difficulty = updateLogDto.Difficulty;
 
             await _logRepository.UpdateAsync(log);
 

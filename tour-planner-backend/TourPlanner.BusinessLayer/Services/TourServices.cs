@@ -15,7 +15,7 @@ namespace TourPlanner.BusinessLayer.Services
         private readonly ITourRepository _tourRepository;
         private readonly HttpClient _httpClient;
 
-        private readonly string OpenRouteAPI = "https://api.openrouteservice.org";
+        private readonly string openRouteAPI = "https://api.openrouteservice.org";
 
         public TourService(ITourRepository tourRepository, HttpClient httpClient)
         {
@@ -25,29 +25,29 @@ namespace TourPlanner.BusinessLayer.Services
 
         public async Task<Tour> CreateTourAsync(CreateTourDto dto)
         {
-            var (distance_km, estimatedTime, geometryString) = await GetRouteInfoAsync(dto.waypoints, dto.TransportType);
+            var (distanceKm, estimatedTime, geometryString) = await GetRouteInfoAsync(dto.Waypoints, dto.TransportType);
 
             var tourId = Guid.NewGuid();
             var newTour = new Tour
             {
                 Id = tourId,
-                userID = dto.userId,
-                Name = dto.name,
-                Description = dto.description,
+                UserId = dto.UserId,
+                Name = dto.Name,
+                Description = dto.Description,
                 TransportType = dto.TransportType,
-                Distance_km = distance_km,
+                DistanceKm = distanceKm,
                 EstimatedTime = estimatedTime,
                 RouteInformation = geometryString,
                 CreationDate = DateTime.UtcNow,
                 LastModifiedDate = DateTime.UtcNow,
-                Waypoints = dto.waypoints.Select((w, index) => new Waypoint
+                Waypoints = dto.Waypoints.Select((w, index) => new Waypoint
                 {
                     Id = Guid.NewGuid(),
                     TourId = tourId,
                     OrderIndex = index,
-                    Label = w.label,
-                    Latitude = w.latitude,
-                    Longitude = w.longitude
+                    Label = w.Label,
+                    Latitude = w.Latitude,
+                    Longitude = w.Longitude
                 }).ToList()
             };
 
@@ -72,23 +72,23 @@ namespace TourPlanner.BusinessLayer.Services
                 throw new KeyNotFoundException($"Tour with ID {id} not found.");
             }
 
-            var (distance_km, estimatedTime, geometryString) = await GetRouteInfoAsync(dto.waypoints, dto.TransportType);
+            var (distanceKm, estimatedTime, geometryString) = await GetRouteInfoAsync(dto.Waypoints, dto.TransportType);
 
-            existingTour.Name = dto.name;
-            existingTour.Description = dto.description;
+            existingTour.Name = dto.Name;
+            existingTour.Description = dto.Description;
             existingTour.TransportType = dto.TransportType;
-            existingTour.Distance_km = distance_km;
+            existingTour.DistanceKm = distanceKm;
             existingTour.EstimatedTime = estimatedTime;
             existingTour.RouteInformation = geometryString;
             existingTour.LastModifiedDate = DateTime.UtcNow;
             
-            existingTour.Waypoints = dto.waypoints.Select((w, index) => new Waypoint
+            existingTour.Waypoints = dto.Waypoints.Select((w, index) => new Waypoint
             {
                 TourId = id,
                 OrderIndex = index,
-                Label = w.label,
-                Latitude = w.latitude,
-                Longitude = w.longitude
+                Label = w.Label,
+                Latitude = w.Latitude,
+                Longitude = w.Longitude
             }).ToList();
 
             await _tourRepository.UpdateAsync(existingTour);
@@ -99,7 +99,7 @@ namespace TourPlanner.BusinessLayer.Services
             await _tourRepository.DeleteAsync(id);
         }
 
-        private async Task<(double distance_km, TimeSpan estimatedTime, string geometryString)> GetRouteInfoAsync(List<WaypointDto> waypoints, TransportType transportType)
+        private async Task<(double distanceKm, TimeSpan estimatedTime, string geometryString)> GetRouteInfoAsync(List<WaypointDto> waypoints, TransportType transportType)
         {
             string? apiKey = Environment.GetEnvironmentVariable("OpenRoute_ApiKey");
 
@@ -118,16 +118,16 @@ namespace TourPlanner.BusinessLayer.Services
             
             var requestBody = new OrsRequest
             {
-                Coordinates = waypoints.Select(w => new double[] { w.longitude, w.latitude }).ToList()
+                Coordinates = waypoints.Select(w => new double[] { w.Longitude, w.Latitude }).ToList()
             };
 
-            var response = await _httpClient.PostAsJsonAsync($"{OpenRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
+            var response = await _httpClient.PostAsJsonAsync($"{openRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
 
             if (response.IsSuccessStatusCode)
             {
                 var orsData = await response.Content.ReadFromJsonAsync<OrsResponse>();
 
-                double distance_km = 0;
+                double distanceKm = 0;
                 TimeSpan estimatedTime = TimeSpan.Zero;
                 string geometryString = "";
 
@@ -135,13 +135,13 @@ namespace TourPlanner.BusinessLayer.Services
                 {
                     var route = orsData.Routes[0];
                     
-                    distance_km = Math.Round(route.Summary.Distance / 1000.0, 2);
+                    distanceKm = Math.Round(route.Summary.Distance / 1000.0, 2);
                     estimatedTime = TimeSpan.FromSeconds(route.Summary.Duration);
                     
                     geometryString = route.Geometry; 
                 }
 
-                return (distance_km, estimatedTime, geometryString);
+                return (distanceKm, estimatedTime, geometryString);
             }
             else
             {

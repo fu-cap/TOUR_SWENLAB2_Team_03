@@ -49,7 +49,7 @@ namespace TourPlanner.API.Controllers
             }
 
             try{
-                _logger.LogInformation("Starting creating user: {Username}", dto.username);
+                _logger.LogInformation("Starting creating user: {Username}", dto.Username);
 
                 var createdUser = await _userService.CreateUserAsync(dto);
                 
@@ -61,7 +61,7 @@ namespace TourPlanner.API.Controllers
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning(ex, "Error in Business Logic: {Username}", dto.username);
+                _logger.LogWarning(ex, "Error in Business Logic: {Username}", dto.Username);
                 return BadRequest(new { message = ex.Message });
             }
             catch (HttpRequestException ex)
@@ -71,7 +71,7 @@ namespace TourPlanner.API.Controllers
             }
             catch (DbUpdateException ex)
             {
-                _logger.LogError(ex, "Username or email already exists: {Username}", dto.username);
+                _logger.LogError(ex, "Username or email already exists: {Username}", dto.Username);
                 return StatusCode(400, new { message = "Username or email already exists" });
             }
             catch(Exception ex)

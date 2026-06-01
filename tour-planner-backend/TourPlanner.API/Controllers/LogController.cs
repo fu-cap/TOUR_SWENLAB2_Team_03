@@ -103,7 +103,7 @@ namespace TourPlanner.API.Controllers
 
             try
             {
-                _logger.LogInformation("Starting creating log for tour: {Tour}", dto.tour_id);
+                _logger.LogInformation("Starting creating log for tour: {Tour}", dto.TourId);
 
                 var createdLog = await _logService.CreateLogAsync(dto);
 
@@ -132,7 +132,7 @@ namespace TourPlanner.API.Controllers
         }
 
         [HttpPut("{logId:guid}")]
-        public async Task<IActionResult> updateLogAsync([FromRoute] Guid logId, [FromBody] CreateLogDto dto)
+        public async Task<IActionResult> UpdateLogAsync([FromRoute] Guid logId, [FromBody] CreateLogDto dto)
         {
              if (!ModelState.IsValid)
             {
@@ -142,7 +142,7 @@ namespace TourPlanner.API.Controllers
 
             try
             {
-                _logger.LogInformation("Starting updating log for tour: {Tour}", dto.tour_id);
+                _logger.LogInformation("Starting updating log for tour: {Tour}", dto.TourId);
 
                 await _logService.UpdateLogAsync(logId, dto);
                 return NoContent();
@@ -167,7 +167,7 @@ namespace TourPlanner.API.Controllers
 
 
         [HttpDelete("{logId:guid}")]
-        public async Task<IActionResult> deleteLogAsync([FromRoute] Guid logId)
+        public async Task<IActionResult> DeleteLogAsync([FromRoute] Guid logId)
         {
             try
             {
@@ -192,27 +192,5 @@ namespace TourPlanner.API.Controllers
                 return StatusCode(500, new { message = "Internal Server Error" });
             }
         }
-
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteLog(Guid id)
-        {
-            _logger.LogInformation("Delete Log called for id: {Id}", id);
-            try
-            {
-                await _logService.DeleteLogAsync(id);
-                return NoContent();
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _logger.LogError(ex, "Log was not found when deleting");
-                return StatusCode(404, new { message = "Log not found" });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while deleting log");
-                return StatusCode(500, new { message = "Internal Server Error" });
-            }
-        }
-
     }
 }

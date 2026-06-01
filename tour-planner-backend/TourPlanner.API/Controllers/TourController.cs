@@ -49,7 +49,7 @@ namespace TourPlanner.API.Controllers
             }
 
             try{
-                _logger.LogInformation("Starting creating tour: {TourName}", dto.name);
+                _logger.LogInformation("Starting creating tour: {TourName}", dto.Name);
 
                 var createdTour = await _tourService.CreateTourAsync(dto);
 
@@ -57,7 +57,7 @@ namespace TourPlanner.API.Controllers
             }
             catch (ArgumentException ex)
             {
-                _logger.LogWarning(ex, "Error in Business Logic: {TourName}", dto.name);
+                _logger.LogWarning(ex, "Error in Business Logic: {TourName}", dto.Name);
                 return BadRequest(new { message = ex.Message });
             }
             catch (HttpRequestException ex)

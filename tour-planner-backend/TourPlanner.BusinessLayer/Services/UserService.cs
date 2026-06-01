@@ -18,9 +18,10 @@ namespace TourPlanner.BusinessLayer.Services
         {    
             var newUser = new User
             {
-                username = createUserDto.username,
-                password_hash = HashUtil.HashPassword(createUserDto.password),
-                email = createUserDto.email,
+                Username = createUserDto.Username,
+                PasswordHash = HashUtil.HashPassword(createUserDto.Password),
+                Email = createUserDto.Email,
+                CreatedAt = DateTime.UtcNow
             };
 
             return await _userRepository.AddAsync(newUser);
@@ -33,17 +34,17 @@ namespace TourPlanner.BusinessLayer.Services
 
         public async Task<User?> GetUserByIdAsync(Guid id)
         {
-            return null;
+            return await _userRepository.GetByIdAsync(id);
         }
 
         public async Task UpdateUserAsync(Guid id, CreateUserDto updateUserDto)
         {
-            
+            // Implementation for update
         }
 
         public async Task DeleteUserAsync(Guid id)
         {
-            
+            await _userRepository.DeleteAsync(id);
         }
     }
 }
