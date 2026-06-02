@@ -17,12 +17,12 @@ export type TransportType =
 
 export interface TourLog {
   id?: string;
-  tour_id: string;
-  date_time: string;
+  tourId: string;
+  dateTime: string;
   comment: string;
   difficulty: number;
-  total_distance_km: number;
-  total_time_min: string; // TimeSpan string
+  totalDistanceKm: number;
+  totalTimeMin: string; // TimeSpan string
   rating: number;
 }
 
@@ -34,7 +34,7 @@ export interface Tour {
   transportType: TransportType;
 
   // Felder von API befüllt
-  distance_km?: number;
+  distanceKm?: number;
   estimatedTime?: string; // TimeSpan string from Backend "HH:mm:ss"
 
   // Hier speicherst du die kompletten GeoJSON-Daten für Leaflet

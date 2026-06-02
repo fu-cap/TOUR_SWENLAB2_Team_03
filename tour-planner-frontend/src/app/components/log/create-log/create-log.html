@@ -7,10 +7,10 @@
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
-    <z-form-field #fdt="zardId" zardId="date_time">
+    <z-form-field #fdt="zardId" zardId="dateTime">
       <label z-form-label [for]="fdt.id()" zRequired>Date & Time</label>
       <z-form-control>
-        <input z-input [id]="fdt.id()" type="datetime-local" formControlName="date_time" />
+        <input z-input [id]="fdt.id()" type="datetime-local" formControlName="dateTime" />
       </z-form-control>
     </z-form-field>
 
@@ -31,17 +31,17 @@
     </div>
 
     <div class="grid grid-cols-2 gap-4">
-      <z-form-field #fdis="zardId" zardId="total_distance_km">
+      <z-form-field #fdis="zardId" zardId="totalDistanceKm">
         <label z-form-label [for]="fdis.id()" zRequired>Distance (km)</label>
         <z-form-control>
-          <input z-input [id]="fdis.id()" type="number" step="0.1" formControlName="total_distance_km" />
+          <input z-input [id]="fdis.id()" type="number" step="0.1" formControlName="totalDistanceKm" />
         </z-form-control>
       </z-form-field>
 
-      <z-form-field #ft="zardId" zardId="total_time_min">
+      <z-form-field #ft="zardId" zardId="totalTimeMin">
         <label z-form-label [for]="ft.id()" zRequired>Duration</label>
         <z-form-control>
-          <input z-input [id]="ft.id()" type="text" placeholder="HH:mm:ss" formControlName="total_time_min" />
+          <input z-input [id]="ft.id()" type="text" placeholder="HH:mm:ss" formControlName="totalTimeMin" />
         </z-form-control>
       </z-form-field>
     </div>

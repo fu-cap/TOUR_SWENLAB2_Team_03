@@ -31,11 +31,11 @@ export class CreateLog {
   private logService = inject(LogService);
 
   form: FormGroup = this.fb.group({
-    date_time: [new Date().toISOString().substring(0, 16), Validators.required],
+    dateTime: [new Date().toISOString().substring(0, 16), Validators.required],
     comment: ['', Validators.required],
     difficulty: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-    total_distance_km: [0, [Validators.required, Validators.min(0)]],
-    total_time_min: ['00:30:00', Validators.required],
+    totalDistanceKm: [0, [Validators.required, Validators.min(0)]],
+    totalTimeMin: ['00:30:00', Validators.required],
     rating: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
   });
 
@@ -43,7 +43,7 @@ export class CreateLog {
     if (this.form.invalid) return;
 
     const newLog: TourLog = {
-      tour_id: this.tourId,
+      tourId: this.tourId,
       ...this.form.value
     };
 

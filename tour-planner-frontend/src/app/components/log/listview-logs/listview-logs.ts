@@ -5,12 +5,13 @@ import { LogService } from '@/shared/core/services/log.service';
 import { TourLog } from '@/models/tour.model';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { CreateLog } from '@/components/log/create-log/create-log';
+import { EditLog } from '@/components/log/edit-log/edit-log';
 import { LogItemComponent } from '@/components/log/log-item/log-item';
 
 @Component({
   selector: 'app-listview-logs',
   standalone: true,
-  imports: [CommonModule, ZardButtonComponent, CreateLog, LogItemComponent],
+  imports: [CommonModule, ZardButtonComponent, CreateLog, EditLog, LogItemComponent],
   templateUrl: './listview-logs.html',
   styleUrl: './listview-logs.css',
 })
@@ -22,6 +23,7 @@ export class ListviewLogs implements OnInit {
   logs = signal<TourLog[]>([]);
   isLoadingLogs = signal(false);
   isAddingLog = signal(false);
+  editingLog = signal<TourLog | null>(null);
 
   ngOnInit() {
     if (this.tour()) {
@@ -44,5 +46,18 @@ export class ListviewLogs implements OnInit {
         this.isLoadingLogs.set(false);
       }
     });
+  }
+
+  startEdit(log: TourLog) {
+    this.editingLog.set(log);
+  }
+
+  cancelEdit() {
+    this.editingLog.set(null);
+  }
+
+  onLogUpdated() {
+    this.editingLog.set(null);
+    this.loadLogs();
   }
 }

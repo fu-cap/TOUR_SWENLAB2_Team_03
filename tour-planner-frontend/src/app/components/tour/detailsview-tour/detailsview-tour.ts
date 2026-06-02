@@ -1,16 +1,15 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TourService } from '@/shared/core/services/tour.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { RouteService } from '@/shared/core/services/route.service';
 import { TransportType } from '@/models/tour.model';
-import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardBadgeComponent } from '@/shared/components/badge';
 
 @Component({
   selector: 'app-detailsview-tour',
   standalone: true,
-  imports: [CommonModule, ZardBadgeComponent, ZardButtonComponent],
+  imports: [CommonModule, ZardBadgeComponent],
   templateUrl: './detailsview-tour.html',
   styleUrl: './detailsview-tour.css',
 })

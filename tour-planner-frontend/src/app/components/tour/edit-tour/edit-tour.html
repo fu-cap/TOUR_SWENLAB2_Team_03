@@ -5,9 +5,9 @@
         <h2 class="text-2xl font-bold">Edit Tour</h2>
         <p class="text-muted-foreground text-sm">Modify your adventure and update the route details.</p>
       </div>
-      <button 
-        z-button zType="ghost" zSize="sm" 
-        class="text-destructive hover:bg-destructive/10" 
+      <button
+        z-button zType="ghost" zSize="sm"
+        class="text-destructive hover:bg-destructive/10"
         (click)="confirmDelete()"
         title="Delete tour"
       >
@@ -52,7 +52,7 @@
       <!-- Route Summary -->
       <div class="flex gap-4 p-3 bg-muted/50 rounded-lg">
         <div class="flex items-center gap-2">
-          <div class="p-2 bg-primary/10 rounded-full text-primary">
+          <div class="flex p-2 bg-primary/10 rounded-full text-primary">
             <span class="material-icons text-base">route</span>
           </div>
           <div class="flex flex-col">
@@ -61,7 +61,7 @@
           </div>
         </div>
         <div class="flex items-center gap-2 border-l border-sidebar-border pl-4">
-          <div class="p-2 bg-primary/10 rounded-full text-primary">
+          <div class="flex p-2 bg-primary/10 rounded-full text-primary">
             <span class="material-icons text-base">timer</span>
           </div>
           <div class="flex flex-col">
@@ -76,15 +76,16 @@
         <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">Route Waypoints</h3>
         <div formArrayName="waypoints" class="space-y-3">
           @for (waypoint of waypoints.controls; track waypoint; let i = $index; let first = $first; let last = $last) {
-            <div [formGroupName]="i" class="flex flex-col">
+            <div [formGroup]="$any(waypoint)" class="flex flex-col">
               <z-form-field #fw="zardId" [zardId]="'waypoint-' + i">
                 <label z-form-label [for]="fw.id()" zRequired>
                   @if (first) { Start } @else if (last) { Destination } @else { Stop {{ i }} }
                 </label>
                 <z-form-control>
-                  <z-input-group [zAddonBefore]="pinIcon" [zAddonAfter]="!first && !last ? removeBtn : ''" zPopover [zContent]="resultsPopover" [zVisible]="!!(activeWaypointIndex() === i && searchResults().length > 0 && waypoints.at(i).get('label')?.dirty)" [zTrigger]="null">
+                  <z-input-group [zAddonBefore]="pinIcon" [zAddonAfter]="!first && !last ? removeBtn : ''" zPopover [zContent]="resultsPopover" [zVisible]="!!(activeWaypointIndex() === i && searchResults().length > 0 && $any(waypoint).get('label')?.dirty)" [zTrigger]="null">
                     <input z-input [id]="fw.id()" type="text" [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')" formControlName="label" />
                   </z-input-group>
+
                   <ng-template #resultsPopover>
                     <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-sidebar-border rounded-md shadow-lg p-1">
                       @if (isSearching()) { <div class="p-2 text-xs text-muted-foreground flex items-center gap-2"><span class="material-icons animate-spin text-sm">search</span>Searching...</div> }

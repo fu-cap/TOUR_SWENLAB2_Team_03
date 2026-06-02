@@ -11,15 +11,23 @@ export class LogService {
   private readonly API_URL = 'http://localhost:8080/api/log';
 
   getLogsByTourId(tourId: string): Observable<TourLog[]> {
-    return this.http.get<TourLog[]>(`${this.API_URL}/${tourId}`);
+    return this.http.get<TourLog[]>(`${this.API_URL}/tour/${tourId}`);
   }
 
   createLog(log: TourLog): Observable<void> {
     return this.http.post<void>(this.API_URL, log);
   }
 
+  updateLog(id: string, log: TourLog): Observable<void> {
+    return this.http.put<void>(`${this.API_URL}/${id}`, log);
+  }
+
   deleteLog(id: string): Observable<void> {
     return this.http.delete<void>(`${this.API_URL}/${id}`);
+  }
+
+  getLogById(id: string): Observable<TourLog> {
+    return this.http.get<TourLog>(`${this.API_URL}/${id}`);
   }
 
   getAllLogs(): Observable<TourLog[]> {

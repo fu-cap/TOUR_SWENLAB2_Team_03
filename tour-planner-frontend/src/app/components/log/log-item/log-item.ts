@@ -15,6 +15,7 @@ import { toast } from 'ngx-sonner';
 export class LogItemComponent {
   @Input({ required: true }) log!: TourLog;
   @Output() logDeleted = new EventEmitter<void>();
+  @Output() logEdit = new EventEmitter<TourLog>();
 
   private dialogService = inject(ZardDialogService);
   private logService = inject(LogService);
