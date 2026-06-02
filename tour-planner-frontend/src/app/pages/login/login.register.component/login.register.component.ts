@@ -1,5 +1,6 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ZardIdDirective } from '@/shared/core';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputImports } from '@/shared/components/input';
@@ -15,6 +16,7 @@ import { ZardSelectImports } from '@/shared/components/select';
 })
 export class LoginRegisterComponent {
   @Output() loginComponentStatus = new EventEmitter<string>();
+  private router = inject(Router);
 
   form = new FormGroup({
     gender: new FormControl('', Validators.required),
@@ -24,6 +26,11 @@ export class LoginRegisterComponent {
     username: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]+$/)]),
     password: new FormControl('', [Validators.required, Validators.minLength(9)]),
   })
+
+  public onSubmit() {
+    // For now, just navigate to home
+    this.router.navigate(['/home']);
+  }
 
   public changeStatus() {
     this.loginComponentStatus.emit('login');

@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="form">
+<form [formGroup]="form" class="form" (ngSubmit)="onSubmit()">
   <h1 class="form-title">Register</h1>
   <z-form-field #fg="zardId" zardId="gender">
     <label z-form-label [for]="fg.id()" zRequired>Gender</label>
