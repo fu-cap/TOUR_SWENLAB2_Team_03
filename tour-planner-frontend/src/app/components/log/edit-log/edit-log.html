@@ -1,0 +1,61 @@
+<div class="space-y-6">
+  <div class="flex justify-between items-center">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Edit Tour Log</h3>
+    <button z-button zType="ghost" zSize="sm" class="text-muted-foreground" (click)="cancel.emit()">
+      <span class="material-icons text-sm">close</span>
+    </button>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <z-form-field #fdt="zardId" zardId="dateTime">
+      <label z-form-label [for]="fdt.id()" zRequired>Date & Time</label>
+      <z-form-control>
+        <input z-input [id]="fdt.id()" type="datetime-local" formControlName="dateTime" />
+      </z-form-control>
+    </z-form-field>
+
+    <div class="grid grid-cols-2 gap-4">
+      <z-form-field #fdi="zardId" zardId="difficulty">
+        <label z-form-label [for]="fdi.id()" zRequired>Difficulty (1-5)</label>
+        <z-form-control>
+          <input z-input [id]="fdi.id()" type="number" min="1" max="5" formControlName="difficulty" />
+        </z-form-control>
+      </z-form-field>
+
+      <z-form-field #fr="zardId" zardId="rating">
+        <label z-form-label [for]="fr.id()" zRequired>Rating (1-5)</label>
+        <z-form-control>
+          <input z-input [id]="fr.id()" type="number" min="1" max="5" formControlName="rating" />
+        </z-form-control>
+      </z-form-field>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <z-form-field #fdis="zardId" zardId="totalDistanceKm">
+        <label z-form-label [for]="fdis.id()" zRequired>Distance (km)</label>
+        <z-form-control>
+          <input z-input [id]="fdis.id()" type="number" step="0.1" formControlName="totalDistanceKm" />
+        </z-form-control>
+      </z-form-field>
+
+      <z-form-field #ft="zardId" zardId="totalTimeMin">
+        <label z-form-label [for]="ft.id()" zRequired>Duration</label>
+        <z-form-control>
+          <input z-input [id]="ft.id()" type="text" placeholder="HH:mm:ss" formControlName="totalTimeMin" />
+        </z-form-control>
+      </z-form-field>
+    </div>
+
+    <z-form-field #fc="zardId" zardId="comment">
+      <label z-form-label [for]="fc.id()" zRequired>Comment</label>
+      <z-form-control>
+        <textarea z-input [id]="fc.id()" rows="2" placeholder="How was your tour?" formControlName="comment"></textarea>
+      </z-form-control>
+    </z-form-field>
+
+    <div class="flex gap-2 pt-2">
+      <button z-button zType="outline" class="flex-1" type="button" (click)="cancel.emit()">Cancel</button>
+      <button z-button zType="default" class="flex-1" type="submit" [disabled]="form.invalid">Save Changes</button>
+    </div>
+  </form>
+</div>
