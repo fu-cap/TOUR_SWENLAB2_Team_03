@@ -268,7 +268,26 @@ export class EditTour implements OnInit, OnDestroy {
             id: loadingToast,
             description: `Successfully saved "${request.name}".`
           });
-          this.stateChange.emit('overview');
+          
+          // Update the selected tour with new data to ensure details view is current
+          this.tourService.selectedTour.set({
+            ...currentTour,
+            name: request.name,
+            description: request.description,
+            transportType: request.transportType,
+            distanceKm: Number(this.formattedDistance().replace(' km', '')),
+            estimatedTime: this.form.get('estimatedTime')?.value || currentTour.estimatedTime, // Keep old if not in form
+            waypoints: request.waypoints.map((wp, index) => ({
+              id: currentTour.waypoints[index]?.id, // Try to preserve IDs
+              tourId: currentTour.id,
+              orderIndex: index,
+              label: wp.label,
+              latitude: wp.latitude,
+              longitude: wp.longitude
+            }))
+          });
+
+          this.stateChange.emit('details');
         },
         error: (err) => {
           console.error('Error updating tour:', err);
