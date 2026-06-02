@@ -5,7 +5,8 @@
 }
 
 .form-title {
-  @apply text-3xl text-gray-700 self-start mb-8 tracking-wide;
+  @apply text-3xl self-start mb-8 tracking-wide font-bold;
+  color: var(--foreground);
 }
 
 z-form-field {
@@ -13,32 +14,57 @@ z-form-field {
 }
 
 [z-form-label] {
-  @apply text-sm text-gray-600 pl-2 self-start;
+  @apply text-sm pl-2 self-start font-medium;
+  color: var(--muted-foreground);
 }
 
 .form-input {
-  @apply w-full h-9 px-4 rounded-xl border border-purple-300/60 bg-white/40 text-gray-700 placeholder:text-transparent focus:bg-white/70 focus:outline-none focus:border-purple-400 transition-all;
+  @apply w-full h-10 px-4 rounded-xl border transition-all;
+  border-color: var(--border);
+  background-color: var(--sidebar);
+  color: var(--foreground);
+}
+
+.form-input::placeholder {
+  color: color-mix(in srgb, var(--muted-foreground), transparent 50%);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--primary);
 }
 
 .content-center {
-  @apply w-full flex justify-center;
+  @apply w-full flex justify-center mt-4;
 }
+
 .form-send-button {
-  @apply w-full h-11 border border-purple-300 text-purple-500 tracking-widest rounded-xl uppercase bg-white/20 transition-all duration-200 hover:bg-purple-500/10 active:scale-[0.99] cursor-pointer;
+  @apply w-full h-11 border tracking-widest rounded-xl uppercase transition-all duration-200 active:scale-[0.98] cursor-pointer font-bold;
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: color-mix(in srgb, var(--primary), transparent 95%);
+}
+
+.form-send-button:hover {
+  background-color: color-mix(in srgb, var(--primary), transparent 90%);
 }
 
 .content-bottom {
-  @apply w-full mt-20 flex justify-center;
+  @apply w-full mt-12 flex flex-col gap-3 items-center;
 }
+
 .form-change-form {
-  @apply w-full h-11 text-white tracking-widest rounded-xl uppercase transition-all duration-200 flex items-center justify-center cursor-pointer active:scale-[0.99];
-  background-color: #a78bfa;
+  @apply w-full h-11 tracking-widest rounded-xl uppercase transition-all duration-200 flex items-center justify-center cursor-pointer active:scale-[0.98] font-bold;
+  color: var(--primary-foreground);
+  background-color: var(--primary);
   border: none;
 }
+
 .form-change-form:hover {
-  background-color: #906ffa;
+  filter: brightness(1.1);
 }
 
 z-form-message {
-  @apply text-xs text-red-500 mt-1 pl-2;
+  @apply text-[10px] mt-1 pl-2 font-medium;
+  color: var(--destructive);
 }

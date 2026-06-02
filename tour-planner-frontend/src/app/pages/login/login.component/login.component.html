@@ -1,7 +1,7 @@
 <div class="page-wrapper">
   <div class="map-container">
     <div id="map" class="w-full h-full"></div>
-      <app-content>
+      <app-content [showToggle]="false">
         @if (currentStatus == 'login') {
           <app-login-form (loginComponentStatus)="handleStatusUpdate($event)"></app-login-form>
         } @else if (currentStatus == 'register') {

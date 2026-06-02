@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common';
 export class Content {
   @Input() activeState?: AppState;
   @Input() isCollapsed = false;
+  @Input() showToggle = true;
   @Output() activeStateChange = new EventEmitter<AppState>();
   @Output() toggleCollapse = new EventEmitter<void>();
 }
