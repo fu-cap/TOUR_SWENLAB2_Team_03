@@ -22,6 +22,7 @@ export class Content {
   @Input() activeState?: AppState;
   @Input() isCollapsed = false;
   @Input() showToggle = true;
+  @Input() centerContent = false;
   @Output() activeStateChange = new EventEmitter<AppState>();
   @Output() toggleCollapse = new EventEmitter<void>();
 }

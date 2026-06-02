@@ -1,13 +1,16 @@
 <div class="page-wrapper">
   <div class="map-container">
     <div id="map" class="w-full h-full"></div>
-      <app-content [showToggle]="false">
+    
+    <div class="overlay">
+      <app-content [showToggle]="false" [centerContent]="true">
         @if (currentStatus == 'login') {
           <app-login-form (loginComponentStatus)="handleStatusUpdate($event)"></app-login-form>
         } @else if (currentStatus == 'register') {
           <app-register-form (loginComponentStatus)="handleStatusUpdate($event)"></app-register-form>
         }
       </app-content>
+    </div>
 
     <div class="absolute bottom-0 left-0 w-full z-1000">
       <app-footer></app-footer>
