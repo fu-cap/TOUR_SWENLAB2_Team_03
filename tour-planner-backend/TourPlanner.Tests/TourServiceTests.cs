@@ -1,23 +1,22 @@
 using Moq;
 using Moq.Protected;
-using NUnit.Framework;
+using System.Net;
+using System.Net.Http.Json;
 using TourPlanner.BusinessLayer.Dtos;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataAccessLayer.Entities;
-using TourPlanner.DataAccessLayer.Repositories;
 using TourPlanner.DataAccessLayer.Enums;
-using System.Net;
-using System.Net.Http.Json;
+using TourPlanner.DataAccessLayer.Repositories;
 
 namespace TourPlanner.Tests
 {
     [TestFixture]
     public class TourServiceTests
     {
-        private Mock<ITourRepository> _tourRepositoryMock;
-        private Mock<HttpMessageHandler> _httpMessageHandlerMock;
-        private HttpClient _httpClient;
-        private TourService _tourService;
+        private Mock<ITourRepository> _tourRepositoryMock = null!;
+        private Mock<HttpMessageHandler> _httpMessageHandlerMock = null!;
+        private HttpClient _httpClient = null!;
+        private TourService _tourService = null!;
 
         [SetUp]
         public void SetUp()
@@ -26,8 +25,6 @@ namespace TourPlanner.Tests
             _httpMessageHandlerMock = new Mock<HttpMessageHandler>();
             _httpClient = new HttpClient(_httpMessageHandlerMock.Object);
             _tourService = new TourService(_tourRepositoryMock.Object, _httpClient);
-            
-            Environment.SetEnvironmentVariable("OpenRoute_ApiKey", "test-key");
         }
 
         [TearDown]
@@ -42,14 +39,14 @@ namespace TourPlanner.Tests
             // Arrange
             var dto = new CreateTourDto
             {
-                userId = Guid.NewGuid(),
-                name = "Test Tour",
-                description = "Description",
+                UserId = Guid.NewGuid(),
+                Name = "Test Tour",
+                Description = "Description",
                 TransportType = TransportType.DrivingCar,
-                waypoints = new List<WaypointDto>
+                Waypoints = new List<WaypointDto>
                 {
-                    new WaypointDto { label = "Start", latitude = 48.0, longitude = 16.0 },
-                    new WaypointDto { label = "End", latitude = 48.1, longitude = 16.1 }
+                    new WaypointDto { Label = "Start", Latitude = 48.0, Longitude = 16.0 },
+                    new WaypointDto { Label = "End", Latitude = 48.1, Longitude = 16.1 }
                 }
             };
 

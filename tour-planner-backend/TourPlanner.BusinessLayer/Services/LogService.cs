@@ -26,7 +26,7 @@ namespace TourPlanner.BusinessLayer.Services
 
             if (createLogDto.TotalDistanceKm == 0.0)
             {
-                createLogDto.TotalDistanceKm = tour.Distance_km;
+                createLogDto.TotalDistanceKm = tour.DistanceKm;
             }
 
             if (createLogDto.TotalTimeMin == TimeSpan.Zero)
@@ -54,13 +54,8 @@ namespace TourPlanner.BusinessLayer.Services
             return await _logRepository.GetAllLogsAsync();
         }
 
-        public async Task<List<Log>?> GetLogsByTourIdAsync(Guid tourId)
+        public async Task<List<Log>> GetLogsByTourIdAsync(Guid tourId)
         {
-            var tour = await _tourRepository.GetByIdAsync(tourId);
-            if (tour is null)
-            {
-                return null;
-            }
             return await _logRepository.GetLogsByTourIdAsync(tourId);
         }
         public async Task<Log?> GetLogByIdAsync(Guid id)
@@ -84,7 +79,7 @@ namespace TourPlanner.BusinessLayer.Services
 
             if (updateLogDto.TotalDistanceKm == 0.0)
             {
-                updateLogDto.TotalDistanceKm = tour.Distance_km;
+                updateLogDto.TotalDistanceKm = tour.DistanceKm;
             }
 
             if (updateLogDto.TotalTimeMin == TimeSpan.Zero)

@@ -55,14 +55,9 @@ namespace TourPlanner.API.Controllers
                 }
                 return Ok(log);
             }
-            catch (KeyNotFoundException ex)
-            {
-                _logger.LogError(ex, "Tour was not found when getting logs by tour id");
-                return StatusCode(404, new { message = "Log not found" });
-            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while getting logs by tour id");
+                _logger.LogError(ex, "Error while getting log by log id");
                 return StatusCode(500, new { message = "Internal Server Error" });
             }
         }
@@ -74,16 +69,7 @@ namespace TourPlanner.API.Controllers
             try
             {
                 var logs = await _logService.GetLogsByTourIdAsync(tourId);
-                if(logs is null)
-                {
-                    return NotFound(new { message = "Tour not found" });
-                }
                 return Ok(logs);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                _logger.LogError(ex, "Tour was not found when getting logs by tour id");
-                return StatusCode(404, new { message = "Tour not found" });  
             }
             catch (Exception ex)
             {

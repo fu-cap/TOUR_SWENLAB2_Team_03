@@ -23,7 +23,7 @@ namespace TourPlanner.DataAccessLayer.Repositories
         }
         public async Task<List<Log>> GetLogsByTourIdAsync(Guid tourId)
         {
-            return await _context.Log.Where(log => log.tour_id == tourId).ToListAsync();
+            return await _context.Log.Where(log => log.TourId == tourId).ToListAsync();
         }
         public async Task<Log?> GetByIdAsync(Guid id)
         {
