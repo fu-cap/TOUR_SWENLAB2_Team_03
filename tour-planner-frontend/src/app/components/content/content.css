@@ -1,7 +1,14 @@
 :host {
   display: block;
-  width: 450px;
   height: 100%;
+}
+
+:host(.collapsed) {
+  width: 0 !important;
+}
+
+.scroll-container {
+  width: 450px;
 }
 
 .scroll-container::-webkit-scrollbar {

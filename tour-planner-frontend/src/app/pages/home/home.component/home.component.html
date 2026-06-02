@@ -3,7 +3,13 @@
     <div id="map" class="w-full h-full"></div>
     <div class="overlay pointer-events-none">
       <app-navbar class="pointer-events-auto" [activeState]="currentState()" (activeStateChange)="currentState.set($event)" />
-      <app-content class="pointer-events-auto" [activeState]="currentState()" (activeStateChange)="currentState.set($event)"></app-content>
+      <app-content 
+        class="pointer-events-auto" 
+        [activeState]="currentState()" 
+        [isCollapsed]="isCollapsed()"
+        (activeStateChange)="currentState.set($event)"
+        (toggleCollapse)="isCollapsed.set(!isCollapsed())"
+      />
     </div>
   </div>
 </div>

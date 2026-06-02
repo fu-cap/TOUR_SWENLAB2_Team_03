@@ -1,7 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TourService } from '@/shared/core/services/tour.service';
 import { LogService } from '@/shared/core/services/log.service';
+import { MapService, MapMarker } from '@/shared/core/services/map.service';
+import { RouteService } from '@/shared/core/services/route.service';
 import { TourLog } from '@/models/tour.model';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { CreateLog } from '@/components/log/create-log/create-log';
@@ -15,9 +17,11 @@ import { LogItemComponent } from '@/components/log/log-item/log-item';
   templateUrl: './listview-logs.html',
   styleUrl: './listview-logs.css',
 })
-export class ListviewLogs implements OnInit {
+export class ListviewLogs implements OnInit, OnDestroy {
   private tourService = inject(TourService);
   private logService = inject(LogService);
+  private mapService = inject(MapService);
+  private routeService = inject(RouteService);
 
   tour = this.tourService.selectedTour;
   logs = signal<TourLog[]>([]);
@@ -28,7 +32,33 @@ export class ListviewLogs implements OnInit {
   ngOnInit() {
     if (this.tour()) {
       this.loadLogs();
+      this.syncMap();
     }
+  }
+
+  ngOnDestroy() {
+    this.mapService.clearMap();
+  }
+
+  syncMap() {
+    const t = this.tour();
+    if (!t) return;
+
+    // 1. Show Markers
+    const markers: MapMarker[] = t.waypoints.map((wp, index) => ({
+      id: index,
+      lat: wp.latitude,
+      lng: wp.longitude,
+      label: wp.label || `Stop ${index}`
+    }));
+    this.mapService.updateMarkers(markers);
+
+    // 2. Fetch and Show Route
+    const coords = t.waypoints.map(wp => [wp.longitude, wp.latitude]);
+    this.routeService.getRoute(coords, t.transportType).subscribe({
+      next: (geoJson) => this.mapService.updateRoute(geoJson),
+      error: (err) => console.error('Error fetching route for logs:', err)
+    });
   }
 
   loadLogs() {

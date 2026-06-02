@@ -86,30 +86,16 @@
 
     <div formArrayName="waypoints" class="space-y-3">
       @for (waypoint of waypoints.controls; track waypoint; let i = $index; let first = $first; let last = $last) {
-        <div [formGroupName]="i" class="flex flex-col">
+        <div [formGroup]="$any(waypoint)" class="flex flex-col">
           <z-form-field #fw="zardId" [zardId]="'waypoint-' + i">
             <label z-form-label [for]="fw.id()" zRequired>
-              @if (first) { Start }
-              @else if (last) { Destination }
-              @else { Stop {{ i }} }
+              @if (first) { Start } @else if (last) { Destination } @else { Stop {{ i }} }
             </label>
             <z-form-control>
-              <z-input-group
-                [zAddonBefore]="pinIcon"
-                [zAddonAfter]="!first && !last ? removeBtn : ''"
-                zPopover
-                [zContent]="resultsPopover"
-                [zVisible]="!!(activeWaypointIndex() === i && searchResults().length > 0 && waypoints.at(i).get('label')?.dirty)"
-                [zTrigger]="null"
-              >
-                <input
-                  z-input
-                  [id]="fw.id()"
-                  type="text"
-                  [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')"
-                  formControlName="label"
-                />
+              <z-input-group [zAddonBefore]="pinIcon" [zAddonAfter]="!first && !last ? removeBtn : ''" zPopover [zContent]="resultsPopover" [zVisible]="!!(activeWaypointIndex() === i && searchResults().length > 0 && $any(waypoint).get('label')?.dirty)" [zTrigger]="null">
+                <input z-input [id]="fw.id()" type="text" [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')" formControlName="label" />
               </z-input-group>
+
 
               <ng-template #resultsPopover>
                 <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-sidebar-border rounded-md shadow-lg p-1">

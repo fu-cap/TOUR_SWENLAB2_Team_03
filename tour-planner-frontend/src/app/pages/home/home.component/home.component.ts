@@ -19,6 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   
   currentState = signal<AppState>('overview');
+  isCollapsed = signal(false);
 
   private readonly EUROPE_CENTER: L.LatLngExpression = [50, 10];
   private readonly EUROPE_ZOOM = 5;
