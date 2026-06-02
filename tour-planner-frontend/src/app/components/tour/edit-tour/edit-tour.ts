@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed, output } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { Tour, Waypoint, TransportType } from '@/models/tour.model';
+import { Waypoint, TransportType } from '@/models/tour.model';
 import { ZardIdDirective } from '@/shared/core';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputImports } from '@/shared/components/input';
@@ -8,6 +8,7 @@ import { ZardFormImports } from '@/shared/components/form';
 import { ZardSelectImports } from '@/shared/components/select';
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { ZardPopoverImports } from '@/shared/components/popover';
+import { ZardTooltipImports } from '@/shared/components/tooltip';
 import { ZardDialogService } from '@/shared/components/dialog';
 import { CommonModule } from '@angular/common';
 import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocoding.service';
@@ -28,8 +29,8 @@ import { AppState } from '@/components/navbar/navbar';
     ZardButtonComponent,
     ...ZardInputImports,
     ...ZardFormImports,
-    ...ZardSelectImports,
     ...ZardPopoverImports,
+    ...ZardTooltipImports,
     ZardInputGroupComponent,
   ],
   templateUrl: './edit-tour.html',
@@ -41,7 +42,16 @@ export class EditTour implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private routeService = inject(RouteService);
   private dialogService = inject(ZardDialogService);
-  
+
+  transportOptions: { value: TransportType; icon: string; label: string }[] = [
+    { value: 'driving-car', icon: 'directions_car', label: 'Car' },
+    { value: 'driving-hgv', icon: 'local_shipping', label: 'Truck' },
+    { value: 'cycling-regular', icon: 'directions_bike', label: 'Bike' },
+    { value: 'cycling-road', icon: 'pedal_bike', label: 'Road Bike' },
+    { value: 'foot-walking', icon: 'directions_walk', label: 'Walk' },
+    { value: 'foot-hiking', icon: 'hiking', label: 'Hike' },
+  ];
+
   stateChange = output<AppState>();
 
   tour = this.tourService.selectedTour;
@@ -125,7 +135,7 @@ export class EditTour implements OnInit, OnDestroy {
         return null;
       })
       .filter(m => m !== null) as MapMarker[];
-    
+
     this.mapService.updateMarkers(markers);
   }
 
@@ -235,7 +245,7 @@ export class EditTour implements OnInit, OnDestroy {
     const currentTour = this.tour();
     if (this.form.valid && currentTour?.id) {
       const formValue = this.form.getRawValue();
-      
+
       const request: CreateTourRequest = {
         userId: '00000000-0000-0000-0000-000000000000',
         name: formValue.name ?? '',

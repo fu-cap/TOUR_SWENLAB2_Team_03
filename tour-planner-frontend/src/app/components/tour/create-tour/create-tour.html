@@ -40,19 +40,25 @@
       }
     </z-form-field>
 
-    <z-form-field #ft="zardId" zardId="transportType">
-      <label z-form-label [for]="ft.id()" zRequired>Transport Type</label>
-      <z-form-control>
-        <z-select [id]="ft.id()" formControlName="transportType" zPlaceholder="Select transport type">
-          <z-select-item zValue="driving-car">Car</z-select-item>
-          <z-select-item zValue="driving-hgv">HGV (Truck)</z-select-item>
-          <z-select-item zValue="cycling-regular">Cycling (Regular)</z-select-item>
-          <z-select-item zValue="cycling-road">Cycling (Road)</z-select-item>
-          <z-select-item zValue="foot-walking">Walking</z-select-item>
-          <z-select-item zValue="foot-hiking">Hiking</z-select-item>
-        </z-select>
-      </z-form-control>
-    </z-form-field>
+    <div class="space-y-2">
+      <label z-form-label zRequired>Transport Type</label>
+      <div class="flex gap-1 p-1 bg-muted/30 rounded-xl border border-sidebar-border">
+        @for (option of transportOptions; track option.value) {
+          <button
+            type="button"
+            z-button
+            [zType]="form.get('transportType')?.value === option.value ? 'default' : 'ghost'"
+            zSize="sm"
+            class="flex-1 h-10 min-w-0 p-0 transition-all"
+            (click)="form.get('transportType')?.setValue($any(option.value))"
+            [zTooltip]="option.label"
+            zPosition="top"
+          >
+            <span class="material-icons text-xl">{{ option.icon }}</span>
+          </button>
+        }
+      </div>
+    </div>
   </div>
 
   <hr class="border-sidebar-border" />
@@ -92,7 +98,7 @@
               @if (first) { Start } @else if (last) { Destination } @else { Stop {{ i }} }
             </label>
             <z-form-control>
-              <z-input-group [zAddonBefore]="pinIcon" [zAddonAfter]="!first && !last ? removeBtn : ''" zPopover [zContent]="resultsPopover" [zVisible]="!!(activeWaypointIndex() === i && searchResults().length > 0 && $any(waypoint).get('label')?.dirty)" [zTrigger]="null">
+              <z-input-group [zAddonBefore]="$any(pinIcon)" [zAddonAfter]="!first && !last ? $any(removeBtn) : ''" zPopover [zContent]="resultsPopover" [zVisible]="activeWaypointIndex() === i && searchResults().length > 0 && $any(waypoint).get('label')?.dirty" [zTrigger]="null">
                 <input z-input [id]="fw.id()" type="text" [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')" formControlName="label" />
               </z-input-group>
 

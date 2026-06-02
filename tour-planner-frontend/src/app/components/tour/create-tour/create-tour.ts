@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy, inject, signal, computed } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
-import { Tour, Waypoint, TransportType } from '@/models/tour.model';
+import { Waypoint, TransportType } from '@/models/tour.model';
 import { ZardIdDirective } from '@/shared/core';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputImports } from '@/shared/components/input';
 import { ZardFormImports } from '@/shared/components/form';
-import { ZardSelectImports } from '@/shared/components/select';
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { ZardPopoverImports } from '@/shared/components/popover';
-import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardTooltipImports } from '@/shared/components/tooltip';
 import { CommonModule } from '@angular/common';
 import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocoding.service';
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
@@ -26,8 +25,8 @@ import { toast } from 'ngx-sonner';
     ZardButtonComponent,
     ...ZardInputImports,
     ...ZardFormImports,
-    ...ZardSelectImports,
     ...ZardPopoverImports,
+    ...ZardTooltipImports,
     ZardInputGroupComponent,
   ],
   templateUrl: './create-tour.html',
@@ -38,7 +37,16 @@ export class CreateTour implements OnInit, OnDestroy {
   private tourService = inject(TourService);
   private mapService = inject(MapService);
   private routeService = inject(RouteService);
-  
+
+  transportOptions: { value: TransportType; icon: string; label: string }[] = [
+    { value: 'driving-car', icon: 'directions_car', label: 'Car' },
+    { value: 'driving-hgv', icon: 'local_shipping', label: 'Truck' },
+    { value: 'cycling-regular', icon: 'directions_bike', label: 'Bike' },
+    { value: 'cycling-road', icon: 'pedal_bike', label: 'Road Bike' },
+    { value: 'foot-walking', icon: 'directions_walk', label: 'Walk' },
+    { value: 'foot-hiking', icon: 'hiking', label: 'Hike' },
+  ];
+
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
@@ -102,7 +110,7 @@ export class CreateTour implements OnInit, OnDestroy {
         return null;
       })
       .filter(m => m !== null) as MapMarker[];
-    
+
     this.mapService.updateMarkers(markers);
   }
 
@@ -130,11 +138,11 @@ export class CreateTour implements OnInit, OnDestroy {
     }
   }
 
-  addWaypoint(index?: number) {
+  addWaypoint(index?: number, data?: Waypoint) {
     const waypointGroup = new FormGroup({
-      label: new FormControl('', [Validators.required]),
-      lat: new FormControl<number | null>(null, [Validators.required]),
-      lng: new FormControl<number | null>(null, [Validators.required]),
+      label: new FormControl(data?.label || '', [Validators.required]),
+      lat: new FormControl<number | null>(data?.latitude || null, [Validators.required]),
+      lng: new FormControl<number | null>(data?.longitude || null, [Validators.required]),
     });
 
     // Setup autocomplete for this waypoint
@@ -146,11 +154,11 @@ export class CreateTour implements OnInit, OnDestroy {
           this.searchResults.set([]);
           return of([]);
         }
-        
+
         // Find current index of this group in the array
         const currentIndex = this.waypoints.controls.indexOf(waypointGroup);
         this.activeWaypointIndex.set(currentIndex);
-        
+
         this.isSearching.set(true);
         return this.geocodingService.search(value);
       })
@@ -189,7 +197,7 @@ export class CreateTour implements OnInit, OnDestroy {
   onSubmit() {
     if (this.form.valid) {
       const formValue = this.form.getRawValue();
-      
+
       const request: CreateTourRequest = {
         userId: '00000000-0000-0000-0000-000000000000', // Placeholder
         name: formValue.name ?? '',
