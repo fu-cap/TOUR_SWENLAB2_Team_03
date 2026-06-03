@@ -5,7 +5,6 @@ import { ZardIdDirective } from '@/shared/core';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputImports } from '@/shared/components/input';
 import { ZardFormImports } from '@/shared/components/form';
-import { ZardSelectImports } from '@/shared/components/select';
 import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { ZardPopoverImports } from '@/shared/components/popover';
 import { ZardTooltipImports } from '@/shared/components/tooltip';
@@ -174,7 +173,7 @@ export class EditTour implements OnInit, OnDestroy {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap(value => {
-        if (!value || value.length < 3) {
+        if (!waypointGroup.controls.label.dirty || !value || value.length < 3) {
           this.searchResults.set([]);
           return of([]);
         }
@@ -205,6 +204,10 @@ export class EditTour implements OnInit, OnDestroy {
       lat: result.lat,
       lng: result.lng
     }, { emitEvent: true });
+
+    // Mark as pristine to hide the popover
+    group.get('label')?.markAsPristine();
+
     this.searchResults.set([]);
     this.activeWaypointIndex.set(null);
   }
@@ -268,7 +271,7 @@ export class EditTour implements OnInit, OnDestroy {
             id: loadingToast,
             description: `Successfully saved "${request.name}".`
           });
-          
+
           // Update the selected tour with new data to ensure details view is current
           this.tourService.selectedTour.set({
             ...currentTour,

@@ -150,7 +150,7 @@ export class CreateTour implements OnInit, OnDestroy {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap(value => {
-        if (!value || value.length < 3) {
+        if (!waypointGroup.controls.label.dirty || !value || value.length < 3) {
           this.searchResults.set([]);
           return of([]);
         }
@@ -183,7 +183,11 @@ export class CreateTour implements OnInit, OnDestroy {
       label: result.address,
       lat: result.lat,
       lng: result.lng
-    }, { emitEvent: true }); // Trigger valueChanges to sync map
+    }, { emitEvent: true });
+    
+    // Mark as pristine to hide the popover (template checks for dirty)
+    group.get('label')?.markAsPristine();
+    
     this.searchResults.set([]);
     this.activeWaypointIndex.set(null);
   }

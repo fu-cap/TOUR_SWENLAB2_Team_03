@@ -99,7 +99,7 @@
             </label>
             <z-form-control>
               <z-input-group [zAddonBefore]="$any(pinIcon)" [zAddonAfter]="!first && !last ? $any(removeBtn) : ''" zPopover [zContent]="resultsPopover" [zVisible]="activeWaypointIndex() === i && searchResults().length > 0 && $any(waypoint).get('label')?.dirty" [zTrigger]="null">
-                <input z-input [id]="fw.id()" type="text" [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')" formControlName="label" />
+                <input z-input [id]="fw.id()" type="text" [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')" formControlName="label" autocomplete="off" />
               </z-input-group>
 
 
