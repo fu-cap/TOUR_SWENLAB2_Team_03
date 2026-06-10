@@ -91,5 +91,31 @@ namespace TourPlanner.API.Controllers
             }
             return Ok(user);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _logger.LogInformation("Login attempt for username: {Username}", dto.Username);
+                var user = await _userService.AuthenticateAsync(dto.Username, dto.Password);
+                if (user == null)
+                {
+                    return Unauthorized(new { message = "Invalid username or password." });
+                }
+
+                return Ok(new { id = user.Id, username = user.Username, email = user.Email });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred during login");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
     }
 }

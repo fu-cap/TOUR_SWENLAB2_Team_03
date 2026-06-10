@@ -40,6 +40,19 @@ namespace TourPlanner.BusinessLayer.Services
             return await _userRepository.GetByIdAsync(id);
         }
 
+        public async Task<User?> AuthenticateAsync(string username, string password)
+        {
+            var user = await _userRepository.GetByUsernameAsync(username);
+            if (user == null) return null;
+
+            if (!HashUtil.CheckPassword(user.PasswordHash, password))
+            {
+                return null;
+            }
+
+            return user;
+        }
+
         public async Task UpdateUserAsync(Guid id, CreateUserDto updateUserDto)
         {
             // Implementation for update
