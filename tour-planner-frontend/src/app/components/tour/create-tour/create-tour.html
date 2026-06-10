@@ -35,9 +35,6 @@
           formControlName="description"
         ></textarea>
       </z-form-control>
-      @if (form.get('description')?.invalid && form.get('description')?.touched) {
-        <z-form-message>Please enter a description for the tour.</z-form-message>
-      }
     </z-form-field>
 
     <div class="space-y-2">

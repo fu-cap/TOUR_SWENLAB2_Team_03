@@ -49,7 +49,7 @@ export class CreateTour implements OnInit, OnDestroy {
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
+    description: new FormControl(''),
     transportType: new FormControl<TransportType>('foot-walking', [Validators.required]),
     waypoints: new FormArray<FormGroup>([]),
   });
