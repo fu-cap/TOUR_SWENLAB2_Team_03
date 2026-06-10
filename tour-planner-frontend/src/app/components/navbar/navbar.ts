@@ -1,5 +1,6 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, Output, EventEmitter, input, inject } from '@angular/core';
 import { Navbutton } from '@/components/navbutton/navbutton';
+import { TourService } from '@/shared/core/services/tour.service';
 
 export type AppState = 'overview' | 'details' | 'edit' | 'logs' | 'user' | 'create' | 'info';
 
@@ -19,6 +20,7 @@ export class Navbar {
   @Output() activeStateChange = new EventEmitter<AppState>();
 
   activeState = input.required<AppState>();
+  public tourService = inject(TourService);
 
   mainNavItems: NavItem[] = [
     {icon: 'dashboard', label: 'Overview', state: 'overview'},
@@ -38,5 +40,10 @@ export class Navbar {
 
   onStateChange(state: AppState): void {
     this.activeStateChange.emit(state);
+  }
+
+  isItemDisabled(item: NavItem): boolean {
+    const noTourSelected = this.tourService.selectedTour() === null;
+    return noTourSelected && (item.state === 'details' || item.state === 'edit' || item.state === 'logs');
   }
 }

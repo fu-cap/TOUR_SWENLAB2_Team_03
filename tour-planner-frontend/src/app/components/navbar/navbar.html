@@ -7,6 +7,7 @@
           [label]="item.label"
           [state]="item.state"
           [isActive]="activeState() === item.state"
+          [disabled]="isItemDisabled(item)"
           (stateChange)="onStateChange($event)"
         />
       }

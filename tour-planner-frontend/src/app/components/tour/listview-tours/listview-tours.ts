@@ -26,6 +26,7 @@ export class ListviewTours implements OnInit {
   isLoading = signal(true);
 
   ngOnInit() {
+    this.tourService.selectedTour.set(null);
     this.loadTours();
   }
 
