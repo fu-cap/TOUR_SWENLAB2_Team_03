@@ -27,6 +27,15 @@ namespace TourPlanner.DataAccessLayer.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Tour>> GetToursByUserIdAsync(Guid userId)
+        {
+            return await _context.Tours
+                .Include(t => t.Waypoints)
+                .Where(t => t.UserId == userId)
+                .OrderByDescending(t => t.CreationDate)
+                .ToListAsync();
+        }
+
         public async Task<Tour?> GetByIdAsync(Guid id)
         {
             return await _context.Tours

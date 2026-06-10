@@ -59,6 +59,11 @@ namespace TourPlanner.BusinessLayer.Services
             return await _tourRepository.GetAllToursAsync();
         }
 
+        public async Task<List<Tour>> GetToursByUserIdAsync(Guid userId)
+        {
+            return await _tourRepository.GetToursByUserIdAsync(userId);
+        }
+
         public async Task<Tour?> GetTourByIdAsync(Guid id)
         {
             return await _tourRepository.GetByIdAsync(id);

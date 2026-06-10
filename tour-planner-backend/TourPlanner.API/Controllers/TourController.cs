@@ -22,20 +22,26 @@ namespace TourPlanner.API.Controllers
 
         // GET http://localhost:<port>/api/tour
         [HttpGet]
-        public async Task<IActionResult> GetAllTours()
+        public async Task<IActionResult> GetAllTours([FromQuery] Guid? userId)
         {
             try
             {
-                _logger.LogInformation("GetAllTours was called");
+                if (userId == null)
+                {
+                    _logger.LogWarning("GetAllTours was called without a userId query parameter.");
+                    return BadRequest("UserId query parameter is required.");
+                }
 
-                List<Tour> allTours = await _tourService.GetAllToursAsync();
+                _logger.LogInformation("GetAllTours was called for user: {UserId}", userId);
 
-                return Ok(allTours);
+                List<Tour> userTours = await _tourService.GetToursByUserIdAsync(userId.Value);
+
+                return Ok(userTours);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while exporting tours.");
-                return StatusCode(500, new {message = "Export failed"});
+                _logger.LogError(ex, "Error while fetching tours.");
+                return StatusCode(500, new {message = "Failed to load tours"});
             }
         }
 
