@@ -33,19 +33,19 @@
   <div class="w-10 flex flex-col border-l border-sidebar-border bg-muted/20 divide-y divide-sidebar-border opacity-0 group-hover:opacity-100 transition-opacity">
     <button
       z-button zType="ghost" zSize="sm"
-      class="flex-1 rounded-none text-primary hover:bg-primary/5 p-0 min-w-0 h-auto"
-      (click)="logEdit.emit(log)"
-      title="Edit log"
-    >
-      <span class="material-icons text-base">edit</span>
-    </button>
-    <button
-      z-button zType="ghost" zSize="sm"
       class="flex-1 rounded-none text-destructive hover:bg-destructive/10 p-0 min-w-0 h-auto"
       (click)="confirmDelete()"
       title="Delete log"
     >
       <span class="material-icons text-base">delete</span>
+    </button>
+    <button
+      z-button zType="ghost" zSize="sm"
+      class="flex-1 rounded-none text-primary hover:bg-primary/5 p-0 min-w-0 h-auto"
+      (click)="logEdit.emit(log)"
+      title="Edit log"
+    >
+      <span class="material-icons text-base">edit</span>
     </button>
   </div>
 </div>
