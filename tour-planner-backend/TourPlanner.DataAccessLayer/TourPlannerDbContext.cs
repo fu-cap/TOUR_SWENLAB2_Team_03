@@ -46,6 +46,9 @@ namespace TourPlanner.DataAccessLayer
                 entity.Property(e => e.Username).HasColumnName("username").IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Email).HasColumnName("email").IsRequired().HasMaxLength(255);
                 entity.Property(e => e.PasswordHash).HasColumnName("password_hash").IsRequired().HasMaxLength(255);
+                entity.Property(e => e.Gender).HasColumnName("gender").IsRequired().HasMaxLength(50);
+                entity.Property(e => e.FirstName).HasColumnName("first_name").IsRequired().HasMaxLength(100);
+                entity.Property(e => e.LastName).HasColumnName("last_name").IsRequired().HasMaxLength(100);
                 entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("NOW()");
 
                 entity.HasIndex(e => e.Username).IsUnique();

@@ -21,6 +21,9 @@ namespace TourPlanner.BusinessLayer.Services
                 Username = createUserDto.Username,
                 PasswordHash = HashUtil.HashPassword(createUserDto.Password),
                 Email = createUserDto.Email,
+                Gender = createUserDto.Gender,
+                FirstName = createUserDto.Firstname,
+                LastName = createUserDto.Lastname,
                 CreatedAt = DateTime.UtcNow
             };
 
