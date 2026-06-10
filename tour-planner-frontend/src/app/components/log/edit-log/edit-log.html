@@ -55,7 +55,7 @@
 
     <div class="flex gap-2 pt-2">
       <button z-button zType="outline" class="flex-1" type="button" (click)="cancel.emit()">Cancel</button>
-      <button z-button zType="default" class="flex-1" type="submit" [disabled]="form.invalid">Save Changes</button>
+      <button z-button zType="default" class="flex-1" type="submit" [zDisabled]="form.invalid">Save Changes</button>
     </div>
   </form>
 </div>
