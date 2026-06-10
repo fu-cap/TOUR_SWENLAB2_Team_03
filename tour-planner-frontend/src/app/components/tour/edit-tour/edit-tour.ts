@@ -14,6 +14,7 @@ import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocod
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { RouteService } from '@/shared/core/services/route.service';
+import { AuthService } from '@/shared/core/services/auth.service';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { toast } from 'ngx-sonner';
 import { AppState } from '@/components/navbar/navbar';
@@ -41,6 +42,7 @@ export class EditTour implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private routeService = inject(RouteService);
   private dialogService = inject(ZardDialogService);
+  private authService = inject(AuthService);
 
   transportOptions: { value: TransportType; icon: string; label: string }[] = [
     { value: 'driving-car', icon: 'directions_car', label: 'Car' },
@@ -250,7 +252,7 @@ export class EditTour implements OnInit, OnDestroy {
       const formValue = this.form.getRawValue();
 
       const request: CreateTourRequest = {
-        userId: '00000000-0000-0000-0000-000000000000',
+        userId: this.authService.currentUser()?.id || '00000000-0000-0000-0000-000000000000',
         name: formValue.name ?? '',
         description: formValue.description ?? '',
         transportType: formValue.transportType as TransportType,

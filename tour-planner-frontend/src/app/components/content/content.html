@@ -21,7 +21,7 @@
       @case ('details')  { <app-detailsview-tour /> }
       @case ('edit')     { <app-edit-tour (stateChange)="activeStateChange.emit($event)" /> }
       @case ('logs')     { <app-listview-logs /> }
-      @case ('user')     { <p>Account</p> }
+      @case ('user')     { <app-account /> }
       @case ('create')   { <app-create-tour /> }
       @case ('info')     { <app-impressum /> }
       @default           { <ng-content /> }

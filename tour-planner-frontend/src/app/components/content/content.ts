@@ -6,12 +6,13 @@ import { ListviewTours } from '@/components/tour/listview-tours/listview-tours';
 import { DetailsviewTour } from '@/components/tour/detailsview-tour/detailsview-tour';
 import { EditTour } from '@/components/tour/edit-tour/edit-tour';
 import { ListviewLogs } from '@/components/log/listview-logs/listview-logs';
+import { AccountComponent } from '@/components/account/account';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-content',
-  imports: [CommonModule, Impressum, CreateTour, ListviewTours, DetailsviewTour, EditTour, ListviewLogs, ZardButtonComponent],
+  imports: [CommonModule, Impressum, CreateTour, ListviewTours, DetailsviewTour, EditTour, ListviewLogs, AccountComponent, ZardButtonComponent],
   templateUrl: './content.html',
   styleUrl: './content.css',
   host: {
