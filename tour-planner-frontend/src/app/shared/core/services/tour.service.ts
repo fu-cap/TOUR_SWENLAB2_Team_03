@@ -29,8 +29,10 @@ export class TourService {
     return this.http.post<Tour>(this.API_URL, tourData);
   }
 
-  getTours(): Observable<Tour[]> {
-    return this.http.get<Tour[]>(this.API_URL);
+  getTours(userId: string): Observable<Tour[]> {
+    return this.http.get<Tour[]>(this.API_URL, {
+      params: { userId: userId }
+    });
   }
 
   getTourById(id: string): Observable<Tour> {

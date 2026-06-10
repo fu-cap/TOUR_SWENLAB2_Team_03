@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TourService } from '@/shared/core/services/tour.service';
+import { AuthService } from '@/shared/core/services/auth.service';
 import { Tour, TransportType } from '@/models/tour.model';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDialogService } from '@/shared/components/dialog';
@@ -17,6 +18,7 @@ import { AppState } from '@/components/navbar/navbar';
 export class ListviewTours implements OnInit {
   private tourService = inject(TourService);
   private dialogService = inject(ZardDialogService);
+  private authService = inject(AuthService);
 
   stateChange = output<AppState>();
 
@@ -29,7 +31,8 @@ export class ListviewTours implements OnInit {
 
   loadTours() {
     this.isLoading.set(true);
-    this.tourService.getTours().subscribe({
+    const userId = this.authService.currentUser()?.id || '00000000-0000-0000-0000-000000000000';
+    this.tourService.getTours(userId).subscribe({
       next: (data) => {
         this.tours.set(data);
         this.isLoading.set(false);
