@@ -108,7 +108,7 @@
     }
   </z-form-field>
   <div class="content-center">
-    <button z-button zType="default" type="submit" class="form-send-button">Register</button>
+    <button z-button zType="default" type="submit" [zDisabled]="form.invalid" class="form-send-button">Register</button>
   </div>
   <div class="content-bottom">
     <button z-button zType="default" type="button" (click)="changeStatus()" class="form-change-form">Login</button>
