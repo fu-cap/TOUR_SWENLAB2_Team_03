@@ -6,7 +6,7 @@ namespace TourPlanner.BusinessLayer.Dtos
     {
         [Required] public Guid TourId { get; set; }
         [Required] public DateTime DateTime { get; set; } = DateTime.Now;
-        [Required] public string Comment { get; set; } = string.Empty;
+        public string Comment { get; set; } = string.Empty;
         [Required] public int Difficulty { get; set; } = 1;
         public double TotalDistanceKm { get; set; } = 0.0;
         public TimeSpan TotalTimeMin { get; set; } = TimeSpan.Zero;

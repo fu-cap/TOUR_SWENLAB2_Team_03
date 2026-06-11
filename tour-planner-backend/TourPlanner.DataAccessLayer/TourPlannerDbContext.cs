@@ -28,7 +28,7 @@ namespace TourPlanner.DataAccessLayer
                 entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.TourId).HasColumnName("tour_id").IsRequired();
                 entity.Property(e => e.DateTime).HasColumnName("date_time").HasDefaultValueSql("NOW()");
-                entity.Property(e => e.Comment).HasColumnName("comment").IsRequired();
+                entity.Property(e => e.Comment).HasColumnName("comment");
                 entity.Property(e => e.Difficulty).HasColumnName("difficulty").IsRequired();
                 entity.Property(e => e.TotalDistanceKm).HasColumnName("total_distance_km").IsRequired();
                 entity.Property(e => e.TotalTimeMin).HasColumnName("total_time_min").IsRequired().HasConversion(
