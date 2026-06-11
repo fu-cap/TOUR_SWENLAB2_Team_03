@@ -142,7 +142,3 @@ GROUP BY
 CREATE CAST (text AS transport_type) 
     WITH INOUT 
     AS IMPLICIT;
-
-INSERT INTO app_user (id, username, email, password_hash, gender, first_name, last_name)
-    VALUES ('00000000-0000-0000-0000-000000000000', 'system_user', 'system@example.com', 'no_hash_yet', 'other', 'System', 'User')
-    ON CONFLICT DO NOTHING;

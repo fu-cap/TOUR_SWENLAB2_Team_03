@@ -32,7 +32,7 @@ export class ListviewTours implements OnInit {
 
   loadTours() {
     this.isLoading.set(true);
-    const userId = this.authService.currentUser()?.id || '00000000-0000-0000-0000-000000000000';
+    const userId = this.authService.currentUser()?.id ?? '';
     this.tourService.getTours(userId).subscribe({
       next: (data) => {
         this.tours.set(data);
