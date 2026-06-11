@@ -31,7 +31,7 @@ export class CreateLog {
   private logService = inject(LogService);
 
   form: FormGroup = this.fb.group({
-    dateTime: [new Date().toISOString().substring(0, 16), Validators.required],
+    dateTime: [{ value: new Date().toISOString().substring(0, 10), disabled: true }, Validators.required],
     comment: [''],
     difficulty: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     totalDistanceKm: [0, [Validators.required, Validators.min(0)]],
@@ -44,7 +44,7 @@ export class CreateLog {
 
     const newLog: TourLog = {
       tourId: this.tourId,
-      ...this.form.value
+      ...this.form.getRawValue()
     };
 
     this.logService.createLog(newLog).subscribe({

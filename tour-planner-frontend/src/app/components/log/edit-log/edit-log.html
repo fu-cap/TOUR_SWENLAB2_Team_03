@@ -1,9 +1,9 @@
 <div class="space-y-6">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
     <z-form-field #fdt="zardId" zardId="dateTime">
-      <label z-form-label [for]="fdt.id()" zRequired>Date & Time</label>
+      <label z-form-label [for]="fdt.id()">Date</label>
       <z-form-control>
-        <input z-input [id]="fdt.id()" type="datetime-local" formControlName="dateTime" />
+        <input z-input [id]="fdt.id()" type="date" formControlName="dateTime" />
       </z-form-control>
     </z-form-field>
 

@@ -31,7 +31,7 @@ export class EditLog implements OnInit {
   private logService = inject(LogService);
 
   form: FormGroup = this.fb.group({
-    dateTime: ['', Validators.required],
+    dateTime: [{ value: '', disabled: true }, Validators.required],
     comment: [''],
     difficulty: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     totalDistanceKm: [0, [Validators.required, Validators.min(0)]],
@@ -42,7 +42,7 @@ export class EditLog implements OnInit {
   ngOnInit() {
     if (this.log) {
       this.form.patchValue({
-        dateTime: this.log.dateTime.substring(0, 16), // Format for datetime-local
+        dateTime: this.log.dateTime.substring(0, 10), // Format for date
         comment: this.log.comment,
         difficulty: this.log.difficulty,
         totalDistanceKm: this.log.totalDistanceKm,
@@ -57,7 +57,7 @@ export class EditLog implements OnInit {
 
     const updatedLog: TourLog = {
       ...this.log,
-      ...this.form.value
+      ...this.form.getRawValue()
     };
 
     const loadingToast = toast.loading('Updating log...');
