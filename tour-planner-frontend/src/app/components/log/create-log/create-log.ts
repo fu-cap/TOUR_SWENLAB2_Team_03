@@ -32,7 +32,7 @@ export class CreateLog {
 
   form: FormGroup = this.fb.group({
     dateTime: [new Date().toISOString().substring(0, 16), Validators.required],
-    comment: ['', Validators.required],
+    comment: [''],
     difficulty: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     totalDistanceKm: [0, [Validators.required, Validators.min(0)]],
     totalTimeMin: ['00:30:00', Validators.required],
