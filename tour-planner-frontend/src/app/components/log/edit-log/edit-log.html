@@ -11,14 +11,44 @@
       <z-form-field #fdi="zardId" zardId="difficulty">
         <label z-form-label [for]="fdi.id()" zRequired>Difficulty (1-5)</label>
         <z-form-control>
-          <input z-input [id]="fdi.id()" type="number" min="1" max="5" formControlName="difficulty" />
+          <div class="flex gap-1 items-center h-10">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <button
+                type="button"
+                (click)="form.get('difficulty')?.setValue(star)"
+                class="transition-all hover:scale-120 focus:outline-none"
+                [class.text-amber-500]="(form.get('difficulty')?.value ?? 0) >= star"
+                [class.text-muted-foreground]="star > (form.get('difficulty')?.value ?? 0)"
+                [class.opacity-40]="star > (form.get('difficulty')?.value ?? 0)"
+              >
+                <span class="material-icons text-2xl">
+                  {{ (form.get('difficulty')?.value ?? 0) >= star ? 'star' : 'star_border' }}
+                </span>
+              </button>
+            }
+          </div>
         </z-form-control>
       </z-form-field>
 
       <z-form-field #fr="zardId" zardId="rating">
         <label z-form-label [for]="fr.id()" zRequired>Rating (1-5)</label>
         <z-form-control>
-          <input z-input [id]="fr.id()" type="number" min="1" max="5" formControlName="rating" />
+          <div class="flex gap-1 items-center h-10">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <button
+                type="button"
+                (click)="form.get('rating')?.setValue(star)"
+                class="transition-all hover:scale-120 focus:outline-none"
+                [class.text-amber-500]="(form.get('rating')?.value ?? 0) >= star"
+                [class.text-muted-foreground]="star > (form.get('rating')?.value ?? 0)"
+                [class.opacity-40]="star > (form.get('rating')?.value ?? 0)"
+              >
+                <span class="material-icons text-2xl">
+                  {{ (form.get('rating')?.value ?? 0) >= star ? 'star' : 'star_border' }}
+                </span>
+              </button>
+            }
+          </div>
         </z-form-control>
       </z-form-field>
     </div>
@@ -40,7 +70,7 @@
     </div>
 
     <z-form-field #fc="zardId" zardId="comment">
-      <label z-form-label [for]="fc.id()" zRequired>Comment</label>
+      <label z-form-label [for]="fc.id()">Comment</label>
       <z-form-control>
         <textarea z-input [id]="fc.id()" rows="2" placeholder="How was your tour?" formControlName="comment"></textarea>
       </z-form-control>

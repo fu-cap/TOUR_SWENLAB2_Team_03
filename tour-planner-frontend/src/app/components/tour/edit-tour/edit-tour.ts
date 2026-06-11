@@ -252,7 +252,7 @@ export class EditTour implements OnInit, OnDestroy {
       const formValue = this.form.getRawValue();
 
       const request: CreateTourRequest = {
-        userId: this.authService.currentUser()?.id || '00000000-0000-0000-0000-000000000000',
+        userId: this.authService.currentUser()?.id ?? '',
         name: formValue.name ?? '',
         description: formValue.description ?? '',
         transportType: formValue.transportType as TransportType,

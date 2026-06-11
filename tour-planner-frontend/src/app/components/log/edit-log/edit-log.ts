@@ -32,7 +32,7 @@ export class EditLog implements OnInit {
 
   form: FormGroup = this.fb.group({
     dateTime: ['', Validators.required],
-    comment: ['', Validators.required],
+    comment: [''],
     difficulty: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     totalDistanceKm: [0, [Validators.required, Validators.min(0)]],
     totalTimeMin: ['', Validators.required],
