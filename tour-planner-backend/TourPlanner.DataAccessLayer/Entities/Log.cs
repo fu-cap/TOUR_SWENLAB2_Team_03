@@ -12,6 +12,8 @@ namespace TourPlanner.DataAccessLayer.Entities
         public double TotalDistanceKm { get; set; } = 0.0;
         public TimeSpan TotalTimeMin { get; set; } = TimeSpan.Zero;
         public required int Rating { get; set; } = 1;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
     
 }

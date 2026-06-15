@@ -85,6 +85,8 @@ CREATE TABLE tour_log (
     total_distance_km  NUMERIC(10,2) NOT NULL,
     total_time_min     INTEGER       NOT NULL,
     rating             SMALLINT      NOT NULL,
+    created_at         TIMESTAMP     NOT NULL DEFAULT NOW(),
+    updated_at         TIMESTAMP     NOT NULL DEFAULT NOW(),
 
     CONSTRAINT pk_tour_log       PRIMARY KEY (id),
     CONSTRAINT fk_tour_log_tour  FOREIGN KEY (tour_id) REFERENCES tour(id) ON DELETE CASCADE,

@@ -94,6 +94,7 @@ namespace TourPlanner.BusinessLayer.Services
             log.TotalDistanceKm = updateLogDto.TotalDistanceKm;
             log.TotalTimeMin = updateLogDto.TotalTimeMin;
             log.Difficulty = updateLogDto.Difficulty;
+            log.UpdatedAt = DateTime.UtcNow;
 
             await _logRepository.UpdateAsync(log);
 

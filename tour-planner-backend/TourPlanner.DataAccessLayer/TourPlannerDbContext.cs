@@ -36,6 +36,8 @@ namespace TourPlanner.DataAccessLayer
                         v => TimeSpan.FromMinutes(v)
                     );
                 entity.Property(e => e.Rating).HasColumnName("rating").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("NOW()");
             });
 
             modelBuilder.Entity<User>(entity =>

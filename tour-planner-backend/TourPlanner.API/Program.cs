@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using TourPlanner.DataAccessLayer.Enums;
 using Npgsql;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Register DbContext
