@@ -164,3 +164,91 @@
     @apply flex flex-col w-screen h-screen overflow-hidden;
   }
 }
+
+/* ==========================================
+   Global Glassmorphism Button Styles
+   ========================================== */
+
+z-button, 
+button[z-button], 
+a[z-button] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+z-button, 
+button[z-button], 
+a[z-button] {
+  color: var(--primary) !important;
+}
+
+z-button[zType="default"], 
+button[z-button][zType="default"], 
+a[z-button][zType="default"] {
+  background-color: color-mix(in oklch, var(--sidebar) 70%, transparent) !important;
+  border: 1px solid color-mix(in oklch, var(--sidebar-border) 50%, transparent) !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+}
+
+z-button[zType="destructive"], 
+button[z-button][zType="destructive"], 
+a[z-button][zType="destructive"] {
+  color: var(--destructive) !important;
+}
+
+/* Hover highlights */
+z-button:hover, 
+button[z-button]:hover, 
+a[z-button]:hover,
+.toggle-button:hover {
+  background-color: var(--sidebar-accent) !important;
+}
+
+z-button[zType="default"]:hover, 
+button[z-button][zType="default"]:hover, 
+a[z-button][zType="default"]:hover {
+  background-color: color-mix(in oklch, var(--primary) 15%, transparent) !important;
+  border-color: color-mix(in oklch, var(--primary) 40%, transparent) !important;
+}
+
+z-button[zType="destructive"]:hover, 
+button[z-button][zType="destructive"]:hover, 
+a[z-button][zType="destructive"]:hover {
+  background-color: color-mix(in oklch, var(--destructive) 15%, transparent) !important;
+}
+
+/* Active/Pressed feedback */
+z-button:active, 
+button[z-button]:active, 
+a[z-button]:active,
+z-button.active, 
+button[z-button].active, 
+a[z-button].active,
+.toggle-button:active {
+  background-color: color-mix(in oklch, var(--primary) 15%, transparent) !important;
+  border-color: color-mix(in oklch, var(--primary) 40%, transparent) !important;
+}
+
+z-button[zType="destructive"]:active, 
+button[z-button][zType="destructive"]:active, 
+a[z-button][zType="destructive"]:active {
+  background-color: color-mix(in oklch, var(--destructive) 20%, transparent) !important;
+  border-color: color-mix(in oklch, var(--destructive) 50%, transparent) !important;
+}
+
+/* Ensure text-destructive buttons globally display in destructive red color */
+button.text-destructive,
+z-button.text-destructive,
+button[z-button].text-destructive,
+.text-destructive {
+  color: var(--destructive) !important;
+}
+
+button.text-destructive:hover,
+z-button.text-destructive:hover,
+button[z-button].text-destructive:hover {
+  background-color: color-mix(in oklch, var(--destructive) 15%, transparent) !important;
+}

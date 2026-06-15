@@ -4,10 +4,12 @@ import { Content } from '@/components/content/content';
 import { LoginFormComponent} from '@/pages/login/login.form.component/login.form.component';
 import { LoginRegisterComponent } from '@/pages/login/login.register.component/login.register.component';
 import { Footer } from '@/components/footer/footer';
+import { Impressum } from '@/components/impressum/impressum';
+import { ZardButtonComponent } from '@/shared/components/button';
 
 @Component({
   selector: 'app-login.component',
-  imports: [Content, LoginFormComponent, LoginRegisterComponent, Footer],
+  imports: [Content, LoginFormComponent, LoginRegisterComponent, Footer, Impressum, ZardButtonComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
