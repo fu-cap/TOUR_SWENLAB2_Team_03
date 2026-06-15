@@ -13,7 +13,7 @@
   }
 
 
-  <div class="scroll-container flex flex-col h-full p-2 rounded-3xl bg-sidebar border border-sidebar-border shadow-sm overflow-y-auto overflow-x-hidden"
+  <div class="scroll-container flex flex-col h-full p-2 rounded-3xl bg-sidebar/70 backdrop-blur-md border border-sidebar-border/50 shadow-lg overflow-y-auto overflow-x-hidden"
        [class.justify-center]="centerContent"
        [class.opacity-0]="isCollapsed" [class.pointer-events-none]="isCollapsed">
     @switch (activeState) {
