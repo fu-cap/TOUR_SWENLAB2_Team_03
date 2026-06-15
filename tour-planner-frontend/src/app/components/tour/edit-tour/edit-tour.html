@@ -33,7 +33,7 @@
 
         <div class="space-y-2">
           <label z-form-label zRequired>Transport Type</label>
-          <div class="flex gap-1 p-1 bg-muted/30 rounded-xl border border-sidebar-border">
+          <div class="flex gap-1 p-1 bg-sidebar/30 backdrop-blur-sm rounded-xl border border-sidebar-border/30 shadow-sm">
             @for (option of transportOptions; track option.value) {
               <button
                 type="button"
@@ -55,7 +55,7 @@
       <hr class="border-sidebar-border" />
 
       <!-- Route Summary -->
-      <div class="flex gap-4 p-3 bg-muted/50 rounded-lg">
+      <div class="flex gap-4 p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-lg shadow-sm">
         <div class="flex items-center gap-2">
           <div class="flex p-2 bg-primary/10 rounded-full text-primary">
             <span class="material-icons text-base">route</span>
@@ -105,7 +105,16 @@
               </z-form-field>
               @if (!last) {
                 <div class="flex justify-center -my-2 relative z-10">
-                  <button z-button zType="outline" zSize="sm" zShape="circle" type="button" (click)="addWaypoint(i + 1)" class="bg-background h-6 w-6 min-w-0 p-0 shadow-sm text-primary border-sidebar-border"><span class="material-icons" style="font-size: 14px;">add</span></button>
+                  <button 
+                    z-button 
+                    zType="ghost" 
+                    zSize="sm" 
+                    type="button" 
+                    (click)="addWaypoint(i + 1)" 
+                    class="!rounded-full h-6 w-6 min-w-0 p-0 border border-sidebar-border/50 bg-sidebar/70 backdrop-blur-md shadow-sm text-primary hover:bg-sidebar-accent/80 transition-all duration-200"
+                  >
+                    <span class="material-icons" style="font-size: 14px;">add</span>
+                  </button>
                 </div>
               }
             </div>
@@ -114,7 +123,12 @@
       </div>
 
       <div class="flex gap-2 pt-4">
-        <button z-button zType="outline" class="flex-1" type="button" (click)="cancel()">
+        <button 
+          z-button zType="ghost" 
+          class="flex-1 text-foreground border border-sidebar-border/50 bg-sidebar/30 backdrop-blur-sm hover:bg-sidebar-accent/80 transition-all duration-200" 
+          type="button" 
+          (click)="cancel()"
+        >
           Cancel
         </button>
         <button z-button zType="default" class="flex-1" type="submit" [zDisabled]="form.invalid">
