@@ -2,8 +2,10 @@
   <!-- Toggle Button -->
   @if (showToggle) {
     <button 
-      z-button zType="outline" zShape="circle"
-      class="absolute -right-3 top-1/2 -translate-y-1/2 z-50 bg-background shadow-md border-sidebar-border h-8 w-8 min-w-0 p-0"
+      type="button"
+      [class.collapsed-state]="isCollapsed"
+      [class.expanded-state]="!isCollapsed"
+      class="toggle-button bg-sidebar/70 backdrop-blur-md border border-sidebar-border/50 active:bg-primary/20"
       (click)="toggleCollapse.emit()"
     >
       <span class="material-icons text-lg transition-transform duration-300" [class.rotate-180]="isCollapsed">

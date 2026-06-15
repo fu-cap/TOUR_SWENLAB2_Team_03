@@ -35,3 +35,40 @@
   background-color: oklch(0.5 0.2 300); /* Slightly darker purple on hover */
   border: 3px solid transparent;
 }
+
+.toggle-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Collapsed state */
+.toggle-button.collapsed-state {
+  width: 2rem !important; /* 32px */
+  height: 2rem !important; /* 32px */
+  right: -1rem !important; /* -16px to center */
+  border-radius: 9999px !important;
+  border-style: solid !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important; /* shadow-md */
+}
+
+/* Expanded state */
+.toggle-button.expanded-state {
+  width: 1.5rem !important; /* 24px */
+  height: 3rem !important; /* 48px */
+  right: -23px !important; /* -23px to overlap border */
+  border-radius: 0 1rem 1rem 0 !important; /* rounded-r-2xl, rounded-l-none */
+  border-left: none !important;
+  box-shadow: none !important;
+}
+
+.toggle-button:hover {
+  background-color: var(--sidebar-accent) !important;
+}
