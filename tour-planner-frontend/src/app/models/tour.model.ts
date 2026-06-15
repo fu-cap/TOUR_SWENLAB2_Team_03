@@ -24,6 +24,8 @@ export interface TourLog {
   totalDistanceKm: number;
   totalTimeMin: string; // TimeSpan string
   rating: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Tour {

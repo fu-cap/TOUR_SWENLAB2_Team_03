@@ -1,21 +1,45 @@
 <div class="group relative flex bg-sidebar border border-sidebar-border rounded-xl overflow-hidden hover:shadow-md transition-all">
   <!-- Main Content Area -->
   <div class="flex-1 p-3 flex flex-col gap-2 min-w-0">
-    <div class="flex justify-between items-start">
-      <div class="flex flex-col">
-        <span class="text-[10px] font-bold text-foreground">{{ log.dateTime | date:'mediumDate' }}</span>
-        <div class="flex items-center gap-1">
-          @for (star of [1,2,3,4,5]; track star) {
-            <span class="material-icons text-[10px]" [class.text-primary]="star <= log.rating" [class.text-muted-foreground]="star > log.rating">
-              {{ star <= log.rating ? 'star' : 'star_border' }}
-            </span>
+    <div class="flex flex-col gap-1.5">
+      <div class="flex justify-between items-start">
+        <span class="text-[10px] font-bold text-foreground">
+          @if (log.updatedAt && log.updatedAt !== log.createdAt) {
+            Updated: {{ log.updatedAt | date:'mediumDate' }}
+          } @else {
+            Created: {{ log.createdAt | date:'mediumDate' }}
           }
+        </span>
+      </div>
+      
+      <!-- Stars for Rating and Difficulty -->
+      <div class="flex flex-col gap-0.5">
+        <div class="flex items-center gap-1">
+          <span class="text-[9px] font-bold text-muted-foreground w-14">Rating:</span>
+          <div class="flex items-center">
+            @for (star of [1,2,3,4,5]; track star) {
+              <span class="material-icons text-[10px]" [class.text-primary]="star <= log.rating" [class.text-muted-foreground]="star > log.rating">
+                {{ star <= log.rating ? 'star' : 'star_border' }}
+              </span>
+            }
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="text-[9px] font-bold text-muted-foreground w-14">Difficulty:</span>
+          <div class="flex items-center">
+            @for (star of [1,2,3,4,5]; track star) {
+              <span class="material-icons text-[10px]" [class.text-primary]="star <= log.difficulty" [class.text-muted-foreground]="star > log.difficulty">
+                {{ star <= log.difficulty ? 'star' : 'star_border' }}
+              </span>
+            }
+          </div>
         </div>
       </div>
-      <span class="text-[10px] px-1.5 py-0.5 rounded bg-muted font-bold">Diff: {{ log.difficulty }}</span>
     </div>
 
-    <p class="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">{{ log.comment }}</p>
+    <p class="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
+      {{ log.comment || '\u00A0' }}
+    </p>
 
     <div class="flex gap-3 pt-1 border-t border-sidebar-border/50 text-[9px] font-bold text-muted-foreground">
       <div class="flex items-center gap-1">
