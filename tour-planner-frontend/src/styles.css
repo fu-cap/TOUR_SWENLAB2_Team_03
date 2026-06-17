@@ -213,3 +213,13 @@ z-button.text-destructive:hover,
 button[z-button].text-destructive:hover {
   background-color: color-mix(in oklch, var(--destructive) 15%, transparent) !important;
 }
+
+/* Square styling for icon-only buttons */
+z-button[data-icon-only],
+button[z-button][data-icon-only],
+a[z-button][data-icon-only] {
+  aspect-ratio: 1 / 1 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: auto !important;
+}
