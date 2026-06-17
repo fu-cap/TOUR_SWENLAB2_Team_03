@@ -43,7 +43,8 @@
           <button
             type="button"
             z-button
-            [zType]="form.get('transportType')?.value === option.value ? 'default' : 'ghost'"
+            zType="ghost"
+            [class.active]="form.get('transportType')?.value === option.value"
             zSize="sm"
             class="flex-1 h-10 min-w-0 p-0 transition-all"
             (click)="form.get('transportType')?.setValue($any(option.value))"
@@ -60,7 +61,7 @@
   <hr class="border-sidebar-border" />
 
   <!-- Route Summary -->
-  <div class="flex gap-4 p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-lg shadow-sm">
+  <div class="flex justify-around p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-lg shadow-sm">
     <div class="flex items-center gap-2">
       <div class="flex p-2 bg-primary/10 rounded-full text-primary">
         <span class="material-icons text-base">route</span>
@@ -71,7 +72,7 @@
       </div>
     </div>
 
-    <div class="flex items-center gap-2 border-l border-sidebar-border pl-4">
+    <div class="flex items-center gap-2 border-sidebar-border pl-4">
       <div class="flex p-2 bg-primary/10 rounded-full text-primary">
         <span class="material-icons text-base">timer</span>
       </div>
