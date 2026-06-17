@@ -4,9 +4,6 @@
 @import 'tailwindcss';
 @plugin "tailwindcss-animate";
 
-@custom-variant dark (&:is(.dark *));
-
-
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -15,69 +12,33 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.627 0.265 303.9);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.72 0.11 65);
+  --primary-foreground: oklch(0.145 0 0);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.627 0.265 303.9);
+  --secondary-foreground: oklch(0.72 0.11 65);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.837 0.128 285.5);
-  --accent-foreground: oklch(0.627 0.265 303.9);
+  --accent: oklch(0.90 0.04 65);
+  --accent-foreground: oklch(0.72 0.11 65);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.837 0.128 285.5 / 0.4);
-  --input: oklch(0.837 0.128 285.5 / 0.4);
-  --ring: oklch(0.627 0.265 303.9);
+  --border: oklch(0.90 0.04 65 / 0.4);
+  --input: oklch(0.90 0.04 65 / 0.4);
+  --ring: oklch(0.72 0.11 65);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-4: oklch(0.72 0.11 65);
   --chart-5: oklch(0.769 0.188 70.08);
   --sidebar: oklch(1 0 0 / 0.8);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.627 0.265 303.9);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.837 0.128 285.5 / 0.2);
-  --sidebar-accent-foreground: oklch(0.627 0.265 303.9);
-  --sidebar-border: oklch(0.837 0.128 285.5 / 0.6);
-  --sidebar-ring: oklch(0.627 0.265 303.9);
+  --sidebar-primary: oklch(0.72 0.11 65);
+  --sidebar-primary-foreground: oklch(0.145 0 0);
+  --sidebar-accent: oklch(0.90 0.04 65 / 0.2);
+  --sidebar-accent-foreground: oklch(0.72 0.11 65);
+  --sidebar-border: oklch(0.90 0.04 65 / 0.6);
+  --sidebar-ring: oklch(0.72 0.11 65);
 }
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 
 @theme inline {
   --color-background: var(--background);
@@ -169,8 +130,8 @@
    Global Glassmorphism Button Styles
    ========================================== */
 
-z-button, 
-button[z-button], 
+z-button,
+button[z-button],
 a[z-button] {
   background-color: transparent !important;
   border-color: transparent !important;
@@ -178,14 +139,14 @@ a[z-button] {
   transition: all 0.2s ease-in-out !important;
 }
 
-z-button, 
-button[z-button], 
+z-button,
+button[z-button],
 a[z-button] {
   color: var(--primary) !important;
 }
 
-z-button[zType="default"], 
-button[z-button][zType="default"], 
+z-button[zType="default"],
+button[z-button][zType="default"],
 a[z-button][zType="default"] {
   background-color: color-mix(in oklch, var(--sidebar) 70%, transparent) !important;
   border: 1px solid color-mix(in oklch, var(--sidebar-border) 50%, transparent) !important;
@@ -193,47 +154,47 @@ a[z-button][zType="default"] {
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
 }
 
-z-button[zType="destructive"], 
-button[z-button][zType="destructive"], 
+z-button[zType="destructive"],
+button[z-button][zType="destructive"],
 a[z-button][zType="destructive"] {
   color: var(--destructive) !important;
 }
 
 /* Hover highlights */
-z-button:hover, 
-button[z-button]:hover, 
+z-button:hover,
+button[z-button]:hover,
 a[z-button]:hover,
 .toggle-button:hover {
   background-color: var(--sidebar-accent) !important;
 }
 
-z-button[zType="default"]:hover, 
-button[z-button][zType="default"]:hover, 
+z-button[zType="default"]:hover,
+button[z-button][zType="default"]:hover,
 a[z-button][zType="default"]:hover {
   background-color: color-mix(in oklch, var(--primary) 15%, transparent) !important;
   border-color: color-mix(in oklch, var(--primary) 40%, transparent) !important;
 }
 
-z-button[zType="destructive"]:hover, 
-button[z-button][zType="destructive"]:hover, 
+z-button[zType="destructive"]:hover,
+button[z-button][zType="destructive"]:hover,
 a[z-button][zType="destructive"]:hover {
   background-color: color-mix(in oklch, var(--destructive) 15%, transparent) !important;
 }
 
 /* Active/Pressed feedback */
-z-button:active, 
-button[z-button]:active, 
+z-button:active,
+button[z-button]:active,
 a[z-button]:active,
-z-button.active, 
-button[z-button].active, 
+z-button.active,
+button[z-button].active,
 a[z-button].active,
 .toggle-button:active {
   background-color: color-mix(in oklch, var(--primary) 15%, transparent) !important;
   border-color: color-mix(in oklch, var(--primary) 40%, transparent) !important;
 }
 
-z-button[zType="destructive"]:active, 
-button[z-button][zType="destructive"]:active, 
+z-button[zType="destructive"]:active,
+button[z-button][zType="destructive"]:active,
 a[z-button][zType="destructive"]:active {
   background-color: color-mix(in oklch, var(--destructive) 20%, transparent) !important;
   border-color: color-mix(in oklch, var(--destructive) 50%, transparent) !important;
