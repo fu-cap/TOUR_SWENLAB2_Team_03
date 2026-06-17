@@ -33,7 +33,7 @@
       <div class="flex flex-col gap-1 p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-xl shadow-sm">
         <div class="flex items-center gap-2 text-primary">
           <span class="material-icons text-lg">route</span>
-          <span class="text-[10px] uppercase font-bold text-muted-foreground">Total Distance</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Total Distance</span>
         </div>
         <span class="text-xl font-bold">{{ tour()?.distanceKm }} km</span>
       </div>
@@ -41,7 +41,7 @@
       <div class="flex flex-col gap-1 p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-xl shadow-sm">
         <div class="flex items-center gap-2 text-primary">
           <span class="material-icons text-lg">timer</span>
-          <span class="text-[10px] uppercase font-bold text-muted-foreground">Estimated Time</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Estimated Time</span>
         </div>
         <span class="text-xl font-bold">{{ formattedDuration() }}</span>
       </div>
@@ -53,13 +53,13 @@
       <div class="space-y-2">
         @for (wp of tour()?.waypoints; track wp.id; let i = $index; let first = $first; let last = $last) {
           <div class="flex items-center gap-3 group">
-            <div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-[10px] font-bold"
+            <div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-[0.625rem] font-bold"
                  [class]="first || last ? 'bg-primary text-primary-foreground' : 'bg-sidebar/40 backdrop-blur-sm border border-sidebar-border/30 shadow-sm'">
               {{ i + 1 }}
             </div>
             <div class="flex-1 min-w-0 p-2 px-3 bg-sidebar/40 backdrop-blur-sm border border-sidebar-border/30 rounded-lg group-hover:border-primary/50 transition-colors shadow-sm">
               <p class="text-sm font-medium truncate" [title]="wp.label">{{ wp.label }}</p>
-              <p class="text-[10px] text-muted-foreground truncate">{{ wp.latitude.toFixed(5) }}, {{ wp.longitude.toFixed(5) }}</p>
+              <p class="text-[0.625rem] text-muted-foreground truncate">{{ wp.latitude.toFixed(5) }}, {{ wp.longitude.toFixed(5) }}</p>
             </div>
           </div>
         }

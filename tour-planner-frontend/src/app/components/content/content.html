@@ -1,4 +1,7 @@
-<div class="relative h-full flex flex-col transition-all duration-300 ease-in-out" [class.w-0]="isCollapsed" [class.w-[450px]]="!isCollapsed">
+<div class="relative h-full flex flex-col transition-all duration-300 ease-in-out"
+     [style.width]="isCollapsed ? '0' : '28.125rem'"
+     [style.min-width]="isCollapsed ? '0' : '28.125rem'"
+     [style.max-width]="isCollapsed ? '0' : '28.125rem'">
   <!-- Toggle Button -->
   @if (showToggle) {
     <button 

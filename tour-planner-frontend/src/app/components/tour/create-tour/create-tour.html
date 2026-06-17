@@ -67,17 +67,17 @@
         <span class="material-icons text-base">route</span>
       </div>
       <div class="flex flex-col">
-        <span class="text-[10px] uppercase font-bold text-muted-foreground leading-none">Distance</span>
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground leading-none">Distance</span>
         <span class="text-sm font-semibold">{{ formattedDistance() }}</span>
       </div>
     </div>
 
-    <div class="flex items-center gap-2 border-sidebar-border pl-4">
+    <div class="flex items-center gap-2 border-sidebar-border">
       <div class="flex p-2 bg-primary/10 rounded-full text-primary">
         <span class="material-icons text-base">timer</span>
       </div>
       <div class="flex flex-col">
-        <span class="text-[10px] uppercase font-bold text-muted-foreground leading-none">Est. Time</span>
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground leading-none">Est. Time</span>
         <span class="text-sm font-semibold">{{ formattedDuration() }}</span>
       </div>
     </div>
@@ -148,10 +148,10 @@
                 zSize="sm"
                 type="button"
                 (click)="addWaypoint(i + 1)"
-                class="!rounded-full h-6 w-6 min-w-0 p-0 border border-sidebar-border/50 bg-sidebar/70 backdrop-blur-md shadow-sm text-primary hover:bg-sidebar-accent/80 transition-all duration-200"
+                class="rounded-full! h-6 w-6 min-w-0 p-0 border border-sidebar-border/50 bg-sidebar/70 backdrop-blur-md shadow-sm text-primary hover:bg-sidebar-accent/80 transition-all duration-200"
                 title="Add intermediate stop"
               >
-                <span class="material-icons" style="font-size: 14px;">add</span>
+                <span class="material-icons" style="font-size: 0.875rem;">add</span>
               </button>
             </div>
           }

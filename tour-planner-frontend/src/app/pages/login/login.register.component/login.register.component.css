@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .form {
-  @apply w-full max-w-[400px] rounded-[2.5rem] px-9 py-3 flex flex-col items-center relative overflow-hidden;
+  @apply w-full max-w-[25rem] rounded-[2.5rem] px-9 py-3 flex flex-col items-center relative overflow-hidden;
 }
 
 .form-title {
@@ -65,6 +65,6 @@ z-form-field {
 }
 
 z-form-message {
-  @apply text-[10px] mt-1 pl-2 font-medium;
+  @apply text-[0.625rem] mt-1 pl-2 font-medium;
   color: var(--destructive);
 }

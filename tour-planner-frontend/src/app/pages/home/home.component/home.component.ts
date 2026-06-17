@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     const customIcon = L.divIcon({
       className: 'custom-div-icon',
-      html: "<div style='background-color:#3b82f6; width:12px; height:12px; border:2px solid white; border-radius:50%; box-shadow:0 0 4px rgba(0,0,0,0.5);'></div>",
+      html: "<div style='background-color:#3b82f6; width:0.75rem; height:0.75rem; border:0.125rem solid white; border-radius:50%; box-shadow:0 0 0.25rem rgba(0,0,0,0.5);'></div>",
       iconSize: [12, 12],
       iconAnchor: [6, 6]
     });

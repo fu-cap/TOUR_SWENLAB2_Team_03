@@ -3,7 +3,7 @@
   <div class="flex-1 p-3 flex flex-col gap-2 min-w-0">
     <div class="flex flex-col gap-1.5">
       <div class="flex justify-between items-start">
-        <span class="text-[10px] font-bold text-foreground">
+        <span class="text-[0.625rem] font-bold text-foreground">
           @if (log.updatedAt && log.updatedAt !== log.createdAt) {
             Updated: {{ log.updatedAt | date:'mediumDate' }}
           } @else {
@@ -15,20 +15,20 @@
       <!-- Stars for Rating and Difficulty -->
       <div class="flex flex-col gap-0.5">
         <div class="flex items-center gap-1">
-          <span class="text-[9px] font-bold text-muted-foreground w-14">Rating:</span>
+          <span class="text-[0.5625rem] font-bold text-muted-foreground w-14">Rating:</span>
           <div class="flex items-center">
             @for (star of [1,2,3,4,5]; track star) {
-              <span class="material-icons text-[10px]" [class.text-primary]="star <= log.rating" [class.text-muted-foreground]="star > log.rating">
+              <span class="material-icons text-[0.625rem]" [class.text-primary]="star <= log.rating" [class.text-muted-foreground]="star > log.rating">
                 {{ star <= log.rating ? 'star' : 'star_border' }}
               </span>
             }
           </div>
         </div>
         <div class="flex items-center gap-1">
-          <span class="text-[9px] font-bold text-muted-foreground w-14">Difficulty:</span>
+          <span class="text-[0.5625rem] font-bold text-muted-foreground w-14">Difficulty:</span>
           <div class="flex items-center">
             @for (star of [1,2,3,4,5]; track star) {
-              <span class="material-icons text-[10px]" [class.text-primary]="star <= log.difficulty" [class.text-muted-foreground]="star > log.difficulty">
+              <span class="material-icons text-[0.625rem]" [class.text-primary]="star <= log.difficulty" [class.text-muted-foreground]="star > log.difficulty">
                 {{ star <= log.difficulty ? 'star' : 'star_border' }}
               </span>
             }
@@ -37,17 +37,17 @@
       </div>
     </div>
  
-    <p class="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
+    <p class="text-[0.6875rem] text-muted-foreground leading-relaxed line-clamp-2">
       {{ log.comment || '\u00A0' }}
     </p>
  
-    <div class="flex gap-3 pt-1 border-t border-sidebar-border/50 text-[9px] font-bold text-muted-foreground">
+    <div class="flex gap-3 pt-1 border-t border-sidebar-border/50 text-[0.5625rem] font-bold text-muted-foreground">
       <div class="flex items-center gap-1">
-        <span class="material-icons text-[10px]">route</span>
+        <span class="material-icons text-[0.625rem]">route</span>
         {{ log.totalDistanceKm }} km
       </div>
       <div class="flex items-center gap-1">
-        <span class="material-icons text-[10px]">timer</span>
+        <span class="material-icons text-[0.625rem]">timer</span>
         {{ log.totalTimeMin }}
       </div>
     </div>
