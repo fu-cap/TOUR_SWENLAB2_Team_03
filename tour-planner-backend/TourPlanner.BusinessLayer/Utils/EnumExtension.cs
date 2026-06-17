@@ -31,7 +31,6 @@ namespace TourPlanner.BusinessLayer.Utils
                 {
                     if (attribute.Description.Equals(apiString, StringComparison.OrdinalIgnoreCase))
                     {
-                        // Gefunden! Konvertiere den Feldnamen in das echte Enum
                         return (TransportType)field.GetValue(null)!;
                     }
                 }
