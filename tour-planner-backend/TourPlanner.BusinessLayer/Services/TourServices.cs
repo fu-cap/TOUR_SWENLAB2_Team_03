@@ -108,42 +108,50 @@ namespace TourPlanner.BusinessLayer.Services
             {
                 throw new ArgumentException("A tour must have at least a start and an end point.");
             }
-
-            openrouteClient.DefaultRequestHeaders.Clear();
-            openrouteClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey);
-            
-            var requestBody = new OrsRequest
+            try
             {
-                Coordinates = waypoints.Select(w => new double[] { w.longitude, w.latitude }).ToList()
-            };
-
-            var response = await openrouteClient.PostAsJsonAsync($"{OpenRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
-
-            if (response.IsSuccessStatusCode)
-            {
-                var orsData = await response.Content.ReadFromJsonAsync<OrsResponse>();
-
-                double distance_km = 0;
-                TimeSpan estimatedTime = TimeSpan.Zero;
-                string geometryString = "";
-
-                if (orsData?.Routes != null && orsData.Routes.Count > 0)
+                openrouteClient.DefaultRequestHeaders.Clear();
+                openrouteClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey);
+                
+                var requestBody = new OrsRequest
                 {
-                    var route = orsData.Routes[0];
-                    
-                    distance_km = Math.Round(route.Summary.Distance / 1000.0, 2);
-                    estimatedTime = TimeSpan.FromSeconds(route.Summary.Duration);
-                    
-                    geometryString = route.Geometry; 
+                    Coordinates = waypoints.Select(w => new double[] { w.longitude, w.latitude }).ToList()
+                };
+
+                var response = await openrouteClient.PostAsJsonAsync($"{OpenRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var orsData = await response.Content.ReadFromJsonAsync<OrsResponse>();
+
+                    double distance_km = 0;
+                    TimeSpan estimatedTime = TimeSpan.Zero;
+                    string geometryString = "";
+
+                    if (orsData?.Routes != null && orsData.Routes.Count > 0)
+                    {
+                        var route = orsData.Routes[0];
+                        
+                        distance_km = Math.Round(route.Summary.Distance / 1000.0, 2);
+                        estimatedTime = TimeSpan.FromSeconds(route.Summary.Duration);
+                        
+                        geometryString = route.Geometry; 
+                    }
+
+                    return (distance_km, estimatedTime, geometryString);
+                }
+                else
+                {
+                    string errorJson = await response.Content.ReadAsStringAsync();
+                    throw new HttpRequestException($"Error while getting route information: {errorJson}");
                 }
 
-                return (distance_km, estimatedTime, geometryString);
             }
-            else
+            catch ()
             {
-                string errorJson = await response.Content.ReadAsStringAsync();
-                throw new HttpRequestException($"Error while getting route information: {errorJson}");
+                
             }
+
         }
     }
 }

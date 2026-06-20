@@ -55,9 +55,11 @@ namespace TourPlanner.API.Controllers
                 
                 if(createdUser is not null)
                 {
-                    return Created();
+                    return Created(string.Empty, createdUser);
                 }
-                throw new Exception("Returned user is null");
+
+                _logger.LogWarning("User creation failed without throwing an exception: {Username}", dto.username);
+                return BadRequest(new { message = "User could not be created." });
             }
             catch (ArgumentException ex)
             {
@@ -72,7 +74,7 @@ namespace TourPlanner.API.Controllers
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex, "Username or email already exists: {Username}", dto.username);
-                return StatusCode(400, new { message = "Username or email already exists" });
+                return StatusCode(409, new { message = "Username or email already exists" });
             }
             catch(Exception ex)
             {
