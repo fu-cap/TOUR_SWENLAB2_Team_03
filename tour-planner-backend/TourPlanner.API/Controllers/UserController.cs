@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
 using TourPlanner.BusinessLayer.Dtos;
 using TourPlanner.BusinessLayer.Services;
@@ -79,6 +80,69 @@ namespace TourPlanner.API.Controllers
             catch(Exception ex)
             {
                 _logger.LogError(ex, "An unexpected error occurred while creating the user");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody] Guid id, CreateUserDto dto)
+        {
+            if (!ModelState.IsValid) 
+            {
+                _logger.LogWarning("Got invalid DTO for updating a user.");
+                return BadRequest(ModelState);
+            }
+
+            try{
+                _logger.LogInformation("Starting updating user: {Username}", dto.username);
+
+                await _userService.UpdateUserAsync(id, dto);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Error in Business Logic: {Username}", dto.username);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Error while communicating with external API.");
+                return StatusCode(503, new { message = "The service is unavailable" });
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Username or email already exists: {Username}", dto.username);
+                return StatusCode(409, new { message = "Username or email already exists" });
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while updating the user");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUser([FromBody] Guid id)
+        {
+            try{
+                _logger.LogInformation("Starting updating user: {Userid}", id);
+
+                await _userService.DeleteUserAsync(id);
+                return NoContent();
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Error in Business Logic: {Username}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Error while communicating with external API.");
+                return StatusCode(503, new { message = "The service is unavailable" });
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while deleting the user");
                 return StatusCode(500, new { message = "Internal Server Error" });
             }
         }

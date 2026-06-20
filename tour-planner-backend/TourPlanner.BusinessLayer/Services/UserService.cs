@@ -33,17 +33,27 @@ namespace TourPlanner.BusinessLayer.Services
 
         public async Task<User?> GetUserByIdAsync(Guid id)
         {
-            return null;
+            return await _userRepository.GetByIdAsync(id);
         }
 
         public async Task UpdateUserAsync(Guid id, CreateUserDto updateUserDto)
         {
-            
+            var user = await _userRepository.GetByIdAsync(id);
+            if(user == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+
+            user.username = updateUserDto.username; 
+            user.password_hash = HashUtil.HashPassword(updateUserDto.password);
+            user.email = updateUserDto.email;
+
+            await _userRepository.UpdateAsync(user);
         }
 
         public async Task DeleteUserAsync(Guid id)
         {
-            
+            await _userRepository.DeleteAsync(id);
         }
     }
 }
