@@ -81,7 +81,7 @@ namespace TourPlanner.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -90,6 +90,62 @@ namespace TourPlanner.API.Controllers
                 return NotFound(new { message = $"User with ID {id} not found." });
             }
             return Ok(user);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] CreateUserDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Got invalid DTO for updating a user.");
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                _logger.LogInformation("Starting updating user: {Username}", dto.Username);
+                await _userService.UpdateUserAsync(id, dto);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogWarning(ex, "Error in Business Logic: {Username}", dto.Username);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Username or email already exists: {Username}", dto.Username);
+                return StatusCode(409, new { message = "Username or email already exists" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while updating the user");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteUser(Guid id)
+        {
+            try
+            {
+                _logger.LogInformation("Deleting user: {UserId}", id);
+                await _userService.DeleteUserAsync(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while deleting the user");
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
         }
 
         [HttpPost("login")]
