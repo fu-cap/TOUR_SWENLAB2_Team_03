@@ -123,12 +123,13 @@ namespace TourPlanner.BusinessLayer.Services
         public async Task DeleteLogAsync(Guid id)
         {
             var log = await _logRepository.GetByIdAsync(id);
-            if (log != null)
+            if (log == null)
             {
-                var tourId = log.TourId;
-                await _logRepository.DeleteAsync(id);
-                await UpdateTourMetricsAsync(tourId);
+                throw new KeyNotFoundException($"Log with ID {id} not found.");
             }
+            var tourId = log.TourId;
+            await _logRepository.DeleteAsync(id);
+            await UpdateTourMetricsAsync(tourId);
         }
     }
 }

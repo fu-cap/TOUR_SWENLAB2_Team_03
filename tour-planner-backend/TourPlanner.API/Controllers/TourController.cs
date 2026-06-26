@@ -165,10 +165,18 @@ namespace TourPlanner.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetTourById(Guid id)
         {
-            var tour = await _tourService.GetTourByIdAsync(id);
-            if (tour == null)
-                return NotFound(new { message = $"Tour with ID {id} not found." });
-            return Ok(ToResponseObject(tour));
+            try
+            {
+                var tour = await _tourService.GetTourByIdAsync(id);
+                if (tour == null)
+                    return NotFound(new { message = $"Tour with ID {id} not found." });
+                return Ok(ToResponseObject(tour));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting tour {TourId}", id);
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
         }
 
         /// <summary>PUT /api/tour/{id} — update a tour</summary>

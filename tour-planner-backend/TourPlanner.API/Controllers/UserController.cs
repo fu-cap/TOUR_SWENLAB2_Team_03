@@ -72,7 +72,7 @@ namespace TourPlanner.API.Controllers
             catch (DbUpdateException ex)
             {
                 _logger.LogError(ex, "Username or email already exists: {Username}", dto.Username);
-                return StatusCode(400, new { message = "Username or email already exists" });
+                return StatusCode(409, new { message = "Username or email already exists" });
             }
             catch(Exception ex)
             {
@@ -84,12 +84,20 @@ namespace TourPlanner.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetUserById(Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound(new { message = $"User with ID {id} not found." });
+                var user = await _userService.GetUserByIdAsync(id);
+                if (user == null)
+                {
+                    return NotFound(new { message = $"User with ID {id} not found." });
+                }
+                return Ok(user);
             }
-            return Ok(user);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting user {UserId}", id);
+                return StatusCode(500, new { message = "Internal Server Error" });
+            }
         }
 
         [HttpPut("{id:guid}")]

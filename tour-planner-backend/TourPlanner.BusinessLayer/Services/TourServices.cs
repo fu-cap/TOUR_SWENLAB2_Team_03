@@ -156,7 +156,7 @@ namespace TourPlanner.BusinessLayer.Services
 
             if (string.IsNullOrEmpty(apiKey))
             {
-                throw new Exception("API-Key not found");
+                throw new InvalidOperationException("OpenRoute API key is not configured.");
             }
 
             if (waypoints.Count < 2)
@@ -164,15 +164,16 @@ namespace TourPlanner.BusinessLayer.Services
                 throw new ArgumentException("A tour must have at least a start and an end point.");
             }
 
-            _httpClient.DefaultRequestHeaders.Clear();
-            _httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", apiKey);
-            
             var requestBody = new OrsRequest
             {
                 Coordinates = waypoints.Select(w => new double[] { w.Longitude, w.Latitude }).ToList()
             };
 
-            var response = await _httpClient.PostAsJsonAsync($"{openRouteAPI}/v2/directions/{transportType.ToApiString()}", requestBody);  
+            using var request = new HttpRequestMessage(HttpMethod.Post, $"{openRouteAPI}/v2/directions/{transportType.ToApiString()}");
+            request.Headers.TryAddWithoutValidation("Authorization", apiKey);
+            request.Content = JsonContent.Create(requestBody);
+
+            var response = await _httpClient.SendAsync(request);  
 
             if (response.IsSuccessStatusCode)
             {

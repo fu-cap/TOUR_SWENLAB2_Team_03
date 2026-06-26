@@ -137,6 +137,8 @@ namespace TourPlanner.Tests
         {
             // Arrange
             var userId = Guid.NewGuid();
+            var existingUser = new User { Id = userId, Username = "toDelete" };
+            _userRepositoryMock.Setup(repo => repo.GetByIdAsync(userId)).ReturnsAsync(existingUser);
             _userRepositoryMock.Setup(repo => repo.DeleteAsync(userId)).Returns(Task.CompletedTask);
 
             // Act

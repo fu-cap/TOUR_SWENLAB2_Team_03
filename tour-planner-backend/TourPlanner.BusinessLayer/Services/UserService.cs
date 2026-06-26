@@ -55,11 +55,32 @@ namespace TourPlanner.BusinessLayer.Services
 
         public async Task UpdateUserAsync(Guid id, CreateUserDto updateUserDto)
         {
-            // Implementation for update
+            var existingUser = await _userRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                throw new KeyNotFoundException($"User with ID {id} not found.");
+            }
+
+            existingUser.Username = updateUserDto.Username;
+            existingUser.Email = updateUserDto.Email;
+            existingUser.Gender = updateUserDto.Gender;
+            existingUser.FirstName = updateUserDto.Firstname;
+            existingUser.LastName = updateUserDto.Lastname;
+            if (!string.IsNullOrWhiteSpace(updateUserDto.Password))
+            {
+                existingUser.PasswordHash = HashUtil.HashPassword(updateUserDto.Password);
+            }
+
+            await _userRepository.UpdateAsync(existingUser);
         }
 
         public async Task DeleteUserAsync(Guid id)
         {
+            var existingUser = await _userRepository.GetByIdAsync(id);
+            if (existingUser == null)
+            {
+                throw new KeyNotFoundException($"User with ID {id} not found.");
+            }
             await _userRepository.DeleteAsync(id);
         }
     }
