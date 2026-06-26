@@ -11,6 +11,18 @@
           <div class="flex flex-wrap gap-2">
             <z-badge zType="secondary" class="capitalize whitespace-nowrap">{{ tour()?.transportType?.replace('-', ' ') }}</z-badge>
             <z-badge zType="outline" class="whitespace-nowrap">{{ tour()?.waypoints?.length }} Stops</z-badge>
+            @if (tour()?.popularity !== undefined && tour()?.popularity !== null) {
+              <z-badge zType="default" class="whitespace-nowrap flex items-center gap-1 bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20">
+                <span class="material-icons text-[10px]">trending_up</span>
+                Pop: {{ tour()?.popularity | number:'1.0-0' }}
+              </z-badge>
+            }
+            @if (tour()?.childFriendliness !== undefined && tour()?.childFriendliness !== null) {
+              <z-badge zType="default" class="whitespace-nowrap flex items-center gap-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20">
+                <span class="material-icons text-[10px]">child_care</span>
+                Child: {{ tour()?.childFriendliness | number:'1.1-2' }}/10
+              </z-badge>
+            }
           </div>
         </div>
       </div>
@@ -45,6 +57,66 @@
         </div>
         <span class="text-xl font-bold">{{ formattedDuration() }}</span>
       </div>
+
+      <div class="flex flex-col gap-1 p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-xl shadow-sm">
+        <div class="flex items-center gap-2 text-primary">
+          <span class="material-icons text-lg text-amber-500">trending_up</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Popularity</span>
+        </div>
+        <span class="text-xl font-bold">{{ tour()?.popularity != null ? (tour()?.popularity | number:'1.0-0') : '0' }}</span>
+      </div>
+
+      <div class="flex flex-col gap-1 p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-xl shadow-sm">
+        <div class="flex items-center gap-2 text-primary">
+          <span class="material-icons text-lg text-blue-500">child_care</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Child Friendliness</span>
+        </div>
+        <span class="text-xl font-bold">{{ tour()?.childFriendliness != null ? (tour()?.childFriendliness | number:'1.1-2') + ' / 10' : 'N/A' }}</span>
+      </div>
+    </div>
+
+    <!-- Carbon Footprint Card -->
+    <div class="flex flex-col gap-3 p-4 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-xl shadow-sm">
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-lg text-emerald-500">eco</span>
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground tracking-wider">Carbon Footprint</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+          <span class="text-[0.625rem] uppercase font-bold text-emerald-600 dark:text-emerald-400 tracking-wider flex items-center gap-1">
+            <span class="material-icons text-[10px]">arrow_downward</span>
+            CO&#x2082; Saved vs. Car
+          </span>
+          @if ((tour()?.co2SavedGrams ?? 0) >= 1000) {
+            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">{{ ((tour()?.co2SavedGrams ?? 0) / 1000) | number:'1.1-2' }} kg</span>
+          } @else {
+            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">{{ (tour()?.co2SavedGrams ?? 0) | number:'1.0-1' }} g</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1 p-3 rounded-lg"
+             [class]="(tour()?.co2EmittedGrams ?? 0) === 0 ? 'bg-emerald-500/5 border border-emerald-500/10' : 'bg-orange-500/10 border border-orange-500/20'">
+          <span class="text-[0.625rem] uppercase font-bold tracking-wider flex items-center gap-1"
+                [class]="(tour()?.co2EmittedGrams ?? 0) === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-orange-600 dark:text-orange-400'">
+            <span class="material-icons text-[10px]">local_fire_department</span>
+            CO&#x2082; Emitted
+          </span>
+          @if ((tour()?.co2EmittedGrams ?? 0) === 0) {
+            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">Zero &#x1F331;</span>
+          } @else if ((tour()?.co2EmittedGrams ?? 0) >= 1000) {
+            <span class="text-xl font-bold text-orange-600 dark:text-orange-400">{{ ((tour()?.co2EmittedGrams ?? 0) / 1000) | number:'1.1-2' }} kg</span>
+          } @else {
+            <span class="text-xl font-bold text-orange-600 dark:text-orange-400">{{ (tour()?.co2EmittedGrams ?? 0) | number:'1.0-1' }} g</span>
+          }
+        </div>
+      </div>
+      @if ((tour()?.co2SavedGrams ?? 0) > 0) {
+        <p class="text-xs text-muted-foreground">
+          &#x1F30D; By choosing <strong>{{ tour()?.transportType?.replace('-', ' ') }}</strong> instead of driving,
+          you save <strong class="text-emerald-600 dark:text-emerald-400">{{ (tour()?.co2SavedGrams ?? 0) >= 1000 ? (((tour()?.co2SavedGrams ?? 0) / 1000) | number:'1.1-2') + ' kg' : ((tour()?.co2SavedGrams ?? 0) | number:'1.0-1') + ' g' }}</strong> of CO&#x2082; on this tour.
+        </p>
+      } @else {
+        <p class="text-xs text-muted-foreground">&#x1F697; Consider an eco-friendly transport option to reduce your carbon footprint.</p>
+      }
     </div>
 
     <!-- Waypoints List -->

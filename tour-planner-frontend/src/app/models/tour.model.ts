@@ -45,4 +45,8 @@ export interface Tour {
   // Statistiken
   popularity?: number;
   childFriendliness?: number;
+
+  // Carbon Footprint (computed by backend, not stored in DB)
+  co2EmittedGrams?: number;
+  co2SavedGrams?: number;
 }

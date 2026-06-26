@@ -70,6 +70,12 @@ export class ListviewLogs implements OnInit, OnDestroy {
       next: (data) => {
         this.logs.set(data);
         this.isLoadingLogs.set(false);
+        this.tourService.getTourById(t.id!).subscribe({
+          next: (updatedTour) => {
+            this.tourService.selectedTour.set(updatedTour);
+          },
+          error: (err) => console.error('Error refreshing tour metrics:', err)
+        });
       },
       error: (err) => {
         console.error('Error loading logs:', err);

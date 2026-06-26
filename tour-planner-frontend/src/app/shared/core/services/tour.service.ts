@@ -29,10 +29,12 @@ export class TourService {
     return this.http.post<Tour>(this.API_URL, tourData);
   }
 
-  getTours(userId: string): Observable<Tour[]> {
-    return this.http.get<Tour[]>(this.API_URL, {
-      params: { userId: userId }
-    });
+  getTours(userId: string, search?: string): Observable<Tour[]> {
+    const params: any = { userId: userId };
+    if (search) {
+      params.search = search;
+    }
+    return this.http.get<Tour[]>(this.API_URL, { params });
   }
 
   getTourById(id: string): Observable<Tour> {
@@ -45,5 +47,13 @@ export class TourService {
 
   updateTour(id: string, tourData: CreateTourRequest): Observable<void> {
     return this.http.put<void>(`${this.API_URL}/${id}`, tourData);
+  }
+
+  exportTours(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.API_URL}/export?userId=${userId}`);
+  }
+
+  importTours(userId: string, tours: any[]): Observable<any> {
+    return this.http.post<any>(`${this.API_URL}/import?userId=${userId}`, tours);
   }
 }

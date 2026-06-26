@@ -76,8 +76,10 @@ namespace TourPlanner.DataAccessLayer
                         v => TimeSpan.FromMinutes(v)
                     );
                 entity.Property(e => e.RouteInformation).HasColumnName("route_information"); // Note: Adding this to schema or mapping to map_image_path
-                entity.Property(e => e.Popularity).HasColumnName("popularity").HasDefaultValue(0.0);
-                entity.Property(e => e.ChildFriendliness).HasColumnName("child_friendliness").HasDefaultValue(0.0);
+                entity.Property(e => e.Popularity).HasColumnName("popularity").HasDefaultValueSql("0");
+                entity.Property(e => e.ChildFriendliness).HasColumnName("child_friendliness").HasDefaultValueSql("0");
+                entity.Ignore(e => e.Co2SavedGrams);    // computed on-the-fly, not stored
+                entity.Ignore(e => e.Co2EmittedGrams);  // computed on-the-fly, not stored
                 entity.Property(e => e.CreationDate).HasColumnName("created_at").HasDefaultValueSql("NOW()");
                 entity.Property(e => e.LastModifiedDate).HasColumnName("updated_at").HasDefaultValueSql("NOW()");
                 
