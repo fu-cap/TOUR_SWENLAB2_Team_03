@@ -126,10 +126,10 @@
       </div>
 
       <div class="flex gap-3 pt-2">
-        <button z-button zType="default" [disabled]="isLoading()" (click)="saveChanges()">
+        <button z-button zType="default" class="flex-1" [disabled]="isLoading()" (click)="saveChanges()">
           @if (isLoading()) { Saving... } @else { Save }
         </button>
-        <button z-button zType="secondary" [disabled]="isLoading()" (click)="cancelEdit()">
+        <button z-button zType="secondary" class="flex-1" [disabled]="isLoading()" (click)="cancelEdit()">
           Cancel
         </button>
       </div>

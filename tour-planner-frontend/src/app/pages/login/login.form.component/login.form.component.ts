@@ -19,6 +19,8 @@ export class LoginFormComponent {
   private router = inject(Router);
   private authService = inject(AuthService);
 
+  showPassword = false;
+
   form = new FormGroup({
     username: new FormControl('', Validators.required),
     password: new FormControl('', Validators.required),

@@ -23,7 +23,7 @@
        [class.opacity-0]="isCollapsed" [class.pointer-events-none]="isCollapsed">
     @switch (activeState) {
       @case ('overview') { <app-listview-tours (stateChange)="activeStateChange.emit($event)" /> }
-      @case ('details')  { <app-detailsview-tour /> }
+      @case ('details')  { <app-detailsview-tour (stateChange)="activeStateChange.emit($event)" /> }
       @case ('edit')     { <app-edit-tour (stateChange)="activeStateChange.emit($event)" /> }
       @case ('logs')     { <app-listview-logs /> }
       @case ('user')     { <app-account /> }

@@ -28,7 +28,7 @@
           <span class="text-[0.5625rem] font-bold text-muted-foreground w-14">Difficulty:</span>
           <div class="flex items-center">
             @for (star of [1,2,3,4,5]; track star) {
-              <span class="material-icons text-[0.625rem]" [class.text-primary]="star <= log.difficulty" [class.text-muted-foreground]="star > log.difficulty">
+              <span class="material-icons text-[0.625rem]" [class.text-orange-500]="star <= log.difficulty" [class.text-muted-foreground]="star > log.difficulty">
                 {{ star <= log.difficulty ? 'star' : 'star_border' }}
               </span>
             }
