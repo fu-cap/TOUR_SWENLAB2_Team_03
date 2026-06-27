@@ -2,8 +2,15 @@
   <div class="map-container">
     <div id="map" class="w-full h-full"></div>
     <div class="overlay pointer-events-none">
-      <app-navbar class="pointer-events-auto" (activeStateChange)="currentState.set($event)" />
-      <app-content class="pointer-events-auto" [activeState]="currentState()"></app-content>
+      <app-navbar class="pointer-events-auto" [activeState]="currentState()" (activeStateChange)="currentState.set($event)" />
+      <app-content
+        class="pointer-events-auto"
+        [activeState]="currentState()"
+        [isCollapsed]="isCollapsed()"
+        (activeStateChange)="currentState.set($event)"
+        (toggleCollapse)="isCollapsed.set(!isCollapsed())"
+      />
     </div>
+    <app-selected-tour-indicator />
   </div>
 </div>

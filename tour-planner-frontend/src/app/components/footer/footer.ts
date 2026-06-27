@@ -1,6 +1,4 @@
-import { Component, inject} from '@angular/core';
-import { ZardDialogService} from '@/shared/components/dialog';
-import { Impressum } from '@/components/impressum/impressum';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
@@ -9,16 +7,9 @@ import { Impressum } from '@/components/impressum/impressum';
   styleUrl: './footer.css',
 })
 export class Footer {
-  private readonly dialog = inject(ZardDialogService);
+  @Output() impressumClick = new EventEmitter<void>();
 
   public openImpressum(): void {
-    this.dialog.create({
-      zContent: Impressum,
-      zHideFooter: true,
-      zMaskClosable: true,
-      zClosable: false,
-      zWidth: '50vw',
-      zCustomClasses: 'max-h-[65vh] overflow-y-auto'
-    });
+    this.impressumClick.emit();
   }
 }

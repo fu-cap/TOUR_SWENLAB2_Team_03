@@ -7,13 +7,20 @@
 .map-container {
   position: relative;
   width: 100%;
-  flex: 1;
+  height: 100%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  padding: 1.5rem;
+  z-index: 1000;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  pointer-events: none;
 }
 
 app-content {
-  position: absolute;
-  z-index: 1000;
+  pointer-events: auto;
+  height: 100%;
 }

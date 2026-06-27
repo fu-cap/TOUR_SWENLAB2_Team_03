@@ -1,12 +1,34 @@
-<div class="flex flex-col h-full p-2 rounded-lg bg-sidebar border border-sidebar-border opacity-85 overflow-scroll">
-  @switch (activeState) {
-    @case ('overview') { <p>Overview</p> }
-    @case ('details')  { <p>Details</p> }
-    @case ('edit')     { <p>Edit</p> }
-    @case ('logs')     { <p>Logs</p> }
-    @case ('user')     { <p>Account</p> }
-    @case ('create')   { <p>Create</p> }
-    @case ('info')     { <app-impressum /> }
-    @default           { <ng-content /> }
+<div class="relative h-full flex flex-col transition-all duration-300 ease-in-out"
+     [style.width]="isCollapsed ? '0' : '28.125rem'"
+     [style.min-width]="isCollapsed ? '0' : '28.125rem'"
+     [style.max-width]="isCollapsed ? '0' : '28.125rem'">
+  @if (showToggle) {
+    <button 
+      type="button"
+      [class.collapsed-state]="isCollapsed"
+      [class.expanded-state]="!isCollapsed"
+      class="toggle-button glass-panel active:bg-primary/20"
+      (click)="toggleCollapse.emit()"
+    >
+      <span class="material-icons text-lg transition-transform duration-300" [class.rotate-180]="isCollapsed">
+        chevron_left
+      </span>
+    </button>
   }
+
+
+  <div class="scroll-container flex flex-col h-full p-2 rounded-3xl glass-panel overflow-y-auto overflow-x-hidden"
+       [class.justify-center]="centerContent"
+       [class.opacity-0]="isCollapsed" [class.pointer-events-none]="isCollapsed">
+    @switch (activeState) {
+      @case ('overview') { <app-listview-tours (stateChange)="activeStateChange.emit($event)" /> }
+      @case ('details')  { <app-detailsview-tour (stateChange)="activeStateChange.emit($event)" /> }
+      @case ('edit')     { <app-edit-tour (stateChange)="activeStateChange.emit($event)" /> }
+      @case ('logs')     { <app-listview-logs /> }
+      @case ('user')     { <app-account /> }
+      @case ('create')   { <app-create-tour /> }
+      @case ('info')     { <app-impressum /> }
+      @default           { <ng-content /> }
+    }
+  </div>
 </div>

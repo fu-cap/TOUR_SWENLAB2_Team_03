@@ -13,9 +13,15 @@
 .overlay {
   position: absolute;
   inset: 0;
-  padding: 1rem;
+  padding: 1.5rem;
   z-index: 1000;
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.overlay > * {
+  pointer-events: auto;
+  height: 100%;
 }

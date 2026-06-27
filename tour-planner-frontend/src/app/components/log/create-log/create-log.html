@@ -1,0 +1,107 @@
+<div class="space-y-6">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div class="grid grid-cols-2 gap-4">
+      <z-form-field #fr="zardId" zardId="rating">
+        <label z-form-label [for]="fr.id()" zRequired>Rating (1-5)</label>
+        <z-form-control>
+          <div class="flex gap-1 items-center h-10">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <button
+                type="button"
+                (click)="form.get('rating')?.setValue(star)"
+                class="transition-all hover:scale-120 focus:outline-none"
+                [class.text-amber-500]="(form.get('rating')?.value ?? 0) >= star"
+                [class.text-muted-foreground]="star > (form.get('rating')?.value ?? 0)"
+                [class.opacity-40]="star > (form.get('rating')?.value ?? 0)"
+              >
+                <span class="material-icons text-2xl">
+                  {{ (form.get('rating')?.value ?? 0) >= star ? 'star' : 'star_border' }}
+                </span>
+              </button>
+            }
+          </div>
+        </z-form-control>
+      </z-form-field>
+
+      <z-form-field #fdi="zardId" zardId="difficulty">
+        <label z-form-label [for]="fdi.id()" zRequired>Difficulty (1-5)</label>
+        <z-form-control>
+          <div class="flex gap-1 items-center h-10">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <button
+                type="button"
+                (click)="form.get('difficulty')?.setValue(star)"
+                class="transition-all hover:scale-120 focus:outline-none"
+                [class.text-amber-500]="(form.get('difficulty')?.value ?? 0) >= star"
+                [class.text-muted-foreground]="star > (form.get('difficulty')?.value ?? 0)"
+                [class.opacity-40]="star > (form.get('difficulty')?.value ?? 0)"
+              >
+                <span class="material-icons text-2xl">
+                  {{ (form.get('difficulty')?.value ?? 0) >= star ? 'star' : 'star_border' }}
+                </span>
+              </button>
+            }
+          </div>
+        </z-form-control>
+      </z-form-field>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <z-form-field #fstart="zardId" zardId="startDateTime">
+        <label z-form-label [for]="fstart.id()" zRequired>Start (Date & Time)</label>
+        <z-form-control>
+          <input z-input [id]="fstart.id()" type="datetime-local" formControlName="startDateTime" />
+        </z-form-control>
+      </z-form-field>
+
+      <z-form-field #fend="zardId" zardId="endDateTime">
+        <label z-form-label [for]="fend.id()" zRequired>End (Date & Time)</label>
+        <z-form-control>
+          <input z-input [id]="fend.id()" type="datetime-local" formControlName="endDateTime" />
+        </z-form-control>
+      </z-form-field>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <z-form-field #fp="zardId" zardId="pauseMinutes">
+        <label z-form-label [for]="fp.id()" zRequired>Pause (min)</label>
+        <z-form-control>
+          <input z-input [id]="fp.id()" type="number" min="0" formControlName="pauseMinutes" />
+        </z-form-control>
+      </z-form-field>
+
+      <div class="flex flex-col justify-end">
+        <span class="text-[0.625rem] font-bold text-muted-foreground uppercase tracking-wider pb-1">Duration</span>
+        <span class="text-sm font-medium text-muted-foreground h-9 flex items-center bg-input/10 dark:bg-input/20 px-2.5 rounded-lg border border-input">
+          {{ calculatedDuration }}
+        </span>
+      </div>
+    </div>
+
+    <z-form-field #fdis="zardId" zardId="totalDistanceKm">
+      <label z-form-label [for]="fdis.id()" zRequired>Distance (km)</label>
+      <z-form-control>
+        <input z-input [id]="fdis.id()" type="number" step="0.1" formControlName="totalDistanceKm" />
+      </z-form-control>
+    </z-form-field>
+
+    <z-form-field #fc="zardId" zardId="comment">
+      <label z-form-label [for]="fc.id()">Comment</label>
+      <z-form-control>
+        <textarea z-input [id]="fc.id()" rows="2" placeholder="How was your tour?" formControlName="comment"></textarea>
+      </z-form-control>
+    </z-form-field>
+
+    <div class="flex gap-2 pt-2">
+      <button 
+        z-button zType="ghost" 
+        class="flex-1 text-foreground glass-card hover:bg-primary/10 transition-all duration-200"
+        type="button" 
+        (click)="cancel.emit()"
+      >
+        Cancel
+      </button>
+      <button z-button zType="default" class="flex-1" type="submit" [zDisabled]="form.invalid || calculatedDuration === '00:00:00'">Add Log</button>
+    </div>
+  </form>
+</div>

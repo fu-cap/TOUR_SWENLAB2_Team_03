@@ -1,0 +1,166 @@
+<div class="flex flex-col gap-6 p-4">
+  <div>
+    <h2 class="text-2xl font-bold">Create New Tour</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div class="space-y-4">
+    <z-form-field #fn="zardId" zardId="name">
+      <label z-form-label [for]="fn.id()" zRequired>Tour Name</label>
+      <z-form-control>
+        <input
+          z-input
+          [id]="fn.id()"
+          type="text"
+          placeholder="e.g. Mountain Bike Tour Vienna"
+          formControlName="name"
+        />
+      </z-form-control>
+      @if (form.get('name')?.invalid && form.get('name')?.touched) {
+        <z-form-message>Please enter a name for the tour.</z-form-message>
+      }
+    </z-form-field>
+
+    <z-form-field #fd="zardId" zardId="description">
+      <label z-form-label [for]="fd.id()">Description</label>
+      <z-form-control>
+        <textarea
+          z-input
+          [id]="fd.id()"
+          type="text"
+          rows="3"
+          placeholder="Describe your tour..."
+          formControlName="description"
+        ></textarea>
+      </z-form-control>
+    </z-form-field>
+
+    <div class="space-y-2">
+      <label z-form-label zRequired>Transport Type</label>
+      <div class="flex gap-1 p-1 glass-card rounded-xl">
+        @for (option of transportOptions; track option.value) {
+          <button
+            type="button"
+            z-button
+            zType="ghost"
+            [class.active]="form.get('transportType')?.value === option.value"
+            zSize="sm"
+            class="flex-1 h-14 min-w-0 p-0 flex-col transition-all"
+            (click)="form.get('transportType')?.setValue($any(option.value))"
+            [zTooltip]="option.label"
+            zPosition="top"
+          >
+            <span class="material-icons text-xl">{{ option.icon }}</span>
+            <span class="text-[0.5rem] mt-0.5 leading-none">{{ option.label }}</span>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <hr class="border-white/25" />
+
+  <div class="flex justify-around p-3 glass-card rounded-lg">
+    <div class="flex items-center gap-2">
+      <div class="flex p-2 bg-primary/10 rounded-full text-primary">
+        <span class="material-icons text-base">route</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground leading-none">Distance</span>
+        <span class="text-sm font-semibold">{{ formattedDistance() }}</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 border-sidebar-border">
+      <div class="flex p-2 bg-primary/10 rounded-full text-primary">
+        <span class="material-icons text-base">timer</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground leading-none">Est. Time</span>
+        <span class="text-sm font-semibold">{{ formattedDuration() }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="space-y-4">
+    <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">Route Waypoints</h3>
+
+    <div formArrayName="waypoints" class="space-y-3">
+      @for (waypoint of waypoints.controls; track waypoint; let i = $index; let first = $first; let last = $last) {
+        <div [formGroup]="$any(waypoint)" class="flex flex-col">
+          <z-form-field #fw="zardId" [zardId]="'waypoint-' + i">
+            <label z-form-label [for]="fw.id()" zRequired>
+              @if (first) { Start } @else if (last) { Destination } @else { Stop {{ i }} }
+            </label>
+            <z-form-control>
+              <z-input-group [zAddonBefore]="$any(pinIcon)" [zAddonAfter]="!first && !last ? $any(removeBtn) : ''" zPopover [zContent]="resultsPopover" [zVisible]="activeWaypointIndex() === i && searchResults().length > 0 && $any(waypoint).get('label')?.dirty" [zTrigger]="null">
+                <input z-input [id]="fw.id()" type="text" [placeholder]="first ? 'Enter starting point' : (last ? 'Enter destination' : 'Enter intermediate stop')" formControlName="label" autocomplete="off" />
+              </z-input-group>
+
+
+              <ng-template #resultsPopover>
+                <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg p-1">
+                  @if (isSearching()) {
+                    <div class="p-2 text-xs text-muted-foreground flex items-center gap-2">
+                      <span class="material-icons animate-spin text-sm">search</span>
+                      Searching...
+                    </div>
+                  }
+                  @for (result of searchResults(); track result.address) {
+                    <button
+                      type="button"
+                      class="w-full text-left p-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm transition-colors"
+                      (click)="selectResult(i, result)"
+                    >
+                      {{ result.address }}
+                    </button>
+                  }
+                </div>
+              </ng-template>
+
+              <ng-template #pinIcon>
+                <span class="material-icons" [class]="waypoints.at(i).get('lat')?.value ? 'text-primary' : 'text-muted-foreground'">location_on</span>
+              </ng-template>
+
+              <ng-template #removeBtn>
+                <button
+                  z-button
+                  zType="ghost"
+                  zSize="sm"
+                  type="button"
+                  (click)="removeWaypoint(i)"
+                  class="text-destructive hover:text-destructive/80 -mr-2"
+                >
+                  <span class="material-icons">delete</span>
+                </button>
+              </ng-template>
+            </z-form-control>
+          </z-form-field>
+
+          @if (!last) {
+            <div class="flex justify-center -my-2 relative z-10">
+              <button
+                z-button
+                zType="ghost"
+                zSize="sm"
+                type="button"
+                (click)="addWaypoint(i + 1)"
+                class="rounded-full! h-8 w-8 min-w-0 p-0 glass-panel shadow-sm text-primary hover:bg-primary/10 transition-all duration-200"
+                title="Add intermediate stop"
+              >
+                <span class="material-icons text-base">add</span>
+              </button>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="pt-4">
+    <button z-button zType="default" zFull type="submit" [zDisabled]="form.invalid">
+      Create Tour
+    </button>
+  </div>
+</form>
+</div>

@@ -4,9 +4,6 @@
 @import 'tailwindcss';
 @plugin "tailwindcss-animate";
 
-@custom-variant dark (&:is(.dark *));
-
-
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -15,69 +12,33 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.55 0.22 264);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: oklch(0.55 0.22 264);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent: oklch(0.88 0.05 264);
+  --accent-foreground: oklch(0.55 0.22 264);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.88 0.05 264 / 0.25);
+  --input: oklch(0.88 0.05 264 / 0.25);
+  --ring: oklch(0.55 0.22 264);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-4: oklch(0.55 0.22 264);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(1 0 0 / 0.42);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-primary: oklch(0.55 0.22 264);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.55 0.22 264 / 0.12);
+  --sidebar-accent-foreground: oklch(0.55 0.22 264);
+  --sidebar-border: oklch(1 0 0 / 0.4);
+  --sidebar-ring: oklch(0.55 0.22 264);
 }
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-}
-
 
 @theme inline {
   --color-background: var(--background);
@@ -104,10 +65,10 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 0.25rem);
+  --radius-md: calc(var(--radius) - 0.125rem);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 0.25rem);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -127,6 +88,10 @@
     @apply bg-background text-foreground;
   }
 
+  button {
+    cursor: pointer;
+  }
+
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -141,17 +106,17 @@
 
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 0.375rem;
+  height: 0.375rem;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--muted-foreground);
-  border-radius: 5px;
+  border-radius: 0.3125rem;
 }
 
 ::-webkit-scrollbar-track {
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   background: var(--muted);
 }
 
@@ -159,4 +124,123 @@
   .page-wrapper {
     @apply flex flex-col w-screen h-screen overflow-hidden;
   }
+
+  .glass-panel {
+    background: linear-gradient(145deg, oklch(1 0 0 / 0.55) 0%, oklch(1 0 0 / 0.35) 100%);
+    backdrop-filter: blur(1.5rem) saturate(1.6);
+    -webkit-backdrop-filter: blur(1.5rem) saturate(1.6);
+    border: 0.0625rem solid oklch(1 0 0 / 0.45);
+    box-shadow:
+      inset 0 0.0625rem 0 oklch(1 0 0 / 0.65),
+      0 0.5rem 2rem oklch(0 0 0 / 0.1),
+      0 0.125rem 0.5rem oklch(0 0 0 / 0.06);
+  }
+
+  .glass-card {
+    background: oklch(1 0 0 / 0.22);
+    backdrop-filter: blur(0.75rem) saturate(1.3);
+    -webkit-backdrop-filter: blur(0.75rem) saturate(1.3);
+    border: 0.0625rem solid oklch(1 0 0 / 0.3);
+    box-shadow:
+      inset 0 0.0625rem 0 oklch(1 0 0 / 0.5),
+      0 0.125rem 0.5rem oklch(0 0 0 / 0.06);
+  }
+}
+
+/* ==========================================
+   Global Glassmorphism Button Styles
+   ========================================== */
+
+z-button,
+button[z-button],
+a[z-button] {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+z-button,
+button[z-button],
+a[z-button] {
+  color: var(--primary) !important;
+}
+
+z-button[zType="default"],
+button[z-button][zType="default"],
+a[z-button][zType="default"] {
+  background-color: color-mix(in oklch, var(--sidebar) 70%, transparent) !important;
+  border: 0.0625rem solid color-mix(in oklch, var(--sidebar-border) 50%, transparent) !important;
+  backdrop-filter: blur(0.5rem) !important;
+  box-shadow: 0 0.0625rem 0.125rem 0 rgb(0 0 0 / 0.05) !important;
+}
+
+z-button[zType="destructive"],
+button[z-button][zType="destructive"],
+a[z-button][zType="destructive"] {
+  color: var(--destructive) !important;
+}
+
+/* Hover highlights */
+z-button:hover,
+button[z-button]:hover,
+a[z-button]:hover,
+.toggle-button:hover {
+  background-color: var(--sidebar-accent) !important;
+}
+
+z-button[zType="default"]:hover,
+button[z-button][zType="default"]:hover,
+a[z-button][zType="default"]:hover {
+  background-color: color-mix(in oklch, var(--primary) 15%, transparent) !important;
+  border-color: color-mix(in oklch, var(--primary) 40%, transparent) !important;
+}
+
+z-button[zType="destructive"]:hover,
+button[z-button][zType="destructive"]:hover,
+a[z-button][zType="destructive"]:hover {
+  background-color: color-mix(in oklch, var(--destructive) 15%, transparent) !important;
+}
+
+/* Active/Pressed feedback */
+z-button:active,
+button[z-button]:active,
+a[z-button]:active,
+z-button.active,
+button[z-button].active,
+a[z-button].active,
+.toggle-button:active {
+  background-color: color-mix(in oklch, var(--primary) 15%, transparent) !important;
+  border-color: color-mix(in oklch, var(--primary) 40%, transparent) !important;
+}
+
+z-button[zType="destructive"]:active,
+button[z-button][zType="destructive"]:active,
+a[z-button][zType="destructive"]:active {
+  background-color: color-mix(in oklch, var(--destructive) 20%, transparent) !important;
+  border-color: color-mix(in oklch, var(--destructive) 50%, transparent) !important;
+}
+
+/* Ensure text-destructive buttons globally display in destructive red color */
+button.text-destructive,
+z-button.text-destructive,
+button[z-button].text-destructive,
+.text-destructive {
+  color: var(--destructive) !important;
+}
+
+button.text-destructive:hover,
+z-button.text-destructive:hover,
+button[z-button].text-destructive:hover {
+  background-color: color-mix(in oklch, var(--destructive) 15%, transparent) !important;
+}
+
+/* Square styling for icon-only buttons */
+z-button[data-icon-only],
+button[z-button][data-icon-only],
+a[z-button][data-icon-only] {
+  aspect-ratio: 1 / 1 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: auto !important;
 }

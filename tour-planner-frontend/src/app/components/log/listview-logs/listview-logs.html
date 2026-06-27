@@ -1,0 +1,66 @@
+@if (tour()) {
+  <div class="flex flex-col gap-6 p-4 w-full max-w-full overflow-x-hidden">
+    <div class="flex flex-row justify-between items-center">
+      <div>
+        <h2 class="text-2xl font-bold">Logs</h2>
+      </div>
+      @if (!isAddingLog() && !editingLog()) {
+        <button
+          z-button zType="ghost" zSize="sm"
+          class="text-primary glass-card hover:bg-primary/10 transition-all duration-200 w-fit"
+          (click)="isAddingLog.set(true)"
+        >
+          <span class="material-icons text-sm mr-1">add</span>
+          Add Log
+        </button>
+      }
+    </div>
+
+    <hr class="border-white/25" />
+
+    <div class="space-y-4">
+      @if (isAddingLog()) {
+        <app-create-log
+          [tourId]="tour()!.id!"
+          (logCreated)="isAddingLog.set(false); loadLogs()"
+          (cancel)="isAddingLog.set(false)"
+        />
+      } @else if (editingLog()) {
+        <app-edit-log
+          [log]="editingLog()!"
+          (logUpdated)="onLogUpdated()"
+          (cancel)="cancelEdit()"
+        />
+      } @else {
+        @if (isLoadingLogs()) {
+          <div class="flex justify-center py-8">
+            <span class="material-icons animate-spin text-muted-foreground text-3xl">sync</span>
+          </div>
+        } @else if (logs().length === 0) {
+          <div class="p-12 border-2 border-dashed border-white/30 rounded-2xl glass-card flex flex-col items-center gap-3 opacity-80">
+            <span class="material-icons text-4xl text-muted-foreground">history</span>
+            <p class="text-sm font-medium text-muted-foreground">No logs recorded yet for this tour.</p>
+            <button 
+              z-button zType="ghost" zSize="sm" 
+              class="text-primary glass-card hover:bg-primary/10 transition-all duration-200"
+              (click)="isAddingLog.set(true)"
+            >
+              Create your first log
+            </button>
+          </div>
+        } @else {
+          <div class="flex flex-col gap-4">
+            @for (log of logs(); track log.id) {
+              <app-log-item [log]="log" (logDeleted)="loadLogs()" (logEdit)="startEdit($event)" />
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+} @else {
+  <div class="flex flex-col items-center justify-center h-full py-20 opacity-50">
+    <span class="material-icons text-6xl">error_outline</span>
+    <p class="mt-4 text-lg">No tour selected.</p>
+  </div>
+}

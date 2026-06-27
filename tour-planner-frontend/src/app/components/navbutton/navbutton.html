@@ -3,7 +3,9 @@
   z-button
   zType="outline"
   [zTooltip]="label"
+  zPosition="right"
   [class.active]="isActive"
+  [zDisabled]="disabled"
   (click)="onClick()"
 >
   <mat-icon>{{ icon }}</mat-icon>

@@ -8,10 +8,10 @@ export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 export const tooltipPositionVariants = cva('absolute', {
   variants: {
     position: {
-      top: 'bottom-0 translate-y-full left-[calc(50%-5px)]',
-      bottom: '-top-2.5 translate-y-0 rotate-180 left-[calc(50%-5px)]',
-      left: 'top-[calc(50%-5px)] rotate-270 translate-y-0 -right-2.5',
-      right: 'top-[calc(50%-5px)] translate-y-0 rotate-90 -left-2.5',
+      top: 'bottom-0 translate-y-full left-[calc(50%-0.3125rem)]',
+      bottom: '-top-2.5 translate-y-0 rotate-180 left-[calc(50%-0.3125rem)]',
+      left: 'top-[calc(50%-0.3125rem)] rotate-270 translate-y-0 -right-2.5',
+      right: 'top-[calc(50%-0.3125rem)] translate-y-0 rotate-90 -left-2.5',
     },
   },
 });

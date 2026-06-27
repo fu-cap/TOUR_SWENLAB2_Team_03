@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using TourPlanner.DataAccessLayer.Enums;
 using Npgsql;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Register DbContext
@@ -23,7 +25,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ITourRepository, TourRepository>();
-builder.Services.AddScoped<ITourService, TourService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddHttpClient<ITourService, TourService>();
 
 builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<ILogService, LogService>();
@@ -36,7 +39,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "http://localhost")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
