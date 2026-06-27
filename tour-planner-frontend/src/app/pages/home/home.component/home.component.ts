@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy, signal, inject, DestroyRef, effect } from
 import * as L from 'leaflet';
 import { Content} from '@/components/content/content';
 import { Navbar, AppState } from '@/components/navbar/navbar';
+import { SelectedTourIndicator } from '@/components/selected-tour-indicator/selected-tour-indicator';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
-  imports: [Navbar, Content],
+  imports: [Navbar, Content, SelectedTourIndicator],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
