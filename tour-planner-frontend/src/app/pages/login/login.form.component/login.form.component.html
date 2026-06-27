@@ -20,23 +20,33 @@
   <z-form-field #fp="zardId" zardId="password">
     <label z-form-label [for]="fp.id()" zRequired>Password</label>
     <z-form-control>
-      <input
-        z-input
-        [id]="fp.id()"
-        type="password"
-        placeholder="Enter your password"
-        formControlName="password"
-        class="form-input"
-      />
+      <div class="relative">
+        <input
+          z-input
+          [id]="fp.id()"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Enter your password"
+          formControlName="password"
+          class="form-input pr-10"
+        />
+        <button
+          type="button"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+          (click)="showPassword = !showPassword"
+          [title]="showPassword ? 'Hide password' : 'Show password'"
+        >
+          <span class="material-icons text-base">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+        </button>
+      </div>
     </z-form-control>
     @if (form.get('password')?.invalid && form.get('password')?.touched) {
       <z-form-message>Please enter your password.</z-form-message>
     }
   </z-form-field>
   <div class="content-center">
-    <button z-button zType="default" type="submit" class="form-send-button">Login</button>
+    <button z-button zType="default" type="submit" [zDisabled]="form.invalid" class="form-send-button">Login</button>
   </div>
   <div class="content-bottom">
-    <button z-button zType="default" type="button" (click)="changeStatus()" class="form-change-form">Register</button>
+    <button z-button zType="ghost" type="button" (click)="changeStatus()" class="form-change-form">Register</button>
   </div>
 </form>

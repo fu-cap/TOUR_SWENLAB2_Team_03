@@ -7,12 +7,12 @@ export interface Waypoint {
   longitude: number;
 }
 
-export type TransportType = 
-  | 'driving-car' 
-  | 'driving-hgv' 
-  | 'cycling-regular' 
-  | 'cycling-road' 
-  | 'foot-walking' 
+export type TransportType =
+  | 'driving-car'
+  | 'driving-hgv'
+  | 'cycling-regular'
+  | 'cycling-road'
+  | 'foot-walking'
   | 'foot-hiking';
 
 export interface TourLog {
@@ -22,25 +22,23 @@ export interface TourLog {
   comment: string;
   difficulty: number;
   totalDistanceKm: number;
-  totalTimeMin: string; // TimeSpan string
+  totalTimeMin: string;
   rating: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Tour {
-  id?: string; // Guid is string in JSON
+  id?: string;
   name: string;
   description: string;
-  waypoints: Waypoint[]; 
+  waypoints: Waypoint[];
   transportType: TransportType;
-
-  // Felder von API befüllt
   distanceKm?: number;
-  estimatedTime?: string; // TimeSpan string from Backend "HH:mm:ss"
-
-  // Hier speicherst du die kompletten GeoJSON-Daten für Leaflet
-  routeInformation: string; // Backend sends polyline string
-
-  // Statistiken
+  estimatedTime?: string;
+  routeInformation: string;
   popularity?: number;
   childFriendliness?: number;
+  co2EmittedGrams?: number;
+  co2SavedGrams?: number;
 }

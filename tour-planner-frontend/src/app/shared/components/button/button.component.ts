@@ -72,7 +72,7 @@ export class ZardButtonComponent implements OnDestroy {
 
       const check = () => {
         const el = this.elementRef.nativeElement;
-        const hasIcon = el.querySelector('ng-icon') !== null;
+        const hasIcon = el.querySelector('ng-icon, mat-icon, .material-icons') !== null;
         const children = Array.from<Node>(el.childNodes);
         const hasText = children.some(node => {
           if (node.nodeType === 3) {
@@ -80,7 +80,7 @@ export class ZardButtonComponent implements OnDestroy {
           }
           if (node.nodeType === 1) {
             const element = node as HTMLElement;
-            if (element.matches('ng-icon')) {
+            if (element.matches('ng-icon, mat-icon, .material-icons')) {
               return false;
             }
             return element.textContent?.trim() !== '';

@@ -1,9 +1,13 @@
-<div class="relative h-full flex flex-col transition-all duration-300 ease-in-out" [class.w-0]="isCollapsed" [class.w-[450px]]="!isCollapsed">
-  <!-- Toggle Button -->
+<div class="relative h-full flex flex-col transition-all duration-300 ease-in-out"
+     [style.width]="isCollapsed ? '0' : '28.125rem'"
+     [style.min-width]="isCollapsed ? '0' : '28.125rem'"
+     [style.max-width]="isCollapsed ? '0' : '28.125rem'">
   @if (showToggle) {
     <button 
-      z-button zType="outline" zShape="circle"
-      class="absolute -right-3 top-1/2 -translate-y-1/2 z-50 bg-background shadow-md border-sidebar-border h-8 w-8 min-w-0 p-0"
+      type="button"
+      [class.collapsed-state]="isCollapsed"
+      [class.expanded-state]="!isCollapsed"
+      class="toggle-button glass-panel active:bg-primary/20"
       (click)="toggleCollapse.emit()"
     >
       <span class="material-icons text-lg transition-transform duration-300" [class.rotate-180]="isCollapsed">
@@ -13,15 +17,15 @@
   }
 
 
-  <div class="scroll-container flex flex-col h-full p-2 rounded-3xl bg-sidebar border border-sidebar-border shadow-sm overflow-y-auto overflow-x-hidden"
+  <div class="scroll-container flex flex-col h-full p-2 rounded-3xl glass-panel overflow-y-auto overflow-x-hidden"
        [class.justify-center]="centerContent"
        [class.opacity-0]="isCollapsed" [class.pointer-events-none]="isCollapsed">
     @switch (activeState) {
       @case ('overview') { <app-listview-tours (stateChange)="activeStateChange.emit($event)" /> }
-      @case ('details')  { <app-detailsview-tour /> }
+      @case ('details')  { <app-detailsview-tour (stateChange)="activeStateChange.emit($event)" /> }
       @case ('edit')     { <app-edit-tour (stateChange)="activeStateChange.emit($event)" /> }
       @case ('logs')     { <app-listview-logs /> }
-      @case ('user')     { <p>Account</p> }
+      @case ('user')     { <app-account /> }
       @case ('create')   { <app-create-tour /> }
       @case ('info')     { <app-impressum /> }
       @default           { <ng-content /> }

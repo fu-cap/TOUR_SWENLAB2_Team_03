@@ -1,4 +1,4 @@
-<div class="flex flex-col justify-between h-full p-2 rounded-2xl bg-sidebar border border-sidebar-border shadow-sm">
+<div class="flex flex-col justify-between h-full p-2 rounded-2xl glass-panel">
   <div id="nav_top" class="flex flex-col gap-3">
     <div class="flex flex-col gap-3">
       @for (item of mainNavItems; track item.state) {
@@ -7,6 +7,7 @@
           [label]="item.label"
           [state]="item.state"
           [isActive]="activeState() === item.state"
+          [disabled]="isItemDisabled(item)"
           (stateChange)="onStateChange($event)"
         />
       }

@@ -13,6 +13,7 @@ import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocod
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { RouteService } from '@/shared/core/services/route.service';
+import { AuthService } from '@/shared/core/services/auth.service';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { toast } from 'ngx-sonner';
 
@@ -37,6 +38,7 @@ export class CreateTour implements OnInit, OnDestroy {
   private tourService = inject(TourService);
   private mapService = inject(MapService);
   private routeService = inject(RouteService);
+  private authService = inject(AuthService);
 
   transportOptions: { value: TransportType; icon: string; label: string }[] = [
     { value: 'driving-car', icon: 'directions_car', label: 'Car' },
@@ -49,7 +51,7 @@ export class CreateTour implements OnInit, OnDestroy {
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
+    description: new FormControl(''),
     transportType: new FormControl<TransportType>('foot-walking', [Validators.required]),
     waypoints: new FormArray<FormGroup>([]),
   });
@@ -80,11 +82,9 @@ export class CreateTour implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // A tour needs at least a start and a destination
-    this.addWaypoint(); // Start
-    this.addWaypoint(); // Destination
+    this.addWaypoint();
+    this.addWaypoint();
 
-    // Listen to form changes to update map markers and route
     this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
       this.syncMapMarkers();
       this.syncRoute();
@@ -145,7 +145,6 @@ export class CreateTour implements OnInit, OnDestroy {
       lng: new FormControl<number | null>(data?.longitude || null, [Validators.required]),
     });
 
-    // Setup autocomplete for this waypoint
     waypointGroup.controls.label.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -155,7 +154,6 @@ export class CreateTour implements OnInit, OnDestroy {
           return of([]);
         }
 
-        // Find current index of this group in the array
         const currentIndex = this.waypoints.controls.indexOf(waypointGroup);
         this.activeWaypointIndex.set(currentIndex);
 
@@ -184,10 +182,9 @@ export class CreateTour implements OnInit, OnDestroy {
       lat: result.lat,
       lng: result.lng
     }, { emitEvent: true });
-    
-    // Mark as pristine to hide the popover (template checks for dirty)
+
     group.get('label')?.markAsPristine();
-    
+
     this.searchResults.set([]);
     this.activeWaypointIndex.set(null);
   }
@@ -203,7 +200,7 @@ export class CreateTour implements OnInit, OnDestroy {
       const formValue = this.form.getRawValue();
 
       const request: CreateTourRequest = {
-        userId: '00000000-0000-0000-0000-000000000000', // Placeholder
+        userId: this.authService.currentUser()?.id ?? '',
         name: formValue.name ?? '',
         description: formValue.description ?? '',
         transportType: formValue.transportType as TransportType,
@@ -242,8 +239,8 @@ export class CreateTour implements OnInit, OnDestroy {
       transportType: 'foot-walking'
     });
     this.waypoints.clear();
-    this.addWaypoint(); // New Start
-    this.addWaypoint(); // New Destination
+    this.addWaypoint();
+    this.addWaypoint();
     this.mapService.clearMap();
     this.routeDistance.set(null);
     this.routeDuration.set(null);

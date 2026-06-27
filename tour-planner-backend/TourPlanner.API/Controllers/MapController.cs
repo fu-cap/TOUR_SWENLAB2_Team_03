@@ -9,11 +9,13 @@ namespace TourPlanner.API.Controllers
     public class MapController : ControllerBase
     {
         private readonly ITourService _tourService;
+        private readonly ILogger<MapController> _logger;
         private static readonly HttpClient _httpClient = new();
 
-        public MapController(ITourService tourService)
+        public MapController(ITourService tourService, ILogger<MapController> logger)
         {
             _tourService = tourService;
+            _logger = logger;
         }
 
         [HttpGet("geocode")]
@@ -25,18 +27,19 @@ namespace TourPlanner.API.Controllers
             if (string.IsNullOrEmpty(apiKey)) return StatusCode(500, "API Key missing in backend");
 
             var url = $"https://api.openrouteservice.org/geocode/search?api_key={apiKey}&text={Uri.EscapeDataString(text)}&size=5";
-            
-            try 
+
+            try
             {
                 var response = await _httpClient.GetAsync(url);
                 if (!response.IsSuccessStatusCode) return StatusCode((int)response.StatusCode);
-                
+
                 var content = await response.Content.ReadAsStringAsync();
                 return Content(content, "application/json");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error while calling geocode API for text: {Text}", text);
+                return StatusCode(500, new { message = "Geocoding service unavailable" });
             }
         }
 
@@ -45,36 +48,37 @@ namespace TourPlanner.API.Controllers
         {
             if (coordinates == null || coordinates.Count < 2) return BadRequest("At least 2 coordinates required");
 
+            if (coordinates.Any(c => c == null || c.Length < 2))
+                return BadRequest("Each coordinate must contain at least [longitude, latitude]");
+
             string? apiKey = Environment.GetEnvironmentVariable("OpenRoute_ApiKey");
             if (string.IsNullOrEmpty(apiKey)) return StatusCode(500, "API Key missing in backend");
 
-            // Correct profile mapping if necessary, but we are sending strings like 'foot-walking' 
-            // which ORS expects.
             var url = $"https://api.openrouteservice.org/v2/directions/{transportType}/geojson";
-            
-            try 
+
+            try
             {
                 var requestBody = new { coordinates = coordinates };
-                
-                // Use a local request to avoid thread-safety issues with static client headers
+
                 using var request = new HttpRequestMessage(HttpMethod.Post, url);
                 request.Headers.TryAddWithoutValidation("Authorization", apiKey);
                 request.Content = JsonContent.Create(requestBody);
 
                 var response = await _httpClient.SendAsync(request);
-                
-                if (!response.IsSuccessStatusCode) 
+
+                if (!response.IsSuccessStatusCode)
                 {
                     var error = await response.Content.ReadAsStringAsync();
                     return StatusCode((int)response.StatusCode, error);
                 }
-                
+
                 var content = await response.Content.ReadAsStringAsync();
                 return Content(content, "application/json");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                _logger.LogError(ex, "Error while calling directions API for transport type: {TransportType}", transportType);
+                return StatusCode(500, new { message = "Route service unavailable" });
             }
         }
     }

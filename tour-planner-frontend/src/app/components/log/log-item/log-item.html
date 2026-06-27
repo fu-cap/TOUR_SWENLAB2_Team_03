@@ -1,44 +1,57 @@
-<div class="group relative flex bg-sidebar border border-sidebar-border rounded-xl overflow-hidden hover:shadow-md transition-all">
-  <!-- Main Content Area -->
+<div class="group relative flex glass-card rounded-xl overflow-hidden hover:shadow-md transition-all duration-300">
   <div class="flex-1 p-3 flex flex-col gap-2 min-w-0">
-    <div class="flex justify-between items-start">
-      <div class="flex flex-col">
-        <span class="text-[10px] font-bold text-foreground">{{ log.dateTime | date:'mediumDate' }}</span>
-        <div class="flex items-center gap-1">
-          @for (star of [1,2,3,4,5]; track star) {
-            <span class="material-icons text-[10px]" [class.text-primary]="star <= log.rating" [class.text-muted-foreground]="star > log.rating">
-              {{ star <= log.rating ? 'star' : 'star_border' }}
-            </span>
+    <div class="flex flex-col gap-1.5">
+      <div class="flex justify-between items-start">
+        <span class="text-[0.625rem] font-bold text-foreground">
+          @if (log.updatedAt && log.updatedAt !== log.createdAt) {
+            Updated: {{ log.updatedAt | date:'mediumDate' }}
+          } @else {
+            Created: {{ log.createdAt | date:'mediumDate' }}
           }
+        </span>
+      </div>
+
+      <div class="flex flex-col gap-0.5">
+        <div class="flex items-center gap-1">
+          <span class="text-[0.5625rem] font-bold text-muted-foreground w-14">Rating:</span>
+          <div class="flex items-center">
+            @for (star of [1,2,3,4,5]; track star) {
+              <span class="material-icons text-[0.625rem]" [class.text-primary]="star <= log.rating" [class.text-muted-foreground]="star > log.rating">
+                {{ star <= log.rating ? 'star' : 'star_border' }}
+              </span>
+            }
+          </div>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="text-[0.5625rem] font-bold text-muted-foreground w-14">Difficulty:</span>
+          <div class="flex items-center">
+            @for (star of [1,2,3,4,5]; track star) {
+              <span class="material-icons text-[0.625rem]" [class.text-orange-500]="star <= log.difficulty" [class.text-muted-foreground]="star > log.difficulty">
+                {{ star <= log.difficulty ? 'star' : 'star_border' }}
+              </span>
+            }
+          </div>
         </div>
       </div>
-      <span class="text-[10px] px-1.5 py-0.5 rounded bg-muted font-bold">Diff: {{ log.difficulty }}</span>
     </div>
 
-    <p class="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">{{ log.comment }}</p>
+    <p class="text-[0.6875rem] text-muted-foreground leading-relaxed line-clamp-2">
+      {{ log.comment || '\u00A0' }}
+    </p>
 
-    <div class="flex gap-3 pt-1 border-t border-sidebar-border/50 text-[9px] font-bold text-muted-foreground">
+    <div class="flex gap-3 pt-1 border-t border-white/25 text-[0.5625rem] font-bold text-muted-foreground">
       <div class="flex items-center gap-1">
-        <span class="material-icons text-[10px]">route</span>
+        <span class="material-icons text-[0.625rem]">route</span>
         {{ log.totalDistanceKm }} km
       </div>
       <div class="flex items-center gap-1">
-        <span class="material-icons text-[10px]">timer</span>
+        <span class="material-icons text-[0.625rem]">timer</span>
         {{ log.totalTimeMin }}
       </div>
     </div>
   </div>
 
-  <!-- Segmented Action Bar -->
-  <div class="w-10 flex flex-col border-l border-sidebar-border bg-muted/20 divide-y divide-sidebar-border opacity-0 group-hover:opacity-100 transition-opacity">
-    <button
-      z-button zType="ghost" zSize="sm"
-      class="flex-1 rounded-none text-primary hover:bg-primary/5 p-0 min-w-0 h-auto"
-      (click)="logEdit.emit(log)"
-      title="Edit log"
-    >
-      <span class="material-icons text-base">edit</span>
-    </button>
+  <div class="w-14 flex flex-col border-l border-white/20 bg-white/10 divide-y divide-white/20 opacity-0 group-hover:opacity-100 transition-opacity">
     <button
       z-button zType="ghost" zSize="sm"
       class="flex-1 rounded-none text-destructive hover:bg-destructive/10 p-0 min-w-0 h-auto"
@@ -46,6 +59,14 @@
       title="Delete log"
     >
       <span class="material-icons text-base">delete</span>
+    </button>
+    <button
+      z-button zType="ghost" zSize="sm"
+      class="flex-1 rounded-none text-primary hover:bg-primary/5 p-0 min-w-0 h-auto"
+      (click)="logEdit.emit(log)"
+      title="Edit log"
+    >
+      <span class="material-icons text-base">edit</span>
     </button>
   </div>
 </div>

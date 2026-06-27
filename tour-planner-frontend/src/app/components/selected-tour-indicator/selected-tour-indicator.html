@@ -1,0 +1,19 @@
+@if (tour()) {
+  <div class="glass-card rounded-xl p-3 flex flex-col gap-2 w-52">
+    <div class="flex items-center gap-2 min-w-0">
+      <div class="flex p-1.5 bg-primary/10 rounded-lg text-primary shrink-0">
+        <span class="material-icons text-base">{{ getTransportIcon(tour()?.transportType) }}</span>
+      </div>
+      <div class="min-w-0 flex-1">
+        <p class="text-[0.625rem] uppercase font-bold text-muted-foreground tracking-wider leading-none mb-0.5">Selected Tour</p>
+        <p class="text-sm font-semibold truncate leading-tight" [title]="tour()!.name">{{ tour()!.name }}</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-1.5 flex-wrap">
+      <z-badge zType="outline">{{ tour()!.waypoints.length }} Stops</z-badge>
+      @if (tour()!.distanceKm) {
+        <z-badge zType="secondary">{{ tour()!.distanceKm | number:'1.0-1' }} km</z-badge>
+      }
+    </div>
+  </div>
+}

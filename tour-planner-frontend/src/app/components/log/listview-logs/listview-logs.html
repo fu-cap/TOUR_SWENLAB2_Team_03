@@ -1,15 +1,13 @@
 @if (tour()) {
   <div class="flex flex-col gap-6 p-4 w-full max-w-full overflow-x-hidden">
-    <!-- Header -->
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-row justify-between items-center">
       <div>
         <h2 class="text-2xl font-bold">Logs</h2>
-        <p class="text-muted-foreground text-sm">Tour: {{ tour()?.name }}</p>
       </div>
       @if (!isAddingLog() && !editingLog()) {
         <button
-          z-button zType="outline" zSize="sm"
-          class="text-primary border-sidebar-border w-fit"
+          z-button zType="ghost" zSize="sm"
+          class="text-primary glass-card hover:bg-primary/10 transition-all duration-200 w-fit"
           (click)="isAddingLog.set(true)"
         >
           <span class="material-icons text-sm mr-1">add</span>
@@ -18,9 +16,8 @@
       }
     </div>
 
-    <hr class="border-sidebar-border" />
+    <hr class="border-white/25" />
 
-    <!-- Tour Logs Section -->
     <div class="space-y-4">
       @if (isAddingLog()) {
         <app-create-log
@@ -40,10 +37,16 @@
             <span class="material-icons animate-spin text-muted-foreground text-3xl">sync</span>
           </div>
         } @else if (logs().length === 0) {
-          <div class="p-12 border-2 border-dashed border-sidebar-border rounded-2xl bg-muted/10 flex flex-col items-center gap-3 opacity-60">
+          <div class="p-12 border-2 border-dashed border-white/30 rounded-2xl glass-card flex flex-col items-center gap-3 opacity-80">
             <span class="material-icons text-4xl text-muted-foreground">history</span>
             <p class="text-sm font-medium text-muted-foreground">No logs recorded yet for this tour.</p>
-            <button z-button zType="outline" zSize="sm" (click)="isAddingLog.set(true)">Create your first log</button>
+            <button 
+              z-button zType="ghost" zSize="sm" 
+              class="text-primary glass-card hover:bg-primary/10 transition-all duration-200"
+              (click)="isAddingLog.set(true)"
+            >
+              Create your first log
+            </button>
           </div>
         } @else {
           <div class="flex flex-col gap-4">

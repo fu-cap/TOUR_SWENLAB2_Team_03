@@ -7,6 +7,7 @@ namespace TourPlanner.DataAccessLayer.Repositories
         Task<User> AddAsync(User user);
         Task<List<User>> GetAllUsersAsync();
         Task<User?> GetByIdAsync(Guid id);
+        Task<User?> GetByUsernameAsync(string username);
         Task UpdateAsync(User user);
         Task DeleteAsync(Guid id);
     }

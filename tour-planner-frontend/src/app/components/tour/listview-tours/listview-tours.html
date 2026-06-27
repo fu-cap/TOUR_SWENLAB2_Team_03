@@ -2,12 +2,52 @@
   <div class="flex justify-between items-center">
     <div>
       <h2 class="text-2xl font-bold">Overview</h2>
-      <p class="text-muted-foreground">Tours</p>
     </div>
-    <button z-button zType="outline" zSize="sm" (click)="loadTours()" [zLoading]="isLoading()" class="text-primary border-sidebar-border">
-      <span class="material-icons text-sm mr-2">refresh</span>
-      Refresh
-    </button>
+    <div class="flex gap-2">
+      <input
+        type="file"
+        #fileInput
+        class="hidden"
+        accept=".json"
+        (change)="onImportFileSelected($event)"
+      />
+      <button
+        z-button
+        zType="outline"
+        zSize="sm"
+        (click)="fileInput.click()"
+        title="Import tours from JSON file"
+      >
+        <span class="material-icons text-sm mr-1">file_upload</span>
+        Import
+      </button>
+      <button
+        z-button
+        zType="outline"
+        zSize="sm"
+        [disabled]="tours().length === 0"
+        (click)="onExportTours()"
+        title="Export all tours to JSON file"
+      >
+        <span class="material-icons text-sm mr-1">file_download</span>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <div class="relative w-full">
+    <z-input-group [zAddonBefore]="searchIcon">
+      <input
+        z-input
+        type="text"
+        placeholder="Search tours, logs, locations..."
+        [value]="rawSearchQuery()"
+        (input)="onSearchChange($event)"
+      />
+    </z-input-group>
+    <ng-template #searchIcon>
+      <span class="material-icons text-muted-foreground text-sm">search</span>
+    </ng-template>
   </div>
 
   @if (isLoading() && tours().length === 0) {
@@ -16,46 +56,82 @@
       <p class="mt-4 text-lg">Loading your tours...</p>
     </div>
   } @else if (tours().length === 0) {
-    <div class="flex flex-col items-center justify-center py-20 border-2 border-dashed border-sidebar-border rounded-xl bg-muted/30">
+    <div class="flex flex-col items-center justify-center py-20 border-2 border-dashed border-white/30 rounded-xl glass-card shadow-sm">
       <span class="material-icons text-6xl text-muted-foreground/30">map</span>
       <p class="mt-4 text-xl font-semibold text-muted-foreground">No tours found</p>
       <p class="text-muted-foreground mb-6">Start by creating your first adventure.</p>
+      @if (rawSearchQuery().length === 0) {
+        <button z-button zType="default" (click)="stateChange.emit('create')">
+          <span class="material-icons text-sm mr-1">add</span>
+          Create first tour
+        </button>
+      }
     </div>
   } @else {
     <div class="flex flex-col gap-4">
       @for (tour of tours(); track tour.id) {
-        <div (click)="selectTour(tour)" class="group relative cursor-pointer flex bg-sidebar border border-sidebar-border rounded-xl overflow-hidden hover:shadow-md transition-all h-30">
+        <div (click)="selectTour(tour)" class="group relative cursor-pointer flex glass-card rounded-xl overflow-hidden hover:shadow-md transition-all duration-300" style="transition: box-shadow 0.3s, background 0.3s;">
 
-          <!-- Main Content Area -->
-          <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
+          <div class="flex-1 p-4 flex flex-col gap-3 min-w-0">
+
             <div class="flex gap-3 items-center min-w-0">
               <div class="flex p-2 bg-primary/10 rounded-lg text-primary shrink-0">
                 <span class="material-icons text-xl">{{ getTransportIcon(tour.transportType) }}</span>
               </div>
               <div class="min-w-0">
-                <h3 class="font-bold text-lg truncate leading-tight" [title]="tour.name">{{ tour.name }}</h3>
+                <h3 class="font-bold text-base truncate leading-tight" [title]="tour.name">{{ tour.name }}</h3>
                 <p class="text-xs text-muted-foreground line-clamp-1">{{ tour.description || 'No description provided.' }}</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-4 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/80 px-1">
+            <div class="flex items-center gap-3 text-xs text-muted-foreground">
               <div class="flex items-center gap-1">
-                <span class="material-icons text-xs">route</span>
-                {{ tour.distanceKm }} km
+                <span class="material-icons text-sm">route</span>
+                <span class="font-medium">{{ tour.distanceKm }} km</span>
               </div>
-              <div class="flex items-center gap-1 border-l border-sidebar-border pl-4">
-                <span class="material-icons text-xs">timer</span>
-                {{ formatDuration(tour.estimatedTime) }}
+              <span class="text-white/30">·</span>
+              <div class="flex items-center gap-1">
+                <span class="material-icons text-sm">timer</span>
+                <span class="font-medium">{{ formatDuration(tour.estimatedTime) }}</span>
               </div>
-              <div class="flex items-center gap-1 border-l border-sidebar-border pl-4">
-                <span class="material-icons text-xs">place</span>
-                {{ tour.waypoints.length }} Stops
+              <span class="text-white/30">·</span>
+              <div class="flex items-center gap-1">
+                <span class="material-icons text-sm">place</span>
+                <span class="font-medium">{{ tour.waypoints.length }} Stops</span>
               </div>
             </div>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <span
+                class="flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                title="Popularity"
+              >
+                <span class="material-icons text-xs">star</span>
+                {{ tour.popularity ?? 0 }}
+              </span>
+              @if (tour.childFriendliness != null) {
+                <span
+                  class="flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400"
+                  title="Child Friendliness (out of 10)"
+                >
+                  <span class="material-icons text-xs">child_friendly</span>
+                  {{ tour.childFriendliness | number:'1.0-1' }}/10
+                </span>
+              }
+              @if ((tour.co2SavedGrams ?? 0) > 0) {
+                <span
+                  class="flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  title="CO₂ saved vs. driving"
+                >
+                  <span class="material-icons text-xs">eco</span>
+                  {{ (tour.co2SavedGrams ?? 0) >= 1000 ? (((tour.co2SavedGrams ?? 0) / 1000) | number:'1.1-2') + ' kg saved' : ((tour.co2SavedGrams ?? 0) | number:'1.0-1') + ' g saved' }}
+                </span>
+              }
+            </div>
+
           </div>
 
-          <!-- Segmented Action Bar -->
-          <div class="w-12 flex flex-col border-l border-sidebar-border bg-muted/20 divide-y divide-sidebar-border">
+          <div class="w-14 flex flex-col items-center border-l border-white/20 bg-white/10 divide-y divide-white/20 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               z-button zType="ghost" zSize="sm"
               class="flex-1 rounded-none text-destructive hover:bg-destructive/10"

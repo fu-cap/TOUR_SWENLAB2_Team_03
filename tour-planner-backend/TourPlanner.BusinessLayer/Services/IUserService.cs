@@ -8,7 +8,8 @@ namespace TourPlanner.BusinessLayer.Services
         Task<User> CreateUserAsync(CreateUserDto createUserDto);
         Task<List<User>> GetAllUsersAsync();
         Task<User?> GetUserByIdAsync(Guid id);
-        Task UpdateUserAsync(Guid id, CreateUserDto updateUserDto);
+        Task<User?> AuthenticateAsync(string username, string password);
+        Task UpdateUserAsync(Guid id, UpdateUserDto updateUserDto);
         Task DeleteUserAsync(Guid id);
     }
 }

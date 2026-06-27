@@ -2,12 +2,13 @@ import { Component, OnInit, OnDestroy, signal, inject, DestroyRef, effect } from
 import * as L from 'leaflet';
 import { Content} from '@/components/content/content';
 import { Navbar, AppState } from '@/components/navbar/navbar';
+import { SelectedTourIndicator } from '@/components/selected-tour-indicator/selected-tour-indicator';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
-  imports: [Navbar, Content],
+  imports: [Navbar, Content, SelectedTourIndicator],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private routeLayer = L.layerGroup();
   private destroyRef = inject(DestroyRef);
   private mapService = inject(MapService);
-  
+
   currentState = signal<AppState>('overview');
   isCollapsed = signal(false);
 
@@ -25,7 +26,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private readonly EUROPE_ZOOM = 5;
 
   constructor() {
-    // Automatically reset map when switching back to overview
     effect(() => {
       if (this.currentState() === 'overview' && this.map) {
         this.resetToDefaultView();
@@ -100,7 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     const customIcon = L.divIcon({
       className: 'custom-div-icon',
-      html: "<div style='background-color:#3b82f6; width:12px; height:12px; border:2px solid white; border-radius:50%; box-shadow:0 0 4px rgba(0,0,0,0.5);'></div>",
+      html: "<div style='background-color:#3b82f6; width:0.75rem; height:0.75rem; border:0.125rem solid white; border-radius:50%; box-shadow:0 0 0.25rem rgba(0,0,0,0.5);'></div>",
       iconSize: [12, 12],
       iconAnchor: [6, 6]
     });

@@ -28,6 +28,11 @@ namespace TourPlanner.DataAccessLayer.Repositories
             return await _context.Users
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
+        public async Task<User?> GetByUsernameAsync(string username)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == username);
+        }
         public async Task UpdateAsync(User user)
         {
             var existingUser = await _context.Users

@@ -25,6 +25,9 @@ CREATE TABLE app_user (
     username      VARCHAR(50)  NOT NULL,
     email         VARCHAR(255) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
+    gender        VARCHAR(50)  NOT NULL,
+    first_name    VARCHAR(100) NOT NULL,
+    last_name     VARCHAR(100) NOT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT NOW(),
 
     CONSTRAINT pk_app_user       PRIMARY KEY (id),
@@ -82,6 +85,8 @@ CREATE TABLE tour_log (
     total_distance_km  NUMERIC(10,2) NOT NULL,
     total_time_min     INTEGER       NOT NULL,
     rating             SMALLINT      NOT NULL,
+    created_at         TIMESTAMP     NOT NULL DEFAULT NOW(),
+    updated_at         TIMESTAMP     NOT NULL DEFAULT NOW(),
 
     CONSTRAINT pk_tour_log       PRIMARY KEY (id),
     CONSTRAINT fk_tour_log_tour  FOREIGN KEY (tour_id) REFERENCES tour(id) ON DELETE CASCADE,
@@ -107,7 +112,7 @@ CREATE TRIGGER trg_tour_updated_at
     FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- =============================================================
---  KORRIGIERTER VIEW (w.label statt w.address & GROUP BY angepasst)
+--  VIEW
 -- =============================================================
 CREATE OR REPLACE VIEW v_tour_search AS
 SELECT
@@ -126,7 +131,7 @@ SELECT
     to_tsvector('english',
         coalesce(t.name,'')        || ' ' ||
         coalesce(t.description,'') || ' ' ||
-        coalesce(string_agg(DISTINCT w.label, ' '),'') || ' ' || -- HIER: label statt address
+        coalesce(string_agg(DISTINCT w.label, ' '),'') || ' ' ||
         coalesce(string_agg(DISTINCT l.comment, ' '),'')
     ) AS search_vector
 FROM tour t
@@ -139,7 +144,3 @@ GROUP BY
 CREATE CAST (text AS transport_type) 
     WITH INOUT 
     AS IMPLICIT;
-
-INSERT INTO app_user (id, username, email, password_hash)
-    VALUES ('00000000-0000-0000-0000-000000000000', 'system_user', 'system@example.com', 'no_hash_yet')
-    ON CONFLICT DO NOTHING;

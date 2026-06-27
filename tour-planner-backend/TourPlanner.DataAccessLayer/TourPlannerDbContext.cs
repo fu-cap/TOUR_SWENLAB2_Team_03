@@ -28,7 +28,7 @@ namespace TourPlanner.DataAccessLayer
                 entity.Property(e => e.Id).HasColumnName("id").HasDefaultValueSql("gen_random_uuid()");
                 entity.Property(e => e.TourId).HasColumnName("tour_id").IsRequired();
                 entity.Property(e => e.DateTime).HasColumnName("date_time").HasDefaultValueSql("NOW()");
-                entity.Property(e => e.Comment).HasColumnName("comment").IsRequired();
+                entity.Property(e => e.Comment).HasColumnName("comment");
                 entity.Property(e => e.Difficulty).HasColumnName("difficulty").IsRequired();
                 entity.Property(e => e.TotalDistanceKm).HasColumnName("total_distance_km").IsRequired();
                 entity.Property(e => e.TotalTimeMin).HasColumnName("total_time_min").IsRequired().HasConversion(
@@ -36,6 +36,8 @@ namespace TourPlanner.DataAccessLayer
                         v => TimeSpan.FromMinutes(v)
                     );
                 entity.Property(e => e.Rating).HasColumnName("rating").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("NOW()");
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("NOW()");
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -46,6 +48,9 @@ namespace TourPlanner.DataAccessLayer
                 entity.Property(e => e.Username).HasColumnName("username").IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Email).HasColumnName("email").IsRequired().HasMaxLength(255);
                 entity.Property(e => e.PasswordHash).HasColumnName("password_hash").IsRequired().HasMaxLength(255);
+                entity.Property(e => e.Gender).HasColumnName("gender").IsRequired().HasMaxLength(50);
+                entity.Property(e => e.FirstName).HasColumnName("first_name").IsRequired().HasMaxLength(100);
+                entity.Property(e => e.LastName).HasColumnName("last_name").IsRequired().HasMaxLength(100);
                 entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("NOW()");
 
                 entity.HasIndex(e => e.Username).IsUnique();
@@ -71,8 +76,10 @@ namespace TourPlanner.DataAccessLayer
                         v => TimeSpan.FromMinutes(v)
                     );
                 entity.Property(e => e.RouteInformation).HasColumnName("route_information"); // Note: Adding this to schema or mapping to map_image_path
-                entity.Property(e => e.Popularity).HasColumnName("popularity").HasDefaultValue(0.0);
-                entity.Property(e => e.ChildFriendliness).HasColumnName("child_friendliness").HasDefaultValue(0.0);
+                entity.Property(e => e.Popularity).HasColumnName("popularity").HasDefaultValueSql("0");
+                entity.Property(e => e.ChildFriendliness).HasColumnName("child_friendliness").HasDefaultValueSql("0");
+                entity.Ignore(e => e.Co2SavedGrams);    // computed on-the-fly, not stored
+                entity.Ignore(e => e.Co2EmittedGrams);  // computed on-the-fly, not stored
                 entity.Property(e => e.CreationDate).HasColumnName("created_at").HasDefaultValueSql("NOW()");
                 entity.Property(e => e.LastModifiedDate).HasColumnName("updated_at").HasDefaultValueSql("NOW()");
                 

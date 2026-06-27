@@ -1,6 +1,5 @@
 @if (tour()) {
   <div class="flex flex-col gap-6 p-4 w-full max-w-full overflow-x-hidden">
-    <!-- Header -->
     <div class="flex flex-col gap-2 min-w-0">
       <div class="flex items-center gap-3 min-w-0">
         <div class="flex p-3 bg-primary/10 rounded-xl text-primary shrink-0">
@@ -18,52 +17,125 @@
 
     <hr class="border-sidebar-border" />
 
-    <!-- Description Section -->
     <div class="space-y-2">
       <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Description</h3>
-      <div class="bg-muted/30 rounded-xl p-4 border border-sidebar-border">
+      <div class="glass-card rounded-xl p-4">
         <p class="text-sm leading-relaxed whitespace-pre-wrap">
           {{ tour()?.description || 'No description available for this tour.' }}
         </p>
       </div>
     </div>
 
-    <!-- Quick Stats Grid -->
     <div class="grid grid-cols-2 gap-4">
-      <div class="flex flex-col gap-1 p-3 bg-sidebar border border-sidebar-border rounded-xl">
+      <div class="flex flex-col gap-1 p-3 glass-card rounded-xl">
         <div class="flex items-center gap-2 text-primary">
           <span class="material-icons text-lg">route</span>
-          <span class="text-[10px] uppercase font-bold text-muted-foreground">Total Distance</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Total Distance</span>
         </div>
         <span class="text-xl font-bold">{{ tour()?.distanceKm }} km</span>
       </div>
 
-      <div class="flex flex-col gap-1 p-3 bg-sidebar border border-sidebar-border rounded-xl">
+      <div class="flex flex-col gap-1 p-3 glass-card rounded-xl">
         <div class="flex items-center gap-2 text-primary">
           <span class="material-icons text-lg">timer</span>
-          <span class="text-[10px] uppercase font-bold text-muted-foreground">Estimated Time</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Estimated Time</span>
         </div>
         <span class="text-xl font-bold">{{ formattedDuration() }}</span>
       </div>
+
+      <div class="flex flex-col gap-1 p-3 glass-card rounded-xl">
+        <div class="flex items-center gap-2 text-primary">
+          <span class="material-icons text-lg text-amber-500">trending_up</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Popularity</span>
+        </div>
+        <span class="text-xl font-bold">{{ tour()?.popularity != null ? (tour()?.popularity | number:'1.0-0') : '0' }}</span>
+      </div>
+
+      <div class="flex flex-col gap-1 p-3 glass-card rounded-xl">
+        <div class="flex items-center gap-2 text-primary">
+          <span class="material-icons text-lg text-blue-500">child_friendly</span>
+          <span class="text-[0.625rem] uppercase font-bold text-muted-foreground">Child Friendliness</span>
+        </div>
+        <span class="text-xl font-bold">{{ tour()?.childFriendliness != null ? (tour()?.childFriendliness | number:'1.1-2') + ' / 10' : 'N/A' }}</span>
+      </div>
     </div>
 
-    <!-- Waypoints List -->
+    <div class="flex flex-col gap-3 p-4 glass-card rounded-xl">
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-lg text-emerald-500">eco</span>
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground tracking-wider">Carbon Footprint</span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+          <span class="text-[0.625rem] uppercase font-bold text-emerald-600 dark:text-emerald-400 tracking-wider flex items-center gap-1">
+            <span class="material-icons text-[10px]">arrow_downward</span>
+            CO&#x2082; Saved vs. Car
+          </span>
+          @if ((tour()?.co2SavedGrams ?? 0) >= 1000) {
+            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">{{ ((tour()?.co2SavedGrams ?? 0) / 1000) | number:'1.1-2' }} kg</span>
+          } @else {
+            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">{{ (tour()?.co2SavedGrams ?? 0) | number:'1.0-1' }} g</span>
+          }
+        </div>
+        <div class="flex flex-col gap-1 p-3 rounded-lg"
+             [class]="(tour()?.co2EmittedGrams ?? 0) === 0 ? 'bg-emerald-500/5 border border-emerald-500/10' : 'bg-orange-500/10 border border-orange-500/20'">
+          <span class="text-[0.625rem] uppercase font-bold tracking-wider flex items-center gap-1"
+                [class]="(tour()?.co2EmittedGrams ?? 0) === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-orange-600 dark:text-orange-400'">
+            <span class="material-icons text-[10px]">local_fire_department</span>
+            CO&#x2082; Emitted
+          </span>
+          @if ((tour()?.co2EmittedGrams ?? 0) === 0) {
+            <span class="text-xl font-bold text-emerald-600 dark:text-emerald-400">Zero &#x1F331;</span>
+          } @else if ((tour()?.co2EmittedGrams ?? 0) >= 1000) {
+            <span class="text-xl font-bold text-orange-600 dark:text-orange-400">{{ ((tour()?.co2EmittedGrams ?? 0) / 1000) | number:'1.1-2' }} kg</span>
+          } @else {
+            <span class="text-xl font-bold text-orange-600 dark:text-orange-400">{{ (tour()?.co2EmittedGrams ?? 0) | number:'1.0-1' }} g</span>
+          }
+        </div>
+      </div>
+      @if ((tour()?.co2SavedGrams ?? 0) > 0) {
+        <p class="text-xs text-muted-foreground">
+          By choosing <strong>{{ tour()?.transportType?.replace('-', ' ') }}</strong> instead of driving,
+          you save CO&#x2082; on this tour.
+        </p>
+      } @else {
+        <p class="text-xs text-muted-foreground">Consider an eco-friendly transport option to reduce your carbon footprint.</p>
+      }
+    </div>
+
     <div class="space-y-4">
       <h3 class="text-sm font-bold uppercase tracking-wider text-muted-foreground">Route Waypoints</h3>
       <div class="space-y-2">
         @for (wp of tour()?.waypoints; track wp.id; let i = $index; let first = $first; let last = $last) {
           <div class="flex items-center gap-3 group">
-            <div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-[10px] font-bold"
-                 [class]="first || last ? 'bg-primary text-primary-foreground' : 'bg-muted border border-sidebar-border'">
+            <div class="w-6 h-6 rounded-full shrink-0 flex items-center justify-center text-[0.625rem] font-bold"
+                 [class]="first || last ? 'bg-primary text-primary-foreground' : 'glass-card'">
               {{ i + 1 }}
             </div>
-            <div class="flex-1 min-w-0 p-2 px-3 bg-sidebar border border-sidebar-border rounded-lg group-hover:border-primary/50 transition-colors">
+            <div class="flex-1 min-w-0 p-2 px-3 glass-card rounded-lg group-hover:border-primary/50 transition-colors">
               <p class="text-sm font-medium truncate" [title]="wp.label">{{ wp.label }}</p>
-              <p class="text-[10px] text-muted-foreground truncate">{{ wp.latitude.toFixed(5) }}, {{ wp.longitude.toFixed(5) }}</p>
+              <p class="text-[0.625rem] text-muted-foreground truncate opacity-50">{{ wp.latitude.toFixed(5) }}, {{ wp.longitude.toFixed(5) }}</p>
             </div>
           </div>
         }
       </div>
+    </div>
+
+    <div class="flex gap-2 pt-4 border-t border-white/25">
+      <button
+        z-button zType="outline" class="flex-1"
+        (click)="stateChange.emit('edit')"
+      >
+        <span class="material-icons text-sm mr-1">edit</span>
+        Edit Tour
+      </button>
+      <button
+        z-button zType="outline" class="flex-1"
+        (click)="stateChange.emit('logs')"
+      >
+        <span class="material-icons text-sm mr-1">list_alt</span>
+        View Logs
+      </button>
     </div>
   </div>
 } @else {

@@ -14,6 +14,7 @@ import { GeocodingService, GeocodingResult } from '@/shared/core/services/geocod
 import { TourService, CreateTourRequest } from '@/shared/core/services/tour.service';
 import { MapService, MapMarker } from '@/shared/core/services/map.service';
 import { RouteService } from '@/shared/core/services/route.service';
+import { AuthService } from '@/shared/core/services/auth.service';
 import { debounceTime, distinctUntilChanged, switchMap, of } from 'rxjs';
 import { toast } from 'ngx-sonner';
 import { AppState } from '@/components/navbar/navbar';
@@ -41,6 +42,7 @@ export class EditTour implements OnInit, OnDestroy {
   private mapService = inject(MapService);
   private routeService = inject(RouteService);
   private dialogService = inject(ZardDialogService);
+  private authService = inject(AuthService);
 
   transportOptions: { value: TransportType; icon: string; label: string }[] = [
     { value: 'driving-car', icon: 'directions_car', label: 'Car' },
@@ -57,7 +59,7 @@ export class EditTour implements OnInit, OnDestroy {
 
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    description: new FormControl('', [Validators.required]),
+    description: new FormControl(''),
     transportType: new FormControl<TransportType>('foot-walking', [Validators.required]),
     waypoints: new FormArray<FormGroup>([]),
   });
@@ -90,25 +92,21 @@ export class EditTour implements OnInit, OnDestroy {
   ngOnInit() {
     const currentTour = this.tour();
     if (currentTour) {
-      // Pre-fill form
       this.form.patchValue({
         name: currentTour.name,
         description: currentTour.description,
         transportType: currentTour.transportType
       });
 
-      // Clear default waypoints and add ones from tour
       this.waypoints.clear();
       currentTour.waypoints.forEach(wp => {
         this.addWaypoint(undefined, wp);
       });
 
-      // Initial map sync
       this.syncMapMarkers();
       this.syncRoute();
     }
 
-    // Listen to form changes
     this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
       this.syncMapMarkers();
       this.syncRoute();
@@ -205,7 +203,6 @@ export class EditTour implements OnInit, OnDestroy {
       lng: result.lng
     }, { emitEvent: true });
 
-    // Mark as pristine to hide the popover
     group.get('label')?.markAsPristine();
 
     this.searchResults.set([]);
@@ -250,7 +247,7 @@ export class EditTour implements OnInit, OnDestroy {
       const formValue = this.form.getRawValue();
 
       const request: CreateTourRequest = {
-        userId: '00000000-0000-0000-0000-000000000000',
+        userId: this.authService.currentUser()?.id ?? '',
         name: formValue.name ?? '',
         description: formValue.description ?? '',
         transportType: formValue.transportType as TransportType,
@@ -265,31 +262,15 @@ export class EditTour implements OnInit, OnDestroy {
         description: `Saving changes to "${request.name}".`
       });
 
-      this.tourService.updateTour(currentTour.id, request).subscribe({
-        next: () => {
+      this.tourService.updateTour(currentTour.id, request).pipe(
+        switchMap(() => this.tourService.getTourById(currentTour.id!))
+      ).subscribe({
+        next: (updatedTour) => {
           toast.success('Tour updated!', {
             id: loadingToast,
             description: `Successfully saved "${request.name}".`
           });
-
-          // Update the selected tour with new data to ensure details view is current
-          this.tourService.selectedTour.set({
-            ...currentTour,
-            name: request.name,
-            description: request.description,
-            transportType: request.transportType,
-            distanceKm: Number(this.formattedDistance().replace(' km', '')),
-            estimatedTime: this.form.get('estimatedTime')?.value || currentTour.estimatedTime, // Keep old if not in form
-            waypoints: request.waypoints.map((wp, index) => ({
-              id: currentTour.waypoints[index]?.id, // Try to preserve IDs
-              tourId: currentTour.id,
-              orderIndex: index,
-              label: wp.label,
-              latitude: wp.latitude,
-              longitude: wp.longitude
-            }))
-          });
-
+          this.tourService.selectedTour.set(updatedTour);
           this.stateChange.emit('details');
         },
         error: (err) => {

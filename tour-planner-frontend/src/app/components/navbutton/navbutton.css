@@ -1,15 +1,17 @@
 button {
   color: var(--primary);
-  border-color: var(--sidebar-border) !important;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
   transition: all 0.2s ease;
 }
 
 button:hover {
-  background-color: var(--sidebar-accent);
+  background-color: var(--sidebar-accent) !important;
 }
 
 button.active {
-  background-color: var(--sidebar-accent);
-  color: var(--primary);
-  border-color: var(--primary) !important;
+  background-color: color-mix(in oklch, var(--primary) 15%, transparent) !important;
+  color: var(--primary) !important;
+  border-color: color-mix(in oklch, var(--primary) 40%, transparent) !important;
 }

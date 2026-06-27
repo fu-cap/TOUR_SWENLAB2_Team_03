@@ -11,7 +11,6 @@ export class RouteService {
   private readonly PROXY_URL = 'http://localhost:8080/api/map/directions';
 
   getRoute(coordinates: number[][], transportType: TransportType): Observable<any> {
-    // coordinates should be [[lng, lat], [lng, lat], ...]
     return this.http.post<any>(`${this.PROXY_URL}/${transportType}`, coordinates);
   }
 }

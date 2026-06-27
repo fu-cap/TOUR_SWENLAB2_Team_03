@@ -6,6 +6,8 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputImports } from '@/shared/components/input';
 import { ZardFormImports } from '@/shared/components/form';
 import { ZardSelectImports } from '@/shared/components/select';
+import { AuthService } from '@/shared/core/services/auth.service';
+import { toast } from 'ngx-sonner';
 
 @Component({
   selector: 'app-register-form',
@@ -17,6 +19,9 @@ import { ZardSelectImports } from '@/shared/components/select';
 export class LoginRegisterComponent {
   @Output() loginComponentStatus = new EventEmitter<string>();
   private router = inject(Router);
+  private authService = inject(AuthService);
+
+  showPassword = false;
 
   form = new FormGroup({
     gender: new FormControl('', Validators.required),
@@ -28,8 +33,35 @@ export class LoginRegisterComponent {
   })
 
   public onSubmit() {
-    // For now, just navigate to home
-    this.router.navigate(['/home']);
+    if (this.form.invalid) return;
+
+    const { username, email, password, gender, firstname, lastname } = this.form.value;
+
+    if (!username || !email || !password || !gender || !firstname || !lastname) {
+      toast.error('Please fill out all required fields.');
+      return;
+    }
+
+    this.authService.register({ username, email, password, gender, firstname, lastname }).subscribe({
+      next: () => {
+        toast.success('Registration successful! Logging in...');
+
+        this.authService.login({ username, password }).subscribe({
+          next: () => {
+            this.router.navigate(['/home']);
+          },
+          error: (loginErr) => {
+            console.error('Auto-login failed:', loginErr);
+            this.loginComponentStatus.emit('login');
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Registration failed:', err);
+        const errMsg = err.error?.message || 'Registration failed. Please try again.';
+        toast.error(errMsg);
+      }
+    });
   }
 
   public changeStatus() {

@@ -15,10 +15,13 @@ export class Navbutton {
   @Input({ required: true }) label!: string;
   @Input({ required: true }) state!: AppState;
   @Input() isActive = false;
+  @Input() disabled = false;
 
   @Output() stateChange = new EventEmitter<AppState>();
 
   onClick(): void {
-    this.stateChange.emit(this.state);
+    if (!this.disabled) {
+      this.stateChange.emit(this.state);
+    }
   }
 }

@@ -8,12 +8,24 @@
           <app-login-form (loginComponentStatus)="handleStatusUpdate($event)"></app-login-form>
         } @else if (currentStatus == 'register') {
           <app-register-form (loginComponentStatus)="handleStatusUpdate($event)"></app-register-form>
+        } @else if (currentStatus == 'impressum') {
+          <app-impressum></app-impressum>
+          <div class="flex justify-center mt-4 px-4 pb-2">
+            <button
+              z-button
+              zType="default"
+              class="w-full text-foreground glass-card hover:bg-primary/10 transition-all duration-200"
+              (click)="handleStatusUpdate('login')"
+            >
+              Back to Login
+            </button>
+          </div>
         }
       </app-content>
     </div>
 
     <div class="absolute bottom-0 left-0 w-full z-1000">
-      <app-footer></app-footer>
+      <app-footer (impressumClick)="handleStatusUpdate('impressum')"></app-footer>
     </div>
   </div>
 </div>

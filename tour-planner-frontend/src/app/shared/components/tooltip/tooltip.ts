@@ -261,7 +261,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
     <span [class]="arrowClasses()">
       <svg
-        class="bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]"
+        class="bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-0.125rem)] rotate-45 rounded-[0.125rem]"
         width="10"
         height="5"
         viewBox="0 0 30 10"

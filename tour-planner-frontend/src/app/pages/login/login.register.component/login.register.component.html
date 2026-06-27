@@ -1,52 +1,41 @@
 <form [formGroup]="form" class="form" (ngSubmit)="onSubmit()">
   <h1 class="form-title">Register</h1>
-  <z-form-field #fg="zardId" zardId="gender">
-    <label z-form-label [for]="fg.id()" zRequired>Gender</label>
-    <z-form-control>
-      <z-select [id]="fg.id()" formControlName="gender" zPlaceholder="Select gender">
-        <z-select-item zValue="male">Male</z-select-item>
-        <z-select-item zValue="female">Female</z-select-item>
-        <z-select-item zValue="other">Other</z-select-item>
-      </z-select>
-    </z-form-control>
-    @if (form.get('gender')?.invalid && form.get('gender')?.touched) {
-      <z-form-message>Please select your gender.</z-form-message>
-    }
-  </z-form-field>
 
-  <z-form-field #ffn="zardId" zardId="firstname">
-    <label z-form-label [for]="ffn.id()" zRequired>Firstname</label>
-    <z-form-control>
-      <input
-        z-input
-        [id]="ffn.id()"
-        type="text"
-        placeholder="Enter your firstname"
-        formControlName="firstname"
-        class="form-input"
-      />
-    </z-form-control>
-    @if (form.get('firstname')?.invalid && form.get('firstname')?.touched) {
-      <z-form-message>Please enter your firstname.</z-form-message>
-    }
-  </z-form-field>
+  <div class="grid grid-cols-2 gap-3">
+    <z-form-field #ffn="zardId" zardId="firstname">
+      <label z-form-label [for]="ffn.id()" zRequired>Firstname</label>
+      <z-form-control>
+        <input
+          z-input
+          [id]="ffn.id()"
+          type="text"
+          placeholder="Firstname"
+          formControlName="firstname"
+          class="form-input"
+        />
+      </z-form-control>
+      @if (form.get('firstname')?.invalid && form.get('firstname')?.touched) {
+        <z-form-message>Required.</z-form-message>
+      }
+    </z-form-field>
 
-  <z-form-field #fln="zardId" zardId="lastname">
-    <label z-form-label [for]="fln.id()" zRequired>Lastname</label>
-    <z-form-control>
-      <input
-        z-input
-        [id]="fln.id()"
-        type="text"
-        placeholder="Enter your lastname"
-        formControlName="lastname"
-        class="form-input"
-      />
-    </z-form-control>
-    @if (form.get('lastname')?.invalid && form.get('lastname')?.touched) {
-      <z-form-message>Please enter your lastname.</z-form-message>
-    }
-  </z-form-field>
+    <z-form-field #fln="zardId" zardId="lastname">
+      <label z-form-label [for]="fln.id()" zRequired>Lastname</label>
+      <z-form-control>
+        <input
+          z-input
+          [id]="fln.id()"
+          type="text"
+          placeholder="Lastname"
+          formControlName="lastname"
+          class="form-input"
+        />
+      </z-form-control>
+      @if (form.get('lastname')?.invalid && form.get('lastname')?.touched) {
+        <z-form-message>Required.</z-form-message>
+      }
+    </z-form-field>
+  </div>
 
   <z-form-field #fem="zardId" zardId="email">
     <label z-form-label [for]="fem.id()" zRequired>Email</label>
@@ -91,14 +80,24 @@
   <z-form-field #fp="zardId" zardId="password">
     <label z-form-label [for]="fp.id()" zRequired>Password</label>
     <z-form-control>
-      <input
-        z-input
-        [id]="fp.id()"
-        type="password"
-        placeholder="Enter your password"
-        formControlName="password"
-        class="form-input"
-      />
+      <div class="relative">
+        <input
+          z-input
+          [id]="fp.id()"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="At least 9 characters"
+          formControlName="password"
+          class="form-input pr-10"
+        />
+        <button
+          type="button"
+          class="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+          (click)="showPassword = !showPassword"
+          [title]="showPassword ? 'Hide password' : 'Show password'"
+        >
+          <span class="material-icons text-base">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+        </button>
+      </div>
     </z-form-control>
     @if (form.get('password')?.invalid && form.get('password')?.touched) {
       <z-form-message>Please enter your password.</z-form-message>
@@ -107,10 +106,25 @@
       <z-form-message>The password must be at least 9 characters long.</z-form-message>
     }
   </z-form-field>
+
+  <z-form-field #fg="zardId" zardId="gender">
+    <label z-form-label [for]="fg.id()" zRequired>Gender</label>
+    <z-form-control>
+      <z-select [id]="fg.id()" formControlName="gender" zPlaceholder="Select gender">
+        <z-select-item zValue="male">Male</z-select-item>
+        <z-select-item zValue="female">Female</z-select-item>
+        <z-select-item zValue="other">Other</z-select-item>
+      </z-select>
+    </z-form-control>
+    @if (form.get('gender')?.invalid && form.get('gender')?.touched) {
+      <z-form-message>Please select your gender.</z-form-message>
+    }
+  </z-form-field>
+
   <div class="content-center">
-    <button z-button zType="default" type="submit" class="form-send-button">Register</button>
+    <button z-button zType="default" type="submit" [zDisabled]="form.invalid" class="form-send-button">Register</button>
   </div>
   <div class="content-bottom">
-    <button z-button zType="default" type="button" (click)="changeStatus()" class="form-change-form">Login</button>
+    <button z-button zType="ghost" type="button" (click)="changeStatus()" class="form-change-form">Login</button>
   </div>
 </form>

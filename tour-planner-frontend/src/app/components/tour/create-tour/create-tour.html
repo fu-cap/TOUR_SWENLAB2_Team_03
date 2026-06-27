@@ -1,11 +1,9 @@
 <div class="flex flex-col gap-6 p-4">
   <div>
     <h2 class="text-2xl font-bold">Create New Tour</h2>
-    <p class="text-muted-foreground">Plan your next adventure by filling out the details below.</p>
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
-  <!-- Tour General Info -->
   <div class="space-y-4">
     <z-form-field #fn="zardId" zardId="name">
       <label z-form-label [for]="fn.id()" zRequired>Tour Name</label>
@@ -35,58 +33,55 @@
           formControlName="description"
         ></textarea>
       </z-form-control>
-      @if (form.get('description')?.invalid && form.get('description')?.touched) {
-        <z-form-message>Please enter a description for the tour.</z-form-message>
-      }
     </z-form-field>
 
     <div class="space-y-2">
       <label z-form-label zRequired>Transport Type</label>
-      <div class="flex gap-1 p-1 bg-muted/30 rounded-xl border border-sidebar-border">
+      <div class="flex gap-1 p-1 glass-card rounded-xl">
         @for (option of transportOptions; track option.value) {
           <button
             type="button"
             z-button
-            [zType]="form.get('transportType')?.value === option.value ? 'default' : 'ghost'"
+            zType="ghost"
+            [class.active]="form.get('transportType')?.value === option.value"
             zSize="sm"
-            class="flex-1 h-10 min-w-0 p-0 transition-all"
+            class="flex-1 h-14 min-w-0 p-0 flex-col transition-all"
             (click)="form.get('transportType')?.setValue($any(option.value))"
             [zTooltip]="option.label"
             zPosition="top"
           >
             <span class="material-icons text-xl">{{ option.icon }}</span>
+            <span class="text-[0.5rem] mt-0.5 leading-none">{{ option.label }}</span>
           </button>
         }
       </div>
     </div>
   </div>
 
-  <hr class="border-sidebar-border" />
+  <hr class="border-white/25" />
 
-  <!-- Route Summary -->
-  <div class="flex gap-4 p-3 bg-muted/50 rounded-lg">
+  <div class="flex justify-around p-3 glass-card rounded-lg">
     <div class="flex items-center gap-2">
       <div class="flex p-2 bg-primary/10 rounded-full text-primary">
         <span class="material-icons text-base">route</span>
       </div>
       <div class="flex flex-col">
-        <span class="text-[10px] uppercase font-bold text-muted-foreground leading-none">Distance</span>
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground leading-none">Distance</span>
         <span class="text-sm font-semibold">{{ formattedDistance() }}</span>
       </div>
     </div>
 
-    <div class="flex items-center gap-2 border-l border-sidebar-border pl-4">
+    <div class="flex items-center gap-2 border-sidebar-border">
       <div class="flex p-2 bg-primary/10 rounded-full text-primary">
         <span class="material-icons text-base">timer</span>
       </div>
       <div class="flex flex-col">
-        <span class="text-[10px] uppercase font-bold text-muted-foreground leading-none">Est. Time</span>
+        <span class="text-[0.625rem] uppercase font-bold text-muted-foreground leading-none">Est. Time</span>
         <span class="text-sm font-semibold">{{ formattedDuration() }}</span>
       </div>
     </div>
   </div>
 
-  <!-- Waypoints Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">Route Waypoints</h3>
 
@@ -104,7 +99,7 @@
 
 
               <ng-template #resultsPopover>
-                <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-sidebar-border rounded-md shadow-lg p-1">
+                <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg p-1">
                   @if (isSearching()) {
                     <div class="p-2 text-xs text-muted-foreground flex items-center gap-2">
                       <span class="material-icons animate-spin text-sm">search</span>
@@ -142,20 +137,18 @@
             </z-form-control>
           </z-form-field>
 
-          <!-- Button to add waypoint AFTER this one (if not the last one) -->
           @if (!last) {
             <div class="flex justify-center -my-2 relative z-10">
               <button
                 z-button
-                zType="outline"
+                zType="ghost"
                 zSize="sm"
-                zShape="circle"
                 type="button"
                 (click)="addWaypoint(i + 1)"
-                class="bg-background h-6 w-6 min-w-0 p-0 shadow-sm text-primary border-sidebar-border"
+                class="rounded-full! h-8 w-8 min-w-0 p-0 glass-panel shadow-sm text-primary hover:bg-primary/10 transition-all duration-200"
                 title="Add intermediate stop"
               >
-                <span class="material-icons" style="font-size: 14px;">add</span>
+                <span class="material-icons text-base">add</span>
               </button>
             </div>
           }
@@ -165,7 +158,7 @@
   </div>
 
   <div class="pt-4">
-    <button z-button zType="default" zFull type="submit" [disabled]="form.invalid">
+    <button z-button zType="default" zFull type="submit" [zDisabled]="form.invalid">
       Create Tour
     </button>
   </div>
