@@ -8,7 +8,7 @@
       type="button"
       [class.collapsed-state]="isCollapsed"
       [class.expanded-state]="!isCollapsed"
-      class="toggle-button bg-sidebar/70 backdrop-blur-md border border-sidebar-border/50 active:bg-primary/20"
+      class="toggle-button glass-panel active:bg-primary/20"
       (click)="toggleCollapse.emit()"
     >
       <span class="material-icons text-lg transition-transform duration-300" [class.rotate-180]="isCollapsed">
@@ -18,7 +18,7 @@
   }
 
 
-  <div class="scroll-container flex flex-col h-full p-2 rounded-3xl bg-sidebar/70 backdrop-blur-md border border-sidebar-border/50 shadow-lg overflow-y-auto overflow-x-hidden"
+  <div class="scroll-container flex flex-col h-full p-2 rounded-3xl glass-panel overflow-y-auto overflow-x-hidden"
        [class.justify-center]="centerContent"
        [class.opacity-0]="isCollapsed" [class.pointer-events-none]="isCollapsed">
     @switch (activeState) {

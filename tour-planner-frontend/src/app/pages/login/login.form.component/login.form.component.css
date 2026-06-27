@@ -21,7 +21,7 @@ z-form-field {
 .form-input {
   @apply w-full h-10 px-4 rounded-xl border transition-all;
   border-color: var(--border);
-  background-color: var(--sidebar);
+  background-color: oklch(1 0 0 / 0.72);
   color: var(--foreground);
 }
 

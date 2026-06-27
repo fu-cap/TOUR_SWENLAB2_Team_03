@@ -32,7 +32,7 @@
 }
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
-  background-color: oklch(0.5 0.2 300); /* Slightly darker purple on hover */
+  background-color: var(--primary);
   border: 0.1875rem solid transparent;
 }
 

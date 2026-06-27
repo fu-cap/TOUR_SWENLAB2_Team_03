@@ -33,7 +33,7 @@
 
         <div class="space-y-2">
           <label z-form-label zRequired>Transport Type</label>
-          <div class="flex gap-1 p-1 bg-sidebar/30 backdrop-blur-sm rounded-xl border border-sidebar-border/30 shadow-sm">
+          <div class="flex gap-1 p-1 glass-card rounded-xl">
             @for (option of transportOptions; track option.value) {
               <button
                 type="button"
@@ -53,10 +53,10 @@
         </div>
       </div>
 
-      <hr class="border-sidebar-border" />
+      <hr class="border-white/25" />
 
       <!-- Route Summary -->
-      <div class="flex justify-around p-3 bg-sidebar/30 backdrop-blur-sm border border-sidebar-border/30 rounded-lg shadow-sm">
+      <div class="flex justify-around p-3 glass-card rounded-lg">
         <div class="flex items-center gap-2">
           <div class="flex p-2 bg-primary/10 rounded-full text-primary">
             <span class="material-icons text-base">route</span>
@@ -93,7 +93,7 @@
                   </z-input-group>
 
                   <ng-template #resultsPopover>
-                    <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-sidebar-border rounded-md shadow-lg p-1">
+                    <div class="w-64 max-h-60 overflow-y-auto bg-popover border border-border rounded-md shadow-lg p-1">
                       @if (isSearching()) { <div class="p-2 text-xs text-muted-foreground flex items-center gap-2"><span class="material-icons animate-spin text-sm">search</span>Searching...</div> }
                       @for (result of searchResults(); track result.address) {
                         <button type="button" class="w-full text-left p-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm transition-colors" (click)="selectResult(i, result)">{{ result.address }}</button>
@@ -112,7 +112,7 @@
                     zSize="sm"
                     type="button"
                     (click)="addWaypoint(i + 1)"
-                    class="rounded-full! h-6 w-6 min-w-0 p-0 border border-sidebar-border/50 bg-sidebar/70 backdrop-blur-md shadow-sm text-primary hover:bg-sidebar-accent/80 transition-all duration-200"
+                    class="rounded-full! h-6 w-6 min-w-0 p-0 glass-panel shadow-sm text-primary hover:bg-primary/10 transition-all duration-200"
                   >
                     <span class="material-icons" style="font-size: 0.875rem;">add</span>
                   </button>
@@ -126,7 +126,7 @@
       <div class="flex gap-2 pt-4">
         <button
           z-button zType="ghost"
-          class="flex-1 text-foreground border border-sidebar-border/50 bg-sidebar/30 backdrop-blur-sm hover:bg-sidebar-accent/80 transition-all duration-200"
+          class="flex-1 text-foreground glass-card hover:bg-primary/10 transition-all duration-200"
           type="button"
           (click)="cancel()"
         >

@@ -57,7 +57,7 @@
       <p class="mt-4 text-lg">Loading your tours...</p>
     </div>
   } @else if (tours().length === 0) {
-    <div class="flex flex-col items-center justify-center py-20 border-2 border-dashed border-sidebar-border/30 rounded-xl bg-sidebar/20 backdrop-blur-sm shadow-sm">
+    <div class="flex flex-col items-center justify-center py-20 border-2 border-dashed border-white/30 rounded-xl glass-card shadow-sm">
       <span class="material-icons text-6xl text-muted-foreground/30">map</span>
       <p class="mt-4 text-xl font-semibold text-muted-foreground">No tours found</p>
       <p class="text-muted-foreground mb-6">Start by creating your first adventure.</p>
@@ -65,7 +65,7 @@
   } @else {
     <div class="flex flex-col gap-4">
       @for (tour of tours(); track tour.id) {
-        <div (click)="selectTour(tour)" class="group relative cursor-pointer flex bg-sidebar/40 backdrop-blur-sm border border-sidebar-border/30 rounded-xl overflow-hidden hover:bg-sidebar/60 hover:shadow-md transition-all duration-300 h-30">
+        <div (click)="selectTour(tour)" class="group relative cursor-pointer flex glass-card rounded-xl overflow-hidden hover:shadow-md transition-all duration-300 h-30" style="transition: box-shadow 0.3s, background 0.3s;">
 
           <!-- Main Content Area -->
           <div class="flex-1 p-4 flex flex-col justify-between min-w-0">
@@ -110,7 +110,7 @@
           </div>
 
           <!-- Segmented Action Bar -->
-          <div class="w-14 flex flex-col items-center border-l border-sidebar-border/30 bg-sidebar/20 divide-y divide-sidebar-border/30">
+          <div class="w-14 flex flex-col items-center border-l border-white/20 bg-white/10 divide-y divide-white/20">
             <button
               z-button zType="ghost" zSize="sm"
               class="flex-1 rounded-none text-destructive hover:bg-destructive/10"
