@@ -45,15 +45,13 @@ export class LoginRegisterComponent {
     this.authService.register({ username, email, password, gender, firstname, lastname }).subscribe({
       next: () => {
         toast.success('Registration successful! Logging in...');
-        
-        // Auto-login using the credentials just registered
+
         this.authService.login({ username, password }).subscribe({
           next: () => {
             this.router.navigate(['/home']);
           },
           error: (loginErr) => {
             console.error('Auto-login failed:', loginErr);
-            // Fallback to the manual login form if auto-login fails for some reason
             this.loginComponentStatus.emit('login');
           }
         });

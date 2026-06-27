@@ -35,7 +35,6 @@
     </div>
   </div>
 
-  <!-- Search Bar -->
   <div class="relative w-full">
     <z-input-group [zAddonBefore]="searchIcon">
       <input
@@ -73,10 +72,8 @@
       @for (tour of tours(); track tour.id) {
         <div (click)="selectTour(tour)" class="group relative cursor-pointer flex glass-card rounded-xl overflow-hidden hover:shadow-md transition-all duration-300" style="transition: box-shadow 0.3s, background 0.3s;">
 
-          <!-- Main Content Area -->
           <div class="flex-1 p-4 flex flex-col gap-3 min-w-0">
 
-            <!-- Header: transport icon + name + description -->
             <div class="flex gap-3 items-center min-w-0">
               <div class="flex p-2 bg-primary/10 rounded-lg text-primary shrink-0">
                 <span class="material-icons text-xl">{{ getTransportIcon(tour.transportType) }}</span>
@@ -87,7 +84,6 @@
               </div>
             </div>
 
-            <!-- Primary stats: distance · time · stops -->
             <div class="flex items-center gap-3 text-xs text-muted-foreground">
               <div class="flex items-center gap-1">
                 <span class="material-icons text-sm">route</span>
@@ -105,7 +101,6 @@
               </div>
             </div>
 
-            <!-- Secondary stats: rating · child friendliness · CO2 as pill badges -->
             <div class="flex items-center gap-2 flex-wrap">
               <span
                 class="flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400"
@@ -136,7 +131,6 @@
 
           </div>
 
-          <!-- Segmented Action Bar -->
           <div class="w-14 flex flex-col items-center border-l border-white/20 bg-white/10 divide-y divide-white/20 opacity-0 group-hover:opacity-100 transition-opacity">
             <button
               z-button zType="ghost" zSize="sm"

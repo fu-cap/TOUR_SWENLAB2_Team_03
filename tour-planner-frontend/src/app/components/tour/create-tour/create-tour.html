@@ -4,7 +4,6 @@
   </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
-  <!-- Tour General Info -->
   <div class="space-y-4">
     <z-form-field #fn="zardId" zardId="name">
       <label z-form-label [for]="fn.id()" zRequired>Tour Name</label>
@@ -61,7 +60,6 @@
 
   <hr class="border-white/25" />
 
-  <!-- Route Summary -->
   <div class="flex justify-around p-3 glass-card rounded-lg">
     <div class="flex items-center gap-2">
       <div class="flex p-2 bg-primary/10 rounded-full text-primary">
@@ -84,7 +82,6 @@
     </div>
   </div>
 
-  <!-- Waypoints Section -->
   <div class="space-y-4">
     <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">Route Waypoints</h3>
 
@@ -140,7 +137,6 @@
             </z-form-control>
           </z-form-field>
 
-          <!-- Button to add waypoint AFTER this one (if not the last one) -->
           @if (!last) {
             <div class="flex justify-center -my-2 relative z-10">
               <button

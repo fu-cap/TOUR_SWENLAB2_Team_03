@@ -16,7 +16,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   selector: 'app-listview-tours',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     ZardButtonComponent,
     ...ZardInputImports,
     ZardInputGroupComponent
@@ -115,14 +115,12 @@ export class ListviewTours implements OnInit, OnDestroy {
 
   formatDuration(timeSpan?: string): string {
     if (!timeSpan) return '0m';
-    
-    // TimeSpan often comes as "HH:mm:ss" or "days.HH:mm:ss"
+
     const parts = timeSpan.split(':');
     if (parts.length >= 2) {
       const hoursPart = parts[0];
       const minutes = parts[1];
-      
-      // Handle potential "days.hours" in the first part
+
       if (hoursPart.includes('.')) {
         const dayParts = hoursPart.split('.');
         const days = parseInt(dayParts[0]);
@@ -130,11 +128,11 @@ export class ListviewTours implements OnInit, OnDestroy {
         const totalHours = (days * 24) + hours;
         return `${totalHours}h ${minutes}m`;
       }
-      
+
       const hours = parseInt(hoursPart);
       return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
     }
-    
+
     return timeSpan;
   }
 
@@ -149,7 +147,7 @@ export class ListviewTours implements OnInit, OnDestroy {
       try {
         const text = e.target?.result as string;
         const tours = JSON.parse(text);
-        
+
         if (!Array.isArray(tours)) {
           toast.error('Import failed', {
             description: 'JSON file must contain an array of tours.'
@@ -206,7 +204,7 @@ export class ListviewTours implements OnInit, OnDestroy {
           const jsonString = JSON.stringify(tours, null, 2);
           const blob = new Blob([jsonString], { type: 'application/json' });
           const url = URL.createObjectURL(blob);
-          
+
           const a = document.createElement('a');
           a.href = url;
           a.download = `tours_export_${new Date().toISOString().slice(0, 10)}.json`;

@@ -44,7 +44,6 @@ export class ListviewLogs implements OnInit, OnDestroy {
     const t = this.tour();
     if (!t) return;
 
-    // 1. Show Markers
     const markers: MapMarker[] = t.waypoints.map((wp, index) => ({
       id: index,
       lat: wp.latitude,
@@ -53,7 +52,6 @@ export class ListviewLogs implements OnInit, OnDestroy {
     }));
     this.mapService.updateMarkers(markers);
 
-    // 2. Fetch and Show Route
     const coords = t.waypoints.map(wp => [wp.longitude, wp.latitude]);
     this.routeService.getRoute(coords, t.transportType).subscribe({
       next: (geoJson) => this.mapService.updateRoute(geoJson),

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Tour, TransportType } from '@/models/tour.model';
 
 export interface CreateTourRequest {
-  userId: string; // Guid
+  userId: string;
   name: string;
   description: string;
   waypoints: {
@@ -22,7 +22,6 @@ export class TourService {
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:8080/api/tour'; // Adjust based on backend
 
-  // Global state for sharing between list and details/edit
   selectedTour = signal<Tour | null>(null);
 
   createTour(tourData: CreateTourRequest): Observable<Tour> {

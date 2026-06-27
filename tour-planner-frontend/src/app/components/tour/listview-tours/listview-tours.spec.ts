@@ -11,10 +11,6 @@ import { Tour } from '@/models/tour.model';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-// ──────────────────────────────────────────────────────────────────────────────
-// Fixtures
-// ──────────────────────────────────────────────────────────────────────────────
-
 const MOCK_USER = { id: 'user-123', username: 'testuser', email: 'test@test.com' };
 
 const MOCK_TOURS: Partial<Tour>[] = [
@@ -44,11 +40,6 @@ const MOCK_TOURS: Partial<Tour>[] = [
   },
 ];
 
-// ──────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ──────────────────────────────────────────────────────────────────────────────
-
-/** Creates a File and a corresponding change event for onImportFileSelected. */
 function makeFileEvent(jsonContent: string): Event {
   const file = new File([jsonContent], 'tours.json', { type: 'application/json' });
   const input = document.createElement('input');
@@ -60,7 +51,6 @@ function makeFileEvent(jsonContent: string): Event {
   return { target: input } as unknown as Event;
 }
 
-/** Stubs FileReader.prototype.readAsText to call onload synchronously with the given text. */
 function stubFileReader(text: string) {
   return vi.spyOn(FileReader.prototype, 'readAsText').mockImplementation(function (this: FileReader) {
     Object.defineProperty(this, 'result', { value: text, configurable: true });
@@ -68,15 +58,10 @@ function stubFileReader(text: string) {
   } as any);
 }
 
-// ──────────────────────────────────────────────────────────────────────────────
-// Test Suite
-// ──────────────────────────────────────────────────────────────────────────────
-
 describe('ListviewTours', () => {
   let component: ListviewTours;
   let fixture: ComponentFixture<ListviewTours>;
 
-  // Mock service instances
   let tourServiceMock: Partial<TourService>;
   let authServiceMock: Partial<AuthService>;
   let dialogServiceMock: Partial<ZardDialogService>;
@@ -119,10 +104,6 @@ describe('ListviewTours', () => {
     vi.restoreAllMocks();
   });
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // 1. Creation & Initialisation
-  // ────────────────────────────────────────────────────────────────────────────
-
   it('should create the component', () => {
     expect(component).toBeTruthy();
   });
@@ -141,10 +122,6 @@ describe('ListviewTours', () => {
     expect(() => component.loadTours()).not.toThrow();
   });
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // 2. Tour selection & navigation
-  // ────────────────────────────────────────────────────────────────────────────
-
   it('should set selectedTour and emit "details" on selectTour()', () => {
     const emitSpy = vi.spyOn(component.stateChange, 'emit');
     component.selectTour(MOCK_TOURS[0] as Tour);
@@ -158,10 +135,6 @@ describe('ListviewTours', () => {
     expect(tourServiceMock.selectedTour!()).toEqual(MOCK_TOURS[1] as Tour);
     expect(emitSpy).toHaveBeenCalledWith('edit');
   });
-
-  // ────────────────────────────────────────────────────────────────────────────
-  // 3. formatDuration helper
-  // ────────────────────────────────────────────────────────────────────────────
 
   it('should format HH:mm:ss with hours correctly', () => {
     expect(component.formatDuration('05:30:00')).toBe('5h 30m');
@@ -178,10 +151,6 @@ describe('ListviewTours', () => {
   it('should handle days.HH:mm:ss format correctly', () => {
     expect(component.formatDuration('1.02:30:00')).toBe('26h 30m');
   });
-
-  // ────────────────────────────────────────────────────────────────────────────
-  // 4. getTransportIcon helper
-  // ────────────────────────────────────────────────────────────────────────────
 
   it('should return "hiking" for foot-hiking', () => {
     expect(component.getTransportIcon('foot-hiking')).toBe('hiking');
@@ -202,10 +171,6 @@ describe('ListviewTours', () => {
   it('should return "help_outline" for unknown transport type', () => {
     expect(component.getTransportIcon('unknown' as any)).toBe('help_outline');
   });
-
-  // ────────────────────────────────────────────────────────────────────────────
-  // 5. Export — onExportTours()
-  // ────────────────────────────────────────────────────────────────────────────
 
   it('should call exportTours with the current userId', () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
@@ -252,10 +217,6 @@ describe('ListviewTours', () => {
     );
     expect(() => component.onExportTours()).not.toThrow();
   });
-
-  // ────────────────────────────────────────────────────────────────────────────
-  // 6. Import — onImportFileSelected()
-  // ────────────────────────────────────────────────────────────────────────────
 
   it('should do nothing when no file is selected', () => {
     const input = document.createElement('input');
@@ -320,10 +281,6 @@ describe('ListviewTours', () => {
     expect(() => component.onImportFileSelected(event)).not.toThrow();
   });
 
-  // ────────────────────────────────────────────────────────────────────────────
-  // 7. Search with debounce
-  // ────────────────────────────────────────────────────────────────────────────
-
   it('should debounce search and call getTours with the search term after 300ms', async () => {
     vi.useFakeTimers();
     vi.mocked(tourServiceMock.getTours!).mockClear();
@@ -342,10 +299,6 @@ describe('ListviewTours', () => {
     component.onSearchChange(mockEvent);
     expect(component.rawSearchQuery()).toBe('bike');
   });
-
-  // ────────────────────────────────────────────────────────────────────────────
-  // 8. Cleanup
-  // ────────────────────────────────────────────────────────────────────────────
 
   it('should unsubscribe from search subject on destroy without throwing', () => {
     expect(() => component.ngOnDestroy()).not.toThrow();

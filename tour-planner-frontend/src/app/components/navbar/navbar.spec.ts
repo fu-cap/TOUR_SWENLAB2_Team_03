@@ -28,7 +28,6 @@ describe('Navbar', () => {
     fixture = TestBed.createComponent(Navbar);
     component = fixture.componentInstance;
 
-    // Provide the required input signal
     fixture.componentRef.setInput('activeState', 'overview');
     fixture.detectChanges();
   });

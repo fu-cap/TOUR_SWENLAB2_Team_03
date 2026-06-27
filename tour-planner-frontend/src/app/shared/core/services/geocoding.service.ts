@@ -13,7 +13,6 @@ export interface GeocodingResult {
 })
 export class GeocodingService {
   private http = inject(HttpClient);
-  // Now calling our own backend proxy to keep the API key safe
   private readonly PROXY_URL = 'http://localhost:8080/api/map/geocode';
 
   search(text: string): Observable<GeocodingResult[]> {

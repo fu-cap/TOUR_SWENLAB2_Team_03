@@ -3,7 +3,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { App } from './app';
 
-// Mock browser APIs not present in the Vitest JSDOM environment
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: (query: string) => ({

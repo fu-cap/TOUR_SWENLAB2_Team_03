@@ -35,7 +35,6 @@ describe('LoginFormComponent', () => {
   });
 
   it('should not submit when form is invalid', () => {
-    // onSubmit on empty form should not throw
     expect(() => component.onSubmit()).not.toThrow();
   });
 });

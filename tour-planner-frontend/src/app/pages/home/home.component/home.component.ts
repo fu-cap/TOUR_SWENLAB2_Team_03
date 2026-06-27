@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private routeLayer = L.layerGroup();
   private destroyRef = inject(DestroyRef);
   private mapService = inject(MapService);
-  
+
   currentState = signal<AppState>('overview');
   isCollapsed = signal(false);
 
@@ -26,7 +26,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private readonly EUROPE_ZOOM = 5;
 
   constructor() {
-    // Automatically reset map when switching back to overview
     effect(() => {
       if (this.currentState() === 'overview' && this.map) {
         this.resetToDefaultView();

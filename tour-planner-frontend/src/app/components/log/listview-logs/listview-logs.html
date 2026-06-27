@@ -1,6 +1,5 @@
 @if (tour()) {
   <div class="flex flex-col gap-6 p-4 w-full max-w-full overflow-x-hidden">
-    <!-- Header -->
     <div class="flex flex-row justify-between items-center">
       <div>
         <h2 class="text-2xl font-bold">Logs</h2>
@@ -19,7 +18,6 @@
 
     <hr class="border-white/25" />
 
-    <!-- Tour Logs Section -->
     <div class="space-y-4">
       @if (isAddingLog()) {
         <app-create-log

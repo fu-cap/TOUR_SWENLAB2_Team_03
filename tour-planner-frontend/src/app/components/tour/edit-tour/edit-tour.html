@@ -15,7 +15,6 @@
     </div>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
-      <!-- Tour General Info -->
       <div class="space-y-4">
         <z-form-field #fn="zardId" zardId="name">
           <label z-form-label [for]="fn.id()" zRequired>Tour Name</label>
@@ -56,7 +55,6 @@
 
       <hr class="border-white/25" />
 
-      <!-- Route Summary -->
       <div class="grid grid-cols-2 gap-3">
         <div class="flex items-center gap-3 p-3 glass-card rounded-lg">
           <div class="flex p-2 bg-primary/10 rounded-full text-primary">
@@ -78,7 +76,6 @@
         </div>
       </div>
 
-      <!-- Waypoints Section -->
       <div class="space-y-4">
         <h3 class="text-sm font-medium text-muted-foreground uppercase tracking-wider">Route Waypoints</h3>
         <div formArrayName="waypoints" class="space-y-3">

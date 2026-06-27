@@ -32,7 +32,7 @@ DB_RESET_SUCCESS=false
 if command -v docker-compose &> /dev/null; then
   echo "Attempting database reset via docker-compose..."
   if docker-compose exec -T db psql -U postgres -d tour_planner -c "TRUNCATE tour_waypoint, tour_log, tour, app_user RESTART IDENTITY CASCADE;" &> /dev/null; then
-    echo "✓ Database reset successful via docker-compose exec."
+    echo "Database reset successful via docker-compose exec."
     DB_RESET_SUCCESS=true
   fi
 fi
@@ -41,7 +41,7 @@ fi
 if [ "$DB_RESET_SUCCESS" = false ] && command -v docker &> /dev/null; then
   echo "Attempting database reset via docker compose..."
   if docker compose exec -T db psql -U postgres -d tour_planner -c "TRUNCATE tour_waypoint, tour_log, tour, app_user RESTART IDENTITY CASCADE;" &> /dev/null; then
-    echo "✓ Database reset successful via docker compose exec."
+    echo "Database reset successful via docker compose exec."
     DB_RESET_SUCCESS=true
   fi
 fi
@@ -52,7 +52,7 @@ if [ "$DB_RESET_SUCCESS" = false ] && command -v docker &> /dev/null; then
   DB_CONTAINER=$(docker ps -q -f name=db | head -n 1 || true)
   if [ -n "$DB_CONTAINER" ]; then
     if docker exec -i "$DB_CONTAINER" psql -U postgres -d tour_planner -c "TRUNCATE tour_waypoint, tour_log, tour, app_user RESTART IDENTITY CASCADE;" &> /dev/null; then
-      echo "✓ Database reset successful via docker exec."
+      echo "Database reset successful via docker exec."
       DB_RESET_SUCCESS=true
     fi
   fi
@@ -62,16 +62,16 @@ fi
 if [ "$DB_RESET_SUCCESS" = false ]; then
   echo "Attempting database reset via local psql client..."
   if PGPASSWORD="${PGPASSWORD:-password}" psql -h localhost -p "${PGPORT:-5432}" -U "${PGUSER:-postgres}" -d "${PGDATABASE:-tour_planner}" -c "TRUNCATE tour_waypoint, tour_log, tour, app_user RESTART IDENTITY CASCADE;" &> /dev/null; then
-    echo "✓ Database reset successful via local psql."
+    echo "Database reset successful via local psql."
     DB_RESET_SUCCESS=true
   fi
 fi
 
 if [ "$DB_RESET_SUCCESS" = false ]; then
-  echo "⚠️ Database reset skipped or could not connect to database."
-  echo "   Please make sure the PostgreSQL container or local instance is running on port 5432."
+  echo "Database reset skipped or could not connect to database."
+  echo "Please make sure the PostgreSQL container or local instance is running on port 5432."
 else
-  echo "✓ Database initialized and ready."
+  echo "Database initialized and ready."
 fi
 
 # --- Step 2: Health Check ---
@@ -89,11 +89,11 @@ for i in {1..15}; do
 done
 
 if [ "$API_READY" = false ]; then
-  echo "❌ Error: Backend API at $API_URL is not reachable."
+  echo "Error: Backend API at $API_URL is not reachable."
   echo "Please start the backend services before running tests."
   exit 1
 fi
-echo "✓ Backend API is UP and running!"
+echo "Backend API is UP and running!"
 
 # --- Step 3: Execute Tests ---
 echo ""
@@ -106,9 +106,9 @@ set -e
 echo ""
 echo "========================================================================"
 if [ $TEST_EXIT_CODE -eq 0 ]; then
-  echo "🎉 SUCCESS: All E2E tests passed!"
+  echo "SUCCESS: All E2E tests passed!"
 else
-  echo "❌ FAILURE: E2E tests failed with exit code $TEST_EXIT_CODE"
+  echo "FAILURE: E2E tests failed with exit code $TEST_EXIT_CODE"
 fi
 echo "========================================================================"
 

@@ -112,7 +112,7 @@ CREATE TRIGGER trg_tour_updated_at
     FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- =============================================================
---  KORRIGIERTER VIEW (w.label statt w.address & GROUP BY angepasst)
+--  VIEW
 -- =============================================================
 CREATE OR REPLACE VIEW v_tour_search AS
 SELECT
@@ -131,7 +131,7 @@ SELECT
     to_tsvector('english',
         coalesce(t.name,'')        || ' ' ||
         coalesce(t.description,'') || ' ' ||
-        coalesce(string_agg(DISTINCT w.label, ' '),'') || ' ' || -- HIER: label statt address
+        coalesce(string_agg(DISTINCT w.label, ' '),'') || ' ' ||
         coalesce(string_agg(DISTINCT l.comment, ' '),'')
     ) AS search_vector
 FROM tour t

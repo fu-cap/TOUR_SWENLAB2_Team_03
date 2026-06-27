@@ -82,11 +82,9 @@ export class CreateTour implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // A tour needs at least a start and a destination
-    this.addWaypoint(); // Start
-    this.addWaypoint(); // Destination
+    this.addWaypoint();
+    this.addWaypoint();
 
-    // Listen to form changes to update map markers and route
     this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
       this.syncMapMarkers();
       this.syncRoute();
@@ -147,7 +145,6 @@ export class CreateTour implements OnInit, OnDestroy {
       lng: new FormControl<number | null>(data?.longitude || null, [Validators.required]),
     });
 
-    // Setup autocomplete for this waypoint
     waypointGroup.controls.label.valueChanges.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -157,7 +154,6 @@ export class CreateTour implements OnInit, OnDestroy {
           return of([]);
         }
 
-        // Find current index of this group in the array
         const currentIndex = this.waypoints.controls.indexOf(waypointGroup);
         this.activeWaypointIndex.set(currentIndex);
 
@@ -186,10 +182,9 @@ export class CreateTour implements OnInit, OnDestroy {
       lat: result.lat,
       lng: result.lng
     }, { emitEvent: true });
-    
-    // Mark as pristine to hide the popover (template checks for dirty)
+
     group.get('label')?.markAsPristine();
-    
+
     this.searchResults.set([]);
     this.activeWaypointIndex.set(null);
   }
@@ -244,8 +239,8 @@ export class CreateTour implements OnInit, OnDestroy {
       transportType: 'foot-walking'
     });
     this.waypoints.clear();
-    this.addWaypoint(); // New Start
-    this.addWaypoint(); // New Destination
+    this.addWaypoint();
+    this.addWaypoint();
     this.mapService.clearMap();
     this.routeDistance.set(null);
     this.routeDuration.set(null);

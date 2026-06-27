@@ -92,25 +92,21 @@ export class EditTour implements OnInit, OnDestroy {
   ngOnInit() {
     const currentTour = this.tour();
     if (currentTour) {
-      // Pre-fill form
       this.form.patchValue({
         name: currentTour.name,
         description: currentTour.description,
         transportType: currentTour.transportType
       });
 
-      // Clear default waypoints and add ones from tour
       this.waypoints.clear();
       currentTour.waypoints.forEach(wp => {
         this.addWaypoint(undefined, wp);
       });
 
-      // Initial map sync
       this.syncMapMarkers();
       this.syncRoute();
     }
 
-    // Listen to form changes
     this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
       this.syncMapMarkers();
       this.syncRoute();
@@ -207,7 +203,6 @@ export class EditTour implements OnInit, OnDestroy {
       lng: result.lng
     }, { emitEvent: true });
 
-    // Mark as pristine to hide the popover
     group.get('label')?.markAsPristine();
 
     this.searchResults.set([]);
