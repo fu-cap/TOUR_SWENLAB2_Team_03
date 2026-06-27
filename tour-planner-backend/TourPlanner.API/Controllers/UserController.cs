@@ -101,7 +101,7 @@ namespace TourPlanner.API.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] CreateUserDto dto)
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserDto dto)
         {
             if (!ModelState.IsValid)
             {

@@ -53,7 +53,7 @@ namespace TourPlanner.BusinessLayer.Services
             return user;
         }
 
-        public async Task UpdateUserAsync(Guid id, CreateUserDto updateUserDto)
+        public async Task UpdateUserAsync(Guid id, UpdateUserDto updateUserDto)
         {
             var existingUser = await _userRepository.GetByIdAsync(id);
             if (existingUser == null)

@@ -22,6 +22,24 @@ export interface UserProfile {
   email: string;
 }
 
+export interface UserFullProfile {
+  id: string;
+  username: string;
+  email: string;
+  gender: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface UpdateUserRequest {
+  username: string;
+  email: string;
+  password: string;
+  gender: string;
+  firstname: string;
+  lastname: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -59,5 +77,23 @@ export class AuthService {
   logout() {
     this.currentUser.set(null);
     localStorage.removeItem('currentUser');
+  }
+
+  getUserById(id: string): Observable<UserFullProfile> {
+    return this.http.get<UserFullProfile>(`${this.API_URL}/${id}`);
+  }
+
+  updateUser(id: string, data: UpdateUserRequest): Observable<void> {
+    return this.http.put<void>(`${this.API_URL}/${id}`, data).pipe(
+      tap(() => {
+        const updated: UserProfile = { id, username: data.username, email: data.email };
+        this.currentUser.set(updated);
+        localStorage.setItem('currentUser', JSON.stringify(updated));
+      })
+    );
+  }
+
+  deleteUser(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/${id}`);
   }
 }
