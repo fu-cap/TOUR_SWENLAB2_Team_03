@@ -7,7 +7,7 @@ export const formLabelVariants = cva(
   {
     variants: {
       zRequired: {
-        true: "after:content-['*'] after:ml-0.5 after:text-red-500",
+        true: "after:content-[''] after:inline-block after:w-1.5 after:h-1.5 after:rounded-full after:bg-primary/70 after:ml-1.5 after:mb-0.5 after:align-middle",
       },
     },
   },

@@ -99,8 +99,8 @@
       </div>
       @if ((tour()?.co2SavedGrams ?? 0) > 0) {
         <p class="text-xs text-muted-foreground">
-          &#x1F30D; By choosing <strong>{{ tour()?.transportType?.replace('-', ' ') }}</strong> instead of driving,
-          you save <strong class="text-emerald-600 dark:text-emerald-400">{{ (tour()?.co2SavedGrams ?? 0) >= 1000 ? (((tour()?.co2SavedGrams ?? 0) / 1000) | number:'1.1-2') + ' kg' : ((tour()?.co2SavedGrams ?? 0) | number:'1.0-1') + ' g' }}</strong> of CO&#x2082; on this tour.
+          By choosing <strong>{{ tour()?.transportType?.replace('-', ' ') }}</strong> instead of driving,
+          you save CO&#x2082; on this tour.
         </p>
       } @else {
         <p class="text-xs text-muted-foreground">Consider an eco-friendly transport option to reduce your carbon footprint.</p>

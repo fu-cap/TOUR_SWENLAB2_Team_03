@@ -31,7 +31,7 @@
           </z-form-control>
         </z-form-field>
 
-        <div class="space-y-2">
+        <div class="space-y-4">
           <label z-form-label zRequired>Transport Type</label>
           <div class="flex gap-1 p-1 glass-card rounded-xl">
             @for (option of transportOptions; track option.value) {
@@ -57,8 +57,8 @@
       <hr class="border-white/25" />
 
       <!-- Route Summary -->
-      <div class="flex justify-around p-3 glass-card rounded-lg">
-        <div class="flex items-center gap-2">
+      <div class="grid grid-cols-2 gap-3">
+        <div class="flex items-center gap-3 p-3 glass-card rounded-lg">
           <div class="flex p-2 bg-primary/10 rounded-full text-primary">
             <span class="material-icons text-base">route</span>
           </div>
@@ -67,7 +67,7 @@
             <span class="text-sm font-semibold">{{ formattedDistance() }}</span>
           </div>
         </div>
-        <div class="flex items-center gap-2 border-sidebar-border">
+        <div class="flex items-center gap-3 p-3 glass-card rounded-lg">
           <div class="flex p-2 bg-primary/10 rounded-full text-primary">
             <span class="material-icons text-base">timer</span>
           </div>
