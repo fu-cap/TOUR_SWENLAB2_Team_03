@@ -69,7 +69,7 @@ namespace TourPlanner.BusinessLayer.Services
             return await _logRepository.GetAllLogsAsync();
         }
 
-        public async Task<List<Log>> GetLogsByTourIdAsync(Guid tourId)
+        public async Task<List<Log>?> GetLogsByTourIdAsync(Guid tourId)
         {
             return await _logRepository.GetLogsByTourIdAsync(tourId);
         }
