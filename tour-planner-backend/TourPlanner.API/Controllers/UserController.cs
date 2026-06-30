@@ -4,7 +4,6 @@ using TourPlanner.BusinessLayer.Dtos;
 using TourPlanner.BusinessLayer.Services;
 using TourPlanner.DataAccessLayer.Entities;
 
-
 namespace TourPlanner.API.Controllers
 {
     [Route("api/[controller]")]
@@ -55,7 +54,7 @@ namespace TourPlanner.API.Controllers
                 
                 if(createdUser is not null)
                 {
-                    return Created();
+                    return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
                 }
                 throw new Exception("Returned user is null");
             }

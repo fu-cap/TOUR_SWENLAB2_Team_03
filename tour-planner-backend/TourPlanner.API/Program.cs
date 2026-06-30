@@ -25,7 +25,6 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<ITourRepository, TourRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddHttpClient<ITourService, TourService>();
 
 builder.Services.AddScoped<ILogRepository, LogRepository>();
@@ -53,6 +52,11 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter(System.Text.Json.JsonNamingPolicy.KebabCaseLower)
         );
     });
+
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddLog4Net("log4net.config");
 
     
 var app = builder.Build();
